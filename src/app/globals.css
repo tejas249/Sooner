@@ -1,0 +1,81 @@
+@import "tailwindcss";
+
+/*
+ * Sooner design tokens. Components use only the semantic names below, so the light and dark themes are the two blocks here.
+ * The page follows the visitor's system setting; there is no toggle yet. Contrast was checked for every text pair:
+ *   light: ink 17.4, muted 6.6, accent-ink 5.7 (all on canvas, so above the 4.5 needed for text)
+ *   dark:  ink 17.0, muted 8.0, accent-ink 9.2
+ * --accent itself is only ever a fill or a mark (3.1:1 on the light canvas), never small text.
+ */
+:root {
+  color-scheme: light dark;
+  --canvas: #fbfaf8;
+  --surface: #ffffff;
+  --surface-2: #f4f1ec;
+  --ink: #14161a;
+  --muted: #565b63;
+  --line: #e6e2db;
+  --accent: #f2622e;
+  --accent-ink: #b13d0c;
+  --accent-soft: #fdebe3;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --canvas: #0e0f12;
+    --surface: #16181d;
+    --surface-2: #1d2026;
+    --ink: #f3f1ec;
+    --muted: #a3a8b0;
+    --line: #2a2d34;
+    --accent: #ff7a4d;
+    --accent-ink: #ff9a73;
+    --accent-soft: #2a1a14;
+  }
+}
+
+@theme inline {
+  /* Only these colours exist, so an off-palette colour cannot creep in. */
+  --color-*: initial;
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-accent-soft: var(--accent-soft);
+
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+@layer base {
+  html {
+    background-color: var(--canvas);
+    color: var(--ink);
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    line-height: 1.6;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* A visible focus ring on every interactive element, in the text colour so it has contrast in both themes. */
+  :focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+}

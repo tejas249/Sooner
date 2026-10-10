@@ -1,11 +1,13 @@
 import { defineConfig, globalIgnores } from "eslint/config";
 import js from "@eslint/js";
+import nextVitals from "eslint-config-next/core-web-vitals";
 import tseslint from "typescript-eslint";
 
 export default defineConfig([
-  globalIgnores(["node_modules/**", "coverage/**", ".state/**"]),
+  globalIgnores(["node_modules/**", "coverage/**", ".state/**", ".next/**", "out/**", "next-env.d.ts"]),
   js.configs.recommended,
   ...tseslint.configs.recommendedTypeChecked,
+  ...nextVitals,
   {
     languageOptions: {
       parserOptions: {
@@ -18,6 +20,11 @@ export default defineConfig([
     // Plain JavaScript config files have no types to check.
     files: ["**/*.mjs"],
     ...tseslint.configs.disableTypeChecked,
+  },
+  {
+    // Next.js documents config files as a bare `export default { ... }`.
+    files: ["**/*.config.mjs"],
+    rules: { "import/no-anonymous-default-export": "off" },
   },
   {
     // src/core is pure: it takes data in and gives data back. No network, files, database or process state, and no
@@ -33,8 +40,8 @@ export default defineConfig([
           ],
           patterns: [
             {
-              group: ["**/worker/**", "**/app/**", "**/local/**", "**/prisma/**", "@prisma/*"],
-              message: "src/core must not import from the worker, the app or the database.",
+              group: ["**/worker/**", "**/app/**", "**/web/**", "**/local/**", "**/prisma/**", "@prisma/*"],
+              message: "src/core must not import from the worker, the web app or the database.",
             },
             {
               group: ["node:fs", "node:fs/*", "node:net", "node:http", "node:https", "node:dns", "node:child_process"],

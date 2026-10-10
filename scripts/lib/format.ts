@@ -72,8 +72,8 @@ export function safe(text: string): string {
 /** Pads text on the right to a column width, cutting it when it is too long. */
 export const column = (text: string, width: number): string => truncate(text, width).padEnd(width);
 
-const useColor = (): boolean => Boolean(process.stdout.isTTY) && !process.env["NO_COLOR"];
-const paint = (code: number, text: string): string => (useColor() ? `\u001b[${code}m${text}\u001b[0m` : text);
+const colorEnabled = (): boolean => Boolean(process.stdout.isTTY) && !process.env["NO_COLOR"];
+const paint = (code: number, text: string): string => (colorEnabled() ? `\u001b[${code}m${text}\u001b[0m` : text);
 export const green = (t: string): string => paint(32, t);
 export const red = (t: string): string => paint(31, t);
 export const yellow = (t: string): string => paint(33, t);
