@@ -4,7 +4,8 @@ Watches the public job-board feeds of a few hundred companies and tells you when
 open, and whether the company tends to fill its roles at all.
 
 This is the **week 0 prototype** from the build guide: a laptop-only poller that reads 50 company boards, remembers what it
-saw, polls again and prints what changed. No database, no web app, no alerts yet. Those start in week 1.
+saw, polls again and prints what changed, plus a landing page deployed on Vercel. There is no database and there are no
+alerts yet. Those start in week 1.
 
 ## Try it
 
@@ -28,7 +29,8 @@ Requires Node 24 or newer (the scripts run as TypeScript directly, with no build
 | Greenhouse adapter, one recorded fixture and a test | [src/core/adapters/greenhouse.ts](src/core/adapters/greenhouse.ts), [fixtures/](fixtures/README.md). Lever and Ashby are done too, since the 50 boards use all three |
 | Hand-pick 50 companies, write `detect-ats`, seed the boards | [data/candidates.json](data/candidates.json) goes through `npm run detect` ([scripts/detect-ats.ts](scripts/detect-ats.ts)) and becomes [data/boards.json](data/boards.json) |
 | Poll them, poll again five minutes later, print what changed | `npm run poll` ([scripts/poll-local.ts](scripts/poll-local.ts)) |
-| Push with CI green | [.github/workflows/ci.yml](.github/workflows/ci.yml) is ready. Typecheck, lint and tests pass locally from a clean checkout |
+| Push with CI green | [.github/workflows/ci.yml](.github/workflows/ci.yml) runs typecheck, lint, tests and the site build on every push and pull request |
+| The `vercel.json` build gate, security headers and design tokens | [vercel.json](vercel.json), [src/web/security-headers.ts](src/web/security-headers.ts) and [src/app/globals.css](src/app/globals.css). See [Deployment](#deployment) |
 
 The 50 boards: 27 global, 15 Indian, 8 remote-first; 26 on Greenhouse, 16 on Ashby, 8 on Lever.
 
@@ -68,7 +70,9 @@ startup called Navi and a pizza marketplace called Slice).
 ```
 src/core/      pure TypeScript: adapters (parse only), text normalising, change detection, schedule maths
 src/worker/    everything that touches the network: the politeness gate, the fetcher, fetchBoard
-scripts/       the four commands above, and their helpers
+src/web/       small pure helpers for the website: security headers, the health report, the page's numbers
+src/app/       the Next.js site: the landing page, /api/health, robots and sitemap
+scripts/       the commands above, their helpers and the post-deploy smoke test
 fixtures/      recorded provider responses the adapter tests parse
 data/          the hand-picked companies and the confirmed boards
 ```
@@ -84,6 +88,32 @@ data/          the hand-picked companies and the confirmed boards
 - **Polite by construction.** One request per second per host and at most two in flight per host, a descriptive
   `User-Agent` with your contact, `If-None-Match` on every repeat request (a 304 costs a few hundred bytes), a size cap, and
   a timeout per provider.
+
+## Deployment
+
+The site is a Next.js app in [src/app](src/app): a landing page built from [data/boards.json](data/boards.json), a
+`/api/health` endpoint, and the security headers from [src/web/security-headers.ts](src/web/security-headers.ts). It deploys
+to Vercel from `main`.
+
+| Step | What happens |
+| --- | --- |
+| Push or pull request | GitHub Actions runs typecheck, lint, tests and the site build ([ci.yml](.github/workflows/ci.yml)) |
+| Vercel build | The build command in [vercel.json](vercel.json) runs `npm run verify` before `npm run build`, so a commit that fails any check never goes live |
+| Pull request | Vercel builds a preview deployment of the branch |
+| Merge to `main` | Vercel deploys to production |
+| After a production deploy | [post-deploy.yml](.github/workflows/post-deploy.yml) runs [scripts/smoke-test.sh](scripts/smoke-test.sh). It checks that `/api/health` reports the commit that was just pushed, that the page renders, that an unknown URL gives a 404 and that the security headers are present |
+
+A red smoke test means the live site is wrong. Roll back in Vercel (Deployments, pick the last good one, Promote to Production),
+then fix forward.
+
+Settings you may need:
+
+- Repository variable `HR_CONTACT` (Settings, Secrets and variables, Actions, Variables): your email address or a URL. The
+  weekly feed canary refuses to run without it.
+- Repository variable `SMOKE_HOST`: the public address the smoke test checks. It defaults to `sooner.vercel.app`. Set it when
+  the site gets its own domain.
+- Vercel environment variable `NEXT_PUBLIC_SITE_URL`: the site's own address once it has a domain, used for absolute links
+  in page metadata.
 
 ## What the live runs found
 
@@ -119,14 +149,16 @@ Adaptive intervals will spread them out.
 
 ## Not here yet
 
-Postgres and the schema, the worker loop (claiming due boards, adaptive intervals, back-off), alerts, the web app, sign-in,
-deployment, Vercel configuration and design tokens. Week 1 starts with the schema and the worker loop; the pieces they plug
-into already exist and are tested.
+Postgres and the schema, the worker loop (claiming due boards, adaptive intervals, back-off), alerts, sign-in, and search and
+company pages on the site. Week 1 starts with the schema and the worker loop; the pieces they plug into already exist and
+are tested.
 
 ## Commands
 
 ```bash
 npm run verify        # typecheck + lint + tests, what CI runs
+npm run dev           # the website on http://localhost:3000
+npm run build         # build the website, as Vercel does
 npm run feeds:check   # the live canary
 npm run detect        # confirm data/candidates.json against the providers and rewrite data/boards.json
 npm run poll          # the prototype
