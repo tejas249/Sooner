@@ -1,0 +1,59 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  # A provider can change its feed without any commit of ours, so the canary also runs every Monday.
+  schedule:
+    - cron: "23 3 * * 1"
+  workflow_dispatch:
+
+# A newer push to the same branch or PR cancels the run it supersedes.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: check
+    if: github.event_name != 'schedule'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm test
+
+  # Fetches one real board from each provider (about six requests) and fails if a feed no longer parses, has lost its
+  # posting dates or stopped answering 304. That is how we learn a provider changed its format before any user does.
+  canary:
+    name: feed canary
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      HR_CONTACT: ${{ vars.HR_CONTACT }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Require a contact address for the User-Agent
+        run: |
+          if [ -z "$HR_CONTACT" ]; then
+            echo "::error::Set the repository variable HR_CONTACT (Settings, Secrets and variables, Actions, Variables) to an email address or URL. It goes into the User-Agent of every request."
+            exit 1
+          fi
+      - run: npm ci
+      - run: npm run feeds:check
