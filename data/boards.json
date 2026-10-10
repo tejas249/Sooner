@@ -1,0 +1,502 @@
+[
+  {
+    "slug": "airbnb",
+    "name": "Airbnb",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "airbnb",
+    "rolesWhenConfirmed": 163,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "anthropic",
+    "name": "Anthropic",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "anthropic",
+    "rolesWhenConfirmed": 646,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "cloudflare",
+    "name": "Cloudflare",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "cloudflare",
+    "rolesWhenConfirmed": 427,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "cohere",
+    "name": "Cohere",
+    "segment": "global",
+    "country": "CA",
+    "provider": "ashby",
+    "token": "cohere",
+    "rolesWhenConfirmed": 123,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "coinbase",
+    "name": "Coinbase",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "coinbase",
+    "rolesWhenConfirmed": 223,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "cursor",
+    "name": "Cursor",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "cursor",
+    "rolesWhenConfirmed": 132,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "databricks",
+    "name": "Databricks",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "databricks",
+    "rolesWhenConfirmed": 895,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "datadog",
+    "name": "Datadog",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "datadog",
+    "rolesWhenConfirmed": 437,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "discord",
+    "name": "Discord",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "discord",
+    "rolesWhenConfirmed": 47,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "doordash",
+    "name": "DoorDash",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "doordashusa",
+    "rolesWhenConfirmed": 467,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "elevenlabs",
+    "name": "ElevenLabs",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "elevenlabs",
+    "rolesWhenConfirmed": 141,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "figma",
+    "name": "Figma",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "figma",
+    "rolesWhenConfirmed": 150,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "harvey",
+    "name": "Harvey",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "harvey",
+    "rolesWhenConfirmed": 337,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "instacart",
+    "name": "Instacart",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "instacart",
+    "rolesWhenConfirmed": 126,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "linear",
+    "name": "Linear",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "linear",
+    "rolesWhenConfirmed": 31,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "notion",
+    "name": "Notion",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "notion",
+    "rolesWhenConfirmed": 135,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "openai",
+    "name": "OpenAI",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "openai",
+    "rolesWhenConfirmed": 816,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "perplexity",
+    "name": "Perplexity",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "perplexity",
+    "rolesWhenConfirmed": 129,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "pinterest",
+    "name": "Pinterest",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "pinterest",
+    "rolesWhenConfirmed": 180,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "plaid",
+    "name": "Plaid",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "plaid",
+    "rolesWhenConfirmed": 122,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "ramp",
+    "name": "Ramp",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "ramp",
+    "rolesWhenConfirmed": 161,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "reddit",
+    "name": "Reddit",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "reddit",
+    "rolesWhenConfirmed": 156,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "robinhood",
+    "name": "Robinhood",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "robinhood",
+    "rolesWhenConfirmed": 163,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "spotify",
+    "name": "Spotify",
+    "segment": "global",
+    "country": "SE",
+    "provider": "lever",
+    "token": "spotify",
+    "rolesWhenConfirmed": 76,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "squarespace",
+    "name": "Squarespace",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "squarespace",
+    "rolesWhenConfirmed": 32,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "stripe",
+    "name": "Stripe",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "stripe",
+    "rolesWhenConfirmed": 726,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "vercel",
+    "name": "Vercel",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "vercel",
+    "rolesWhenConfirmed": 86,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "atlan",
+    "name": "Atlan",
+    "segment": "india",
+    "country": "IN",
+    "provider": "ashby",
+    "token": "atlan",
+    "rolesWhenConfirmed": 7,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "cred",
+    "name": "CRED",
+    "segment": "india",
+    "country": "IN",
+    "provider": "lever",
+    "token": "cred",
+    "rolesWhenConfirmed": 8,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "groww",
+    "name": "Groww",
+    "segment": "india",
+    "country": "IN",
+    "provider": "greenhouse",
+    "token": "groww",
+    "rolesWhenConfirmed": 8,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "hevo-data",
+    "name": "Hevo Data",
+    "segment": "india",
+    "country": "IN",
+    "provider": "lever",
+    "token": "hevodata",
+    "rolesWhenConfirmed": 52,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "inmobi",
+    "name": "InMobi",
+    "segment": "india",
+    "country": "IN",
+    "provider": "greenhouse",
+    "token": "inmobi",
+    "rolesWhenConfirmed": 69,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "meesho",
+    "name": "Meesho",
+    "segment": "india",
+    "country": "IN",
+    "provider": "lever",
+    "token": "meesho",
+    "rolesWhenConfirmed": 60,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "mindtickle",
+    "name": "Mindtickle",
+    "segment": "india",
+    "country": "IN",
+    "provider": "lever",
+    "token": "mindtickle",
+    "rolesWhenConfirmed": 20,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "observe-ai",
+    "name": "Observe.AI",
+    "segment": "india",
+    "country": "IN",
+    "provider": "greenhouse",
+    "token": "observeai",
+    "rolesWhenConfirmed": 12,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "paytm",
+    "name": "Paytm",
+    "segment": "india",
+    "country": "IN",
+    "provider": "lever",
+    "token": "paytm",
+    "rolesWhenConfirmed": 178,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "pocket-fm",
+    "name": "Pocket FM",
+    "segment": "india",
+    "country": "IN",
+    "provider": "lever",
+    "token": "pocketfm",
+    "rolesWhenConfirmed": 10,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "razorpay",
+    "name": "Razorpay",
+    "segment": "india",
+    "country": "IN",
+    "provider": "greenhouse",
+    "token": "razorpaysoftwareprivatelimited",
+    "rolesWhenConfirmed": 27,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "sarvam-ai",
+    "name": "Sarvam AI",
+    "segment": "india",
+    "country": "IN",
+    "provider": "ashby",
+    "token": "sarvam",
+    "rolesWhenConfirmed": 41,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "sigmoid",
+    "name": "Sigmoid",
+    "segment": "india",
+    "country": "IN",
+    "provider": "greenhouse",
+    "token": "sigmoid",
+    "rolesWhenConfirmed": 36,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "tekion",
+    "name": "Tekion",
+    "segment": "india",
+    "country": "US",
+    "provider": "ashby",
+    "token": "tekion",
+    "rolesWhenConfirmed": 96,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "zeta",
+    "name": "Zeta",
+    "segment": "india",
+    "country": "IN",
+    "provider": "lever",
+    "token": "zeta",
+    "rolesWhenConfirmed": 24,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "1password",
+    "name": "1Password",
+    "segment": "remote-first",
+    "country": "CA",
+    "provider": "ashby",
+    "token": "1password",
+    "rolesWhenConfirmed": 69,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "canonical",
+    "name": "Canonical",
+    "segment": "remote-first",
+    "country": "GB",
+    "provider": "greenhouse",
+    "token": "canonical",
+    "rolesWhenConfirmed": 311,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "gitlab",
+    "name": "GitLab",
+    "segment": "remote-first",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "gitlab",
+    "rolesWhenConfirmed": 216,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "grafana-labs",
+    "name": "Grafana Labs",
+    "segment": "remote-first",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "grafanalabs",
+    "rolesWhenConfirmed": 113,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "mozilla",
+    "name": "Mozilla",
+    "segment": "remote-first",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "mozilla",
+    "rolesWhenConfirmed": 91,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "supabase",
+    "name": "Supabase",
+    "segment": "remote-first",
+    "country": "SG",
+    "provider": "ashby",
+    "token": "supabase",
+    "rolesWhenConfirmed": 53,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "tailscale",
+    "name": "Tailscale",
+    "segment": "remote-first",
+    "country": "CA",
+    "provider": "greenhouse",
+    "token": "tailscale",
+    "rolesWhenConfirmed": 56,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "temporal",
+    "name": "Temporal",
+    "segment": "remote-first",
+    "country": "US",
+    "provider": "ashby",
+    "token": "temporal",
+    "rolesWhenConfirmed": 66,
+    "confirmedVia": "hint"
+  }
+]
