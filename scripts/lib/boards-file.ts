@@ -1,11 +1,9 @@
 import { z } from "zod";
-import { TOKEN_RE } from "../../src/core/adapters/index.ts";
-import { PROVIDERS } from "../../src/core/types.ts";
+import { SEGMENTS, slug } from "../../src/core/boards.ts";
 
-export const SEGMENTS = ["global", "india", "remote-first"] as const;
-export type Segment = (typeof SEGMENTS)[number];
+// The confirmed-board list (data/boards.json) is shared with the website, so its schema lives in src/core/boards.ts.
+export { BoardEntries, BoardEntry, SEGMENTS, slugify, type Segment } from "../../src/core/boards.ts";
 
-const slug = z.string().regex(/^[a-z0-9][a-z0-9-]{0,63}$/, "use lower-case letters, digits and hyphens");
 const boardSpec = z.string().regex(/^(greenhouse|lever|ashby):[a-z0-9][a-z0-9_-]{0,63}$/, "use provider:token, for example greenhouse:stripe");
 
 /** One line of data/candidates.json: a company you picked, and whatever you already know about where it hires. */
@@ -22,26 +20,3 @@ export const Candidate = z.object({
 });
 export type Candidate = z.infer<typeof Candidate>;
 export const Candidates = z.array(Candidate);
-
-/** One line of data/boards.json: a confirmed board, ready to poll. This is the seed for the `company` and `board` tables. */
-export const BoardEntry = z.object({
-  slug,
-  name: z.string().min(1),
-  segment: z.enum(SEGMENTS),
-  country: z.string().length(2).optional(),
-  provider: z.enum(PROVIDERS),
-  token: z.string().regex(TOKEN_RE),
-  /** How many roles the board listed when it was confirmed. Only for reading the file; polling does not use it. */
-  rolesWhenConfirmed: z.number().int().nonnegative(),
-  confirmedVia: z.enum(["hint", "careers", "guess"]),
-});
-export type BoardEntry = z.infer<typeof BoardEntry>;
-export const BoardEntries = z.array(BoardEntry);
-
-export const slugify = (name: string): string =>
-  name
-    .normalize("NFKD")
-    .replace(/\p{M}+/gu, "")
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
