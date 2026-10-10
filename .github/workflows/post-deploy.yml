@@ -1,0 +1,28 @@
+name: Post-deploy smoke test
+
+# Vercel reports each deployment to GitHub. When a PRODUCTION deployment succeeds, this hits the public site and checks it
+# serves the commit that was just deployed. A red run here means the live site is wrong: investigate, or roll back
+# (see "Deployment" in the README).
+on:
+  deployment_status:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    name: smoke
+    # GitHub compares strings case-insensitively, so this matches Vercel's "Production".
+    if: github.event.deployment_status.state == 'success' && github.event.deployment.environment == 'Production'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.deployment.sha }}
+      - name: Smoke test the production site
+        env:
+          EXPECTED_SHA: ${{ github.event.deployment.sha }}
+          # The public address to test. Set the repository variable SMOKE_HOST to switch it to a custom domain.
+          SMOKE_HOST: ${{ vars.SMOKE_HOST || 'sooner.vercel.app' }}
+        run: bash scripts/smoke-test.sh "$SMOKE_HOST"
