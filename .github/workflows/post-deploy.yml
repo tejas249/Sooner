@@ -24,5 +24,5 @@ jobs:
         env:
           EXPECTED_SHA: ${{ github.event.deployment.sha }}
           # The public address to test. Set the repository variable SMOKE_HOST to switch it to a custom domain.
-          SMOKE_HOST: ${{ vars.SMOKE_HOST || 'sooner.vercel.app' }}
+          SMOKE_HOST: ${{ vars.SMOKE_HOST || 'sooner-tejas-kambles-projects-b2a75374.vercel.app' }}
         run: bash scripts/smoke-test.sh "$SMOKE_HOST"

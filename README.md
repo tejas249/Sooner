@@ -7,6 +7,8 @@ This is the **week 0 prototype** from the build guide: a laptop-only poller that
 saw, polls again and prints what changed, plus a landing page deployed on Vercel. There is no database and there are no
 alerts yet. Those start in week 1.
 
+Live: https://sooner-tejas-kambles-projects-b2a75374.vercel.app
+
 ## Try it
 
 ```bash
@@ -110,8 +112,8 @@ Settings you may need:
 
 - Repository variable `HR_CONTACT` (Settings, Secrets and variables, Actions, Variables): your email address or a URL. The
   weekly feed canary refuses to run without it.
-- Repository variable `SMOKE_HOST`: the public address the smoke test checks. It defaults to `sooner.vercel.app`. Set it when
-  the site gets its own domain.
+- Repository variable `SMOKE_HOST`: the public address the smoke test checks. It defaults to the project's Vercel address,
+  `sooner-tejas-kambles-projects-b2a75374.vercel.app`. Set it when the site gets its own domain.
 - Vercel environment variable `NEXT_PUBLIC_SITE_URL`: the site's own address once it has a domain, used for absolute links
   in page metadata.
 
