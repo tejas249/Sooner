@@ -1,0 +1,222 @@
+{
+  "jobs": [
+    {
+      "absolute_url": "https://stripe.com/jobs/search?gh_jid=8172510",
+      "data_compliance": [
+        {
+          "type": "gdpr",
+          "requires_consent": false,
+          "requires_processing_consent": false,
+          "requires_retention_consent": false,
+          "retention_period": null,
+          "demographic_data_consent_applies": false
+        }
+      ],
+      "education": "education_required",
+      "internal_job_id": 3537063,
+      "location": {
+        "name": "Seattle, San Francisco, New York City"
+      },
+      "metadata": null,
+      "id": 8172510,
+      "updated_at": "2026-10-07T19:02:27-04:00",
+      "requisition_id": "See Opening ID",
+      "title": "Abuse Investigator",
+      "company_name": "Stripe",
+      "first_published": "2026-09-09T10:50:29-04:00",
+      "language": "en",
+      "application_deadline": null
+    },
+    {
+      "absolute_url": "https://stripe.com/jobs/search?gh_jid=8172503",
+      "data_compliance": [
+        {
+          "type": "gdpr",
+          "requires_consent": false,
+          "requires_processing_consent": false,
+          "requires_retention_consent": false,
+          "retention_period": null,
+          "demographic_data_consent_applies": false
+        }
+      ],
+      "education": "education_required",
+      "internal_job_id": 3537060,
+      "location": {
+        "name": "Remote from the US"
+      },
+      "metadata": null,
+      "id": 8172503,
+      "updated_at": "2026-10-07T19:02:27-04:00",
+      "requisition_id": "See Opening ID",
+      "title": "Abuse Research Engineer",
+      "company_name": "Stripe",
+      "first_published": "2026-09-09T10:52:09-04:00",
+      "language": "en",
+      "application_deadline": null
+    },
+    {
+      "absolute_url": "https://stripe.com/jobs/search?gh_jid=8201690",
+      "data_compliance": [
+        {
+          "type": "gdpr",
+          "requires_consent": false,
+          "requires_processing_consent": false,
+          "requires_retention_consent": false,
+          "retention_period": null,
+          "demographic_data_consent_applies": false
+        }
+      ],
+      "education": "education_required",
+      "internal_job_id": 3549665,
+      "location": {
+        "name": "Dublin or Germany (Berlin or Remote)"
+      },
+      "metadata": null,
+      "id": 8201690,
+      "updated_at": "2026-10-07T19:02:27-04:00",
+      "requisition_id": "See Opening ID",
+      "title": "Account Executive, DACH, Commercial (Existing Business)",
+      "company_name": "Stripe",
+      "first_published": "2026-09-14T13:14:36-04:00",
+      "language": "en",
+      "application_deadline": null
+    },
+    {
+      "absolute_url": "https://stripe.com/jobs/search?gh_jid=7993151",
+      "data_compliance": [
+        {
+          "type": "gdpr",
+          "requires_consent": false,
+          "requires_processing_consent": false,
+          "requires_retention_consent": false,
+          "retention_period": null,
+          "demographic_data_consent_applies": false
+        }
+      ],
+      "education": "education_required",
+      "internal_job_id": 3467410,
+      "location": {
+        "name": "US-Remote-CA, US-San Francisco, US-Seattle, US-New York"
+      },
+      "metadata": null,
+      "id": 7993151,
+      "updated_at": "2026-10-07T19:02:27-04:00",
+      "requisition_id": "See Opening ID",
+      "title": "Account Executive, Enterprise (Grower) ",
+      "company_name": "Stripe",
+      "first_published": "2026-06-09T13:38:22-04:00",
+      "language": "en",
+      "application_deadline": null
+    },
+    {
+      "absolute_url": "https://stripe.com/jobs/search?gh_jid=8077887",
+      "data_compliance": [
+        {
+          "type": "gdpr",
+          "requires_consent": false,
+          "requires_processing_consent": false,
+          "requires_retention_consent": false,
+          "retention_period": null,
+          "demographic_data_consent_applies": false
+        }
+      ],
+      "education": "education_required",
+      "internal_job_id": 3499744,
+      "location": {
+        "name": "SF, NYC, SEA, CHI"
+      },
+      "metadata": null,
+      "id": 8077887,
+      "updated_at": "2026-10-07T19:02:27-04:00",
+      "requisition_id": "See Opening ID",
+      "title": "Account Executive, Bridge ",
+      "company_name": "Stripe",
+      "first_published": "2026-07-22T13:15:53-04:00",
+      "language": "en",
+      "application_deadline": null
+    },
+    {
+      "absolute_url": "https://stripe.com/jobs/search?gh_jid=5416444",
+      "data_compliance": [
+        {
+          "type": "gdpr",
+          "requires_consent": false,
+          "requires_processing_consent": false,
+          "requires_retention_consent": false,
+          "retention_period": null,
+          "demographic_data_consent_applies": false
+        }
+      ],
+      "internal_job_id": 2692714,
+      "location": {
+        "name": "Canada"
+      },
+      "metadata": null,
+      "id": 5416444,
+      "updated_at": "2026-10-07T19:02:27-04:00",
+      "requisition_id": "See Opening ID",
+      "title": "Data Analyst",
+      "company_name": "Stripe",
+      "first_published": "2023-11-01T13:50:50-04:00",
+      "language": "en",
+      "application_deadline": null
+    },
+    {
+      "absolute_url": "https://stripe.com/jobs/search?gh_jid=8144196",
+      "data_compliance": [
+        {
+          "type": "gdpr",
+          "requires_consent": false,
+          "requires_processing_consent": false,
+          "requires_retention_consent": false,
+          "retention_period": null,
+          "demographic_data_consent_applies": false
+        }
+      ],
+      "education": "education_required",
+      "internal_job_id": 3524466,
+      "location": {
+        "name": "Chicago"
+      },
+      "metadata": null,
+      "id": 8144196,
+      "updated_at": "2026-10-07T19:02:27-04:00",
+      "requisition_id": "See Opening ID",
+      "title": "AI Engineer",
+      "company_name": "Stripe",
+      "first_published": "2026-10-07T11:39:36-04:00",
+      "language": "en",
+      "application_deadline": null
+    },
+    {
+      "absolute_url": "https://stripe.com/jobs/search?gh_jid=7825578",
+      "data_compliance": [
+        {
+          "type": "gdpr",
+          "requires_consent": false,
+          "requires_processing_consent": false,
+          "requires_retention_consent": false,
+          "retention_period": null,
+          "demographic_data_consent_applies": false
+        }
+      ],
+      "education": "education_required",
+      "internal_job_id": 3415406,
+      "location": {
+        "name": "Germany "
+      },
+      "metadata": null,
+      "id": 7825578,
+      "updated_at": "2026-10-08T02:26:50-04:00",
+      "requisition_id": "See Opening ID",
+      "title": "Account Executive, Enterprise Hunter (DACH Market)  ",
+      "company_name": "Stripe",
+      "first_published": "2026-04-28T10:29:58-04:00",
+      "language": "en",
+      "application_deadline": null
+    }
+  ],
+  "meta": {
+    "total": 8
+  }
+}
