@@ -1,0 +1,23 @@
+# dependencies
+/node_modules
+
+# testing
+/coverage
+
+# local run state (snapshots and ETags from the prototype poller)
+/.state/
+
+# env files: the real one holds your contact address; the template is committed
+.env*
+!.env.example
+
+# editor and OS
+.DS_Store
+
+# local tooling configuration
+/.claude/
+/CLAUDE.md
+
+# typescript
+*.tsbuildinfo
+npm-debug.log*

@@ -1,0 +1,31 @@
+{
+  "name": "sooner",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Watches the public job-board feeds of a few hundred companies and tells you when a role opens, how long it has really been open, and whether the company fills its roles.",
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint",
+    "test": "vitest run",
+    "verify": "npm run typecheck && npm run lint && npm test",
+    "feeds:check": "node --env-file-if-exists=.env scripts/check-feeds.ts",
+    "detect": "node --env-file-if-exists=.env scripts/detect-ats.ts",
+    "poll": "node --env-file-if-exists=.env scripts/poll-local.ts"
+  },
+  "dependencies": {
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^24.19.1",
+    "eslint": "^10.12.0",
+    "fast-check": "^4.10.2",
+    "typescript": "~5.9.3",
+    "typescript-eslint": "^8.71.1",
+    "vitest": "^5.0.3"
+  }
+}
