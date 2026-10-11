@@ -16,3 +16,8 @@ updates:
     directory: /
     schedule:
       interval: monthly
+  # The worker's base image (node:24-slim) and the database image the tests use are updated by hand when Node or Postgres moves on.
+  - package-ecosystem: docker
+    directory: /
+    schedule:
+      interval: monthly

@@ -34,6 +34,62 @@ jobs:
       - run: npm run lint
       - run: npm test
 
+  # The tests that need a real Postgres: claiming never double-polls, a crash applies nothing, migrations apply to an empty
+  # database. The service container is a throwaway Postgres next to the job, the same major version the hosted database
+  # runs. Locally the same tests start their own (npm run test:db).
+  database:
+    name: database
+    if: github.event_name != 'schedule'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      TEST_DATABASE_URL: postgres://postgres:postgres@localhost:5432/postgres
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run test:db
+
+  # The worker's image has to build, and the program in it has to start. Nothing is pushed anywhere: this only proves the
+  # Dockerfile still works before a deploy finds out it does not.
+  worker-image:
+    name: worker image
+    if: github.event_name != 'schedule'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - run: docker build --tag sooner-worker .
+      - name: The worker starts and accepts its configuration
+        run: >-
+          docker run --rm
+          --env DATABASE_URL=postgres://user:password@localhost:5432/sooner
+          --env HR_CONTACT=ci@example.com
+          sooner-worker node dist/worker.mjs --check
+      - name: The migration runner starts and complains about the missing database, not about a missing file
+        run: |
+          set +e
+          output=$(docker run --rm --env DATABASE_URL=postgres://user:password@127.0.0.1:1/sooner sooner-worker node dist/migrate.mjs 2>&1)
+          status=$?
+          echo "$output"
+          test "$status" -eq 1
+          echo "$output" | grep -q "error:"
+
   # The site has to build too. Vercel runs the same build when it deploys, but a failure here shows up on the pull request
   # first, before anything reaches a preview.
   build:
