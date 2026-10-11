@@ -13,11 +13,13 @@
     "start": "next start",
     "typecheck": "next typegen && tsc --noEmit",
     "lint": "eslint",
-    "test": "vitest run",
+    "test": "vitest run --project unit",
+    "test:db": "vitest run --project db",
     "verify": "npm run typecheck && npm run lint && npm test",
     "feeds:check": "node --env-file-if-exists=.env scripts/check-feeds.ts",
     "detect": "node --env-file-if-exists=.env scripts/detect-ats.ts",
     "poll": "node --env-file-if-exists=.env scripts/poll-local.ts",
+    "db:dev": "node tools/dev-db/serve.mjs",
     "db:migrate": "node --env-file-if-exists=.env scripts/db-migrate.ts"
   },
   "dependencies": {

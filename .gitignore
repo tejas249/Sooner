@@ -4,8 +4,11 @@
 # testing
 /coverage
 
-# local run state (snapshots and ETags from the prototype poller)
+# local run state: the prototype poller's snapshots and ETags, and the dev database's files
 /.state/
+
+# the dev database's binaries are installed on demand (tools/dev-db)
+/tools/*/node_modules/
 
 # env files: the real one holds your contact address; the template is committed
 .env*

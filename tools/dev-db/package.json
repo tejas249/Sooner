@@ -1,0 +1,9 @@
+{
+  "name": "sooner-dev-db",
+  "private": true,
+  "type": "module",
+  "description": "A real Postgres for machines without Docker. Installed on demand by `npm run db:dev` and the database tests; it is deliberately not one of the app's dependencies, so Vercel and CI never download it.",
+  "dependencies": {
+    "embedded-postgres": "17.10.0-beta.17"
+  }
+}
