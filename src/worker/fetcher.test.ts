@@ -239,3 +239,47 @@ describe("politeness", () => {
     expect(gaps.slice(1).every((g) => g >= 120)).toBe(true);
   });
 });
+
+describe("cancelling", () => {
+  it("stops a request that is in progress and says it was aborted, not that it timed out", async () => {
+    handler = () => undefined; // never answers
+    const stop = new AbortController();
+    const pending = fetcher({ timeoutMs: 5000 }).get(`${base}/slow`, { signal: stop.signal });
+    await new Promise((resolve) => setTimeout(resolve, 50));
+    const startedAt = performance.now();
+    stop.abort();
+    const out = await pending;
+    expect(out).toMatchObject({ kind: "retry", reason: "aborted" });
+    expect(performance.now() - startedAt).toBeLessThan(500);
+  });
+
+  it("sends nothing at all when it is cancelled while waiting for its turn at the gate", async () => {
+    handler = (_req, res) => setTimeout(() => json(res, {}), 150);
+    const f = fetcher({ gate: new HostGate({ gapMs: 0, maxInFlight: 1 }) });
+    const first = f.get(`${base}/first`);
+    const stop = new AbortController();
+    const queued = f.get(`${base}/queued`, { signal: stop.signal });
+    await new Promise((resolve) => setTimeout(resolve, 30));
+    stop.abort();
+    await first;
+    expect(await queued).toMatchObject({ kind: "retry", reason: "aborted" });
+    expect(arrivals.map((a) => a.url)).toEqual(["/first"]);
+  });
+
+  it("frees the gate slot of a cancelled request", async () => {
+    handler = (req, res) => (req.url === "/stuck" ? undefined : json(res, {}));
+    const f = fetcher({ gate: new HostGate({ gapMs: 0, maxInFlight: 1 }) });
+    const stop = new AbortController();
+    const stuck = f.get(`${base}/stuck`, { signal: stop.signal });
+    await new Promise((resolve) => setTimeout(resolve, 30));
+    stop.abort();
+    await stuck;
+    expect((await f.get(`${base}/after`)).kind).toBe("ok");
+  });
+
+  it("still times out on its own when it is never cancelled", async () => {
+    handler = () => undefined;
+    const out = await fetcher({ timeoutMs: 80 }).get(`${base}/slow`, { signal: new AbortController().signal });
+    expect(out).toMatchObject({ kind: "retry", reason: "timeout" });
+  });
+});

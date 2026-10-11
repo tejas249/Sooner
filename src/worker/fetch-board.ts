@@ -29,9 +29,14 @@ export type BoardFetch =
 export async function fetchBoard(
   fetcher: Fetcher,
   board: BoardRef & { etag?: string | null },
+  options: { signal?: AbortSignal } = {},
 ): Promise<BoardFetch> {
   const adapter = adapters[board.provider];
-  const outcome = await fetcher.get(adapter.url(board.token), { etag: board.etag, timeoutMs: adapter.timeoutMs });
+  const outcome = await fetcher.get(adapter.url(board.token), {
+    etag: board.etag,
+    timeoutMs: adapter.timeoutMs,
+    signal: options.signal,
+  });
   if (outcome.kind !== "ok") return outcome;
 
   const { text, ...rest } = outcome;

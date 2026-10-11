@@ -44,6 +44,8 @@ export interface GetOptions {
   maxBytes?: number;
   /** Overrides the fetcher's timeout for this request. Some providers are slow to build a big answer. */
   timeoutMs?: number;
+  /** Cancels the request, for a worker that is shutting down. The outcome is a `retry` whose reason is "aborted". */
+  signal?: AbortSignal;
 }
 
 export interface Fetcher {
@@ -65,6 +67,12 @@ function describeFailure(error: unknown): string {
     return `network error (${code ?? error.message})`;
   }
   return "network error";
+}
+
+/** A signal that fires after `ms`, or as soon as `cancel` does, whichever comes first. */
+function withTimeout(ms: number, cancel: AbortSignal | undefined): AbortSignal {
+  const timeout = AbortSignal.timeout(ms);
+  return cancel ? AbortSignal.any([timeout, cancel]) : timeout;
 }
 
 async function readCapped(res: Response, maxBytes: number): Promise<{ text: string; bytes: number } | null> {
@@ -98,6 +106,10 @@ export function createFetcher(options: FetcherOptions): Fetcher {
    */
   async function hop(target: URL, opts: GetOptions): Promise<Hop> {
     const release = await options.gate.acquire(target.host);
+    if (opts.signal?.aborted) {
+      release();
+      throw opts.signal.reason;
+    }
     const started = performance.now();
     const meta = (status: number | null, bytes = 0): FetchMeta => ({
       status,
@@ -117,7 +129,7 @@ export function createFetcher(options: FetcherOptions): Fetcher {
         // "Cache-Control: max-age=0" instead, which just means "check that your copy is current".
         cache: opts.etag ? "no-cache" : "default",
         redirect: "manual",
-        signal: AbortSignal.timeout(opts.timeoutMs ?? timeoutMs),
+        signal: withTimeout(opts.timeoutMs ?? timeoutMs, opts.signal),
       });
 
       const location = res.headers.get("location");
@@ -178,7 +190,7 @@ export function createFetcher(options: FetcherOptions): Fetcher {
         target = new URL(step.location, target);
       }
     } catch (error) {
-      return { kind: "retry", retryAfterSec: null, reason: describeFailure(error), ...meta(null) };
+      return { kind: "retry", retryAfterSec: null, reason: opts.signal?.aborted ? "aborted" : describeFailure(error), ...meta(null) };
     }
   }
 
