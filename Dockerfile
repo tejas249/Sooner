@@ -7,7 +7,7 @@
 # Two stages. The first installs everything and bundles the worker and the migration runner into two files; the second
 # is just Node and those two files, so the image has no node_modules, no source and no build tools in it.
 
-FROM node:24-slim AS build
+FROM node:25-slim AS build
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
@@ -16,7 +16,7 @@ COPY src ./src
 COPY scripts ./scripts
 RUN node scripts/build-worker.ts
 
-FROM node:24-slim
+FROM node:25-slim
 WORKDIR /app
 ENV NODE_ENV=production
 COPY --from=build /app/dist ./dist
