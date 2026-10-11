@@ -113,3 +113,17 @@ describe("ashby adapter, edge cases", () => {
     expect(ashby.parse(board([job({ id: "a" }), job({ id: "b", isListed: false, department: 7 })])).length).toBe(1);
   });
 });
+
+describe("ashby adapter, control characters", () => {
+  const NUL = String.fromCharCode(0);
+
+  it("cleans a control character out of a title instead of passing it on", () => {
+    const [role] = ashby.parse(board([job({ title: `Backend${NUL}Engineer` })]));
+    expect(role?.title).toBe("Backend Engineer");
+  });
+
+  it("fails the response when an ID or a link carries one", () => {
+    expect(() => ashby.parse(board([job({ id: `abc${NUL}def` })]))).toThrow(FeedFormatError);
+    expect(() => ashby.parse(board([job({ jobUrl: `https://jobs.ashbyhq.com/acme/1${NUL}` })]))).toThrow(FeedFormatError);
+  });
+});

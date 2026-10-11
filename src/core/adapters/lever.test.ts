@@ -109,3 +109,22 @@ describe("lever adapter, edge cases", () => {
     expect(() => lever.parse([posting(), posting({ text: "Other" })])).toThrow(/appears twice/);
   });
 });
+
+describe("lever adapter, control characters", () => {
+  const NUL = String.fromCharCode(0);
+
+  it("cleans a control character out of a title and a place instead of passing it on", () => {
+    const [job] = lever.parse([posting({ text: `Backend${NUL}Engineer`, categories: { location: `Ber${NUL}lin` } })]);
+    expect(job?.title).toBe("Backend Engineer");
+    expect(job?.location).toBe("Ber lin");
+  });
+
+  it("fails the response when an ID or a link carries one: the feed is not what we think it is", () => {
+    expect(() => lever.parse([posting({ id: `abc${NUL}def` })])).toThrow(FeedFormatError);
+    expect(() => lever.parse([posting({ hostedUrl: `https://jobs.lever.co/acme/1${NUL}` })])).toThrow(FeedFormatError);
+  });
+
+  it("fails the response for an absurdly long ID", () => {
+    expect(() => lever.parse([posting({ id: "x".repeat(201) })])).toThrow(FeedFormatError);
+  });
+});

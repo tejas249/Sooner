@@ -125,3 +125,17 @@ describe("greenhouse adapter, edge cases", () => {
     expect(() => greenhouse.parse(board([job({ id: 7 }), job({ id: 7, title: "Other" })]))).toThrow(/appears twice/);
   });
 });
+
+describe("greenhouse adapter, control characters", () => {
+  const NUL = String.fromCharCode(0);
+
+  it("cleans a control character out of a title and a place instead of passing it on", () => {
+    const [role] = greenhouse.parse(board([job({ title: `Backend${NUL}Engineer`, location: { name: `Par${NUL}is` } })]));
+    expect(role?.title).toBe("Backend Engineer");
+    expect(role?.location).toBe("Par is");
+  });
+
+  it("fails the response when a link carries one", () => {
+    expect(() => greenhouse.parse(board([job({ absolute_url: `https://example.test/jobs/1${NUL}` })]))).toThrow(FeedFormatError);
+  });
+});

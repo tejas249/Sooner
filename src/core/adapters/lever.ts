@@ -4,6 +4,7 @@ import {
   assertToken,
   employerUrl,
   parseFeed,
+  providerId,
   rejectDuplicateIds,
   requireTitle,
   text,
@@ -13,7 +14,7 @@ import {
 
 // Lever ships whole descriptions with every posting. None of that is listed here, so none of it is kept.
 const Posting = z.object({
-  id: z.string().min(1),
+  id: providerId,
   text: z.string(),
   hostedUrl: employerUrl,
   createdAt: z.number().nullish(),

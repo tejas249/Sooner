@@ -9,10 +9,14 @@ const INVISIBLE = new RegExp(["\\u200B", "\\u2060", "\\uFEFF"].join("|"), "g");
 
 /**
  * Display text: collapse runs of whitespace into one space and trim. Zero-width characters are removed first because
- * they are invisible yet make two identical-looking titles compare as different.
+ * they are invisible yet make two identical-looking titles compare as different. Control characters become spaces:
+ * they have no place in a title, and the database cannot store a NUL at all.
  */
 export const clean = (s?: string | null): string =>
-  (s ?? "").replace(INVISIBLE, "").replace(/\s+/g, " ").trim();
+  (s ?? "").replace(INVISIBLE, "").replace(/\p{Cc}/gu, " ").replace(/\s+/g, " ").trim();
+
+/** Control characters: NUL, the bell, escape codes and the rest of the C0 and C1 ranges (\p{Cc}). */
+export const hasControlCharacter = (s: string): boolean => /\p{Cc}/u.test(s);
 
 /**
  * Comparison text: lower-case, accents removed from Latin letters, every run of punctuation or symbols becomes one

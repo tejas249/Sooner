@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { FeedFormatError } from "../errors.ts";
-import { clean } from "../text.ts";
+import { clean, hasControlCharacter } from "../text.ts";
 import type { NormalizedJob, Provider } from "../types.ts";
 
 /** What the rest of the system knows about a provider. Adapters parse; they never fetch. */
@@ -32,6 +32,10 @@ export function assertToken(token: string): void {
  */
 export const employerUrl = z.string().transform((value, ctx) => {
   const trimmed = value.trim();
+  if (hasControlCharacter(trimmed)) {
+    ctx.addIssue({ code: "custom", message: "must not contain control characters" });
+    return z.NEVER;
+  }
   try {
     const { protocol } = new URL(trimmed);
     if (protocol === "https:") return trimmed;
@@ -42,6 +46,16 @@ export const employerUrl = z.string().transform((value, ctx) => {
   ctx.addIssue({ code: "custom", message: "must be an http or https URL" });
   return z.NEVER;
 });
+
+/**
+ * The provider's own ID for a role. It is stored and compared as text, so it must be a plain, reasonably short string:
+ * a control character in it (the database cannot store a NUL) means the feed is not what we think it is.
+ */
+export const providerId = z
+  .string()
+  .min(1)
+  .max(200)
+  .refine((value) => !hasControlCharacter(value), "must not contain control characters");
 
 /** Dates arrive as ISO text with any offset, or as epoch milliseconds. Out: ISO in UTC, or null when unusable. */
 export function toIso(value: string | number | null | undefined): string | null {

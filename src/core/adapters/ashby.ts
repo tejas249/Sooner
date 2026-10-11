@@ -4,6 +4,7 @@ import {
   assertToken,
   employerUrl,
   parseFeed,
+  providerId,
   rejectDuplicateIds,
   requireTitle,
   text,
@@ -14,7 +15,7 @@ import {
 // isListed is required on purpose. If Ashby ever dropped it, quietly treating every role as listed (or unlisted)
 // would be a wrong guess; failing the response is the honest outcome.
 const Job = z.object({
-  id: z.string().min(1),
+  id: providerId,
   title: z.string(),
   jobUrl: employerUrl,
   isListed: z.boolean(),
