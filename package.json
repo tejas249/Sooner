@@ -21,7 +21,8 @@
     "poll": "node --env-file-if-exists=.env scripts/poll-local.ts",
     "worker": "node --env-file-if-exists=.env src/worker/index.ts",
     "db:dev": "node tools/dev-db/serve.mjs",
-    "db:migrate": "node --env-file-if-exists=.env scripts/db-migrate.ts"
+    "db:migrate": "node --env-file-if-exists=.env scripts/db-migrate.ts",
+    "db:seed": "node --env-file-if-exists=.env scripts/db-seed.ts"
   },
   "dependencies": {
     "next": "^16.4.0",
