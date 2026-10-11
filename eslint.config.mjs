@@ -41,7 +41,7 @@ export default defineConfig([
           ],
           patterns: [
             {
-              group: ["**/worker/**", "**/app/**", "**/web/**", "**/local/**", "**/prisma/**", "@prisma/*"],
+              group: ["**/worker/**", "**/app/**", "**/web/**", "**/db/**", "**/local/**", "**/prisma/**", "@prisma/*"],
               message: "src/core must not import from the worker, the web app or the database.",
             },
             {

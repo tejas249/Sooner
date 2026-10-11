@@ -17,10 +17,12 @@
     "verify": "npm run typecheck && npm run lint && npm test",
     "feeds:check": "node --env-file-if-exists=.env scripts/check-feeds.ts",
     "detect": "node --env-file-if-exists=.env scripts/detect-ats.ts",
-    "poll": "node --env-file-if-exists=.env scripts/poll-local.ts"
+    "poll": "node --env-file-if-exists=.env scripts/poll-local.ts",
+    "db:migrate": "node --env-file-if-exists=.env scripts/db-migrate.ts"
   },
   "dependencies": {
     "next": "^16.4.0",
+    "pg": "^8.23.1",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
     "zod": "^4.6.5"
@@ -29,6 +31,7 @@
     "@eslint/js": "^10.0.1",
     "@tailwindcss/postcss": "^4.3.3",
     "@types/node": "^24.19.1",
+    "@types/pg": "^8.23.1",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "eslint": "^10.12.0",
