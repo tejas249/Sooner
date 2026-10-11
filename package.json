@@ -19,6 +19,7 @@
     "feeds:check": "node --env-file-if-exists=.env scripts/check-feeds.ts",
     "detect": "node --env-file-if-exists=.env scripts/detect-ats.ts",
     "poll": "node --env-file-if-exists=.env scripts/poll-local.ts",
+    "worker": "node --env-file-if-exists=.env src/worker/index.ts",
     "db:dev": "node tools/dev-db/serve.mjs",
     "db:migrate": "node --env-file-if-exists=.env scripts/db-migrate.ts"
   },

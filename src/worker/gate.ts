@@ -1,3 +1,6 @@
+/** At most this many requests to one host run at once, unless a gate is built with another number. */
+export const DEFAULT_MAX_IN_FLIGHT = 2;
+
 export interface GateClock {
   now(): number;
   sleep(ms: number): Promise<void>;
@@ -36,7 +39,7 @@ export class HostGate {
 
   constructor(options: GateOptions = {}) {
     this.#gapMs = options.gapMs ?? 1000;
-    this.#maxInFlight = Math.max(1, options.maxInFlight ?? 2);
+    this.#maxInFlight = Math.max(1, options.maxInFlight ?? DEFAULT_MAX_IN_FLIGHT);
     this.#clock = options.clock ?? realClock;
   }
 
