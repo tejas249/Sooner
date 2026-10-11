@@ -12,13 +12,15 @@ describe("ESLint ignores files that are generated rather than written", () => {
     "node_modules/zod/index.js",
     "next-env.d.ts",
     ".state/poll-local.json",
+    "dist/worker.mjs", // the bundled worker (npm run build:worker)
+    "tools/dev-db/node_modules/pg/lib/index.js", // the dev database's own dependencies
   ])("%s", async (path) => {
     expect(await new ESLint().isPathIgnored(path)).toBe(true);
   });
 
   it("still lints the code we write", async () => {
     const eslint = new ESLint();
-    for (const path of ["src/core/changes.ts", "src/app/page.tsx", "scripts/poll-local.ts"]) {
+    for (const path of ["src/core/changes.ts", "src/app/page.tsx", "scripts/poll-local.ts", "src/worker/loop.ts", "src/db/migrate.ts"]) {
       expect(await eslint.isPathIgnored(path), path).toBe(false);
     }
   });

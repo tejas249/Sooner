@@ -20,6 +20,7 @@
     "detect": "node --env-file-if-exists=.env scripts/detect-ats.ts",
     "poll": "node --env-file-if-exists=.env scripts/poll-local.ts",
     "worker": "node --env-file-if-exists=.env src/worker/index.ts",
+    "build:worker": "node scripts/build-worker.ts",
     "db:dev": "node tools/dev-db/serve.mjs",
     "db:migrate": "node --env-file-if-exists=.env scripts/db-migrate.ts",
     "db:seed": "node --env-file-if-exists=.env scripts/db-seed.ts"
@@ -38,6 +39,7 @@
     "@types/pg": "^8.23.1",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
+    "esbuild": "^0.28.2",
     "eslint": "^10.12.0",
     "eslint-config-next": "^16.4.0",
     "fast-check": "^4.10.2",

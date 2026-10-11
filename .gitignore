@@ -7,6 +7,9 @@
 # local run state: the prototype poller's snapshots and ETags, and the dev database's files
 /.state/
 
+# the bundled worker (npm run build:worker)
+/dist/
+
 # the dev database's binaries are installed on demand (tools/dev-db)
 /tools/*/node_modules/
 

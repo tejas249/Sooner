@@ -5,7 +5,7 @@ import { describe, expect, it } from "vitest";
 // TypeScript's own checks no longer insist on that (the website needs a bundler-style config), so this test starts each
 // script for real. A missing extension shows up as a module error; a healthy script gets as far as complaining about the
 // flag it was given.
-describe.each(["poll-local", "detect-ats", "check-feeds", "db-migrate", "db-seed"])("scripts/%s.ts", (name) => {
+describe.each(["poll-local", "detect-ats", "check-feeds", "db-migrate", "db-seed", "build-worker"])("scripts/%s.ts", (name) => {
   it("loads, and fails only because of the bad flag we pass it", () => {
     const result = spawnSync(process.execPath, [`scripts/${name}.ts`, "--no-such-flag"], { encoding: "utf8" });
     const output = `${result.stdout}${result.stderr}`;

@@ -1,0 +1,20 @@
+# Only what the build needs goes into the image build: package files, tsconfig, src, scripts and migrations.
+.git
+.github
+.next
+.vercel
+.state
+.claude
+.env*
+node_modules
+tools/*/node_modules
+coverage
+dist
+out
+fixtures
+data
+docs
+public
+*.md
+Dockerfile
+.dockerignore
