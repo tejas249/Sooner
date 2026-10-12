@@ -27,13 +27,15 @@ const steps = [
 
 const worksToday = [
   "Reads the public job boards on Greenhouse, Lever and Ashby",
-  "Finds roles that are new, edited, closed or back again",
+  "Keeps every role, and everything that happened to it, in Postgres",
+  "Finds roles that are new, edited, closed, back again or reposted",
   "Never reads a failed or odd answer as “everything closed”",
-  "Is covered by automated tests, including randomised ones",
+  "Backs off when a board struggles, and tells its owner when something needs a person",
+  "Is covered by automated tests, including randomised ones and a mock job-board server",
 ];
 
 const nextUp = [
-  "A database that keeps the history of every role",
+  "Running around the clock on a hosted worker",
   "Search, and a page for each company",
   "Alerts by email, push and Telegram",
   "A stale-role signal that shows its reasons",
@@ -106,7 +108,8 @@ export default function Home() {
           </a>
         </div>
         <p className="mt-6 max-w-xl text-sm text-muted">
-          This is a working prototype. The polling runs today; accounts and alerts are what comes next.
+          This is a working prototype. The polling code is built and tested against the real feeds; running it around the
+          clock, accounts and alerts are what comes next.
         </p>
       </div>
 
@@ -177,7 +180,7 @@ export default function Home() {
       <Section
         id="companies"
         title="Companies it watches"
-        intro={`${stats.companies} boards today, picked for a mix of global tech, Indian companies and remote-first teams. The list grows toward 300.`}
+        intro={`${stats.companies} companies, picked for a mix of global tech, Indian companies and remote-first teams. The ${stats.fast} shown first are checked every five minutes; the others adapt, from every half hour to every six hours, depending on how often they change.`}
       >
         <CompanyList groups={stats.bySegment} />
       </Section>
