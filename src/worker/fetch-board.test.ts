@@ -34,6 +34,14 @@ describe("fetchBoard", () => {
     }
   });
 
+  it("hands back the raw text only when asked, for the detection script's check that a board belongs to the company", async () => {
+    const { fetcher } = cannedFetcher(ok(JSON.stringify(recorded)));
+    const plain = await fetchBoard(fetcher, { provider: "greenhouse", token: "stripe" });
+    const asked = await fetchBoard(fetcher, { provider: "greenhouse", token: "stripe" }, { keepText: true });
+    expect(plain.kind === "ok" && "text" in plain).toBe(false);
+    expect(asked.kind === "ok" && asked.text).toBe(JSON.stringify(recorded));
+  });
+
   it("allows a slow provider longer to answer: Lever took 52 seconds to build a 6 MB board", async () => {
     const { fetcher, calls } = cannedFetcher(ok("[]"));
     await fetchBoard(fetcher, { provider: "lever", token: "palantir" });

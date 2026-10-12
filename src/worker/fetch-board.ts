@@ -16,6 +16,8 @@ export type BoardFetch =
       etag: string | null;
       cacheControl: string | null;
       contentEncoding: string | null;
+      /** The raw answer. Only there when the caller asked for it (`keepText`): the worker never keeps it. */
+      text?: string;
     } & FetchMeta)
   | ({ kind: "unchanged" } & FetchMeta)
   | ({ kind: "retry"; retryAfterSec: number | null; reason: string } & FetchMeta)
@@ -33,7 +35,7 @@ export type BoardFetch =
 export async function fetchBoard(
   fetcher: Fetcher,
   board: BoardRef & { etag?: string | null },
-  options: { signal?: AbortSignal; adapters?: Record<Provider, Adapter> } = {},
+  options: { signal?: AbortSignal; adapters?: Record<Provider, Adapter>; keepText?: boolean } = {},
 ): Promise<BoardFetch> {
   const adapter = (options.adapters ?? realAdapters)[board.provider];
   const outcome = await fetcher.get(adapter.url(board.token), {
@@ -58,6 +60,7 @@ export async function fetchBoard(
       etag: rest.etag,
       cacheControl: rest.cacheControl,
       contentEncoding: rest.contentEncoding,
+      ...(options.keepText ? { text } : {}),
       ...meta,
     };
   } catch (error) {

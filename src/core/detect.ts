@@ -66,3 +66,46 @@ export function guessTokens(name: string, website?: string): string[] {
   }
   return [...new Set(guesses)].filter((token) => TOKEN_RE.test(token)).slice(0, 3);
 }
+
+export interface Evidence {
+  /** How many times the company's name appears. */
+  name: number;
+  /** How many times its website's address appears. */
+  domain: number;
+}
+
+const escapeRegex = (text: string): string => text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+/**
+ * How much a board's own answer says it belongs to this company: how often the company's name, and its website's address,
+ * appear in it. A guessed board token can belong to another company with the same name, and a board that never mentions
+ * the company it was matched to is almost certainly someone else's. Counts are of whole words, ignoring case. A name of
+ * several words also counts its first word when that is long enough not to be common, because boards often say just "Grafana".
+ */
+export function boardEvidence(text: string, name: string, website?: string): Evidence {
+  const words = name.trim().split(/\s+/).filter(Boolean);
+  const names = [words.join(" ")];
+  const first = words[0];
+  if (words.length > 1 && first !== undefined && first.length >= 5) names.push(first);
+
+  const count = (needles: string[], before: string): number => {
+    const alternatives = needles.filter((needle) => needle !== "").map(escapeRegex);
+    if (alternatives.length === 0) return 0;
+    const pattern = new RegExp(`(?<![${before}])(?:${alternatives.join("|")})(?![${before}])`, "giu");
+    return [...text.matchAll(pattern)].length;
+  };
+
+  let host = "";
+  if (website) {
+    try {
+      host = new URL(website).hostname.replace(/^www\./, "").toLowerCase();
+    } catch {
+      // not a URL: no address to look for
+    }
+  }
+  return {
+    // Longest first, so "Grafana Labs" is counted once and not again as "Grafana".
+    name: count(names.sort((a, b) => b.length - a.length), "\\p{L}\\p{N}"),
+    domain: count([host], "\\p{L}\\p{N}-"),
+  };
+}

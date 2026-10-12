@@ -10,103 +10,21 @@
  *   1. the boards you listed ("boards": ["greenhouse:stripe"]),
  *   2. the careers page, read once for links to a job board ("careers": "https://..."),
  *   3. guesses from the company's name and website, on all three providers.
- * A board only counts when the provider's API answers 200 with a shape its adapter understands. Guesses can still land
- * on another company's board, so every guess is shown for you to check.
+ * A board only counts when the provider's API answers 200 with a shape its adapter understands. A guess can land on another
+ * company's board, so a guessed board must also mention the company: its name or its website's address has to appear in
+ * the board's own answer, or the guess is ignored. Every guess is shown with that evidence for you to check, and so is
+ * every hint, since a hint can be a typo.
  *
  * Every request goes through the same politeness gate as polling (one per second per host).
  * The careers page is fetched from the list you wrote. Never point this at addresses other people can type.
  */
 import { parseArgs } from "node:util";
-import { findBoardRefs, guessTokens } from "../src/core/detect.ts";
-import { PROVIDERS, isProvider } from "../src/core/types.ts";
-import { fetchBoard, type BoardRef } from "../src/worker/fetch-board.ts";
-import type { Fetcher } from "../src/worker/fetcher.ts";
 import { mapPool } from "../src/worker/pool.ts";
-import { BoardEntries, Candidates, slugify, type BoardEntry, type Candidate } from "./lib/boards-file.ts";
+import { BoardEntries, Candidates, slugify, type BoardEntry } from "./lib/boards-file.ts";
+import { detect, spec } from "./lib/detect.ts";
 import { bold, column, dim, formatDuration, green, red, yellow } from "./lib/format.ts";
 import { readJson, writeJson } from "./lib/json-file.ts";
 import { createRuntime, run } from "./lib/runtime.ts";
-
-type Via = BoardEntry["confirmedVia"];
-
-type Detection =
-  | { kind: "found"; ref: BoardRef; roles: number; via: Via; sampleHost: string | null }
-  | { kind: "missing"; tried: string[]; notes: string[] }
-  | { kind: "unreachable"; tried: string[]; reason: string };
-
-type Probe =
-  | { kind: "found"; roles: number; sampleHost: string | null }
-  | { kind: "missing" }
-  | { kind: "unreachable"; reason: string };
-
-const spec = (ref: BoardRef): string => `${ref.provider}:${ref.token}`;
-
-async function probe(fetcher: Fetcher, ref: BoardRef): Promise<Probe> {
-  const out = await fetchBoard(fetcher, ref);
-  switch (out.kind) {
-    case "ok": {
-      const first = out.jobs[0];
-      return { kind: "found", roles: out.jobs.length, sampleHost: first ? new URL(first.url).host : null };
-    }
-    case "error":
-      return out.status === 404 ? { kind: "missing" } : { kind: "unreachable", reason: out.reason };
-    case "unchanged":
-      return { kind: "missing" }; // cannot happen without an ETag
-    case "retry":
-    case "invalid":
-      return { kind: "unreachable", reason: out.reason };
-  }
-}
-
-async function detect(fetcher: Fetcher, candidate: Candidate, guessing: boolean): Promise<Detection> {
-  const tried: string[] = [];
-  const notes: string[] = [];
-  let unreachable: string | null = null;
-
-  const attempt = async (ref: BoardRef, via: Via): Promise<Detection | null> => {
-    if (tried.includes(spec(ref))) return null;
-    tried.push(spec(ref));
-    const result = await probe(fetcher, ref);
-    if (result.kind === "unreachable") unreachable = `${spec(ref)}: ${result.reason}`;
-    // An empty board is plausible for a hint, but a guess that finds nothing is more likely the wrong company.
-    if (result.kind === "found" && (via !== "guess" || result.roles > 0)) {
-      return { kind: "found", ref, roles: result.roles, via, sampleHost: result.sampleHost };
-    }
-    return null;
-  };
-
-  for (const hint of candidate.boards ?? []) {
-    const [provider, token] = hint.split(":");
-    if (!isProvider(provider) || !token) continue;
-    const found = await attempt({ provider, token }, "hint");
-    if (found) return found;
-  }
-
-  if (candidate.careers) {
-    const page = await fetcher.get(candidate.careers, { accept: "text/html", maxRedirects: 3, maxBytes: 3_000_000 });
-    if (page.kind !== "ok") {
-      notes.push(`careers page: ${page.kind === "unchanged" ? "unexpected 304" : page.reason}`);
-    } else {
-      const refs = findBoardRefs(page.text);
-      if (refs.length === 0) notes.push("careers page: no job-board links in the HTML (it may be built by JavaScript)");
-      for (const ref of refs) {
-        const found = await attempt(ref, "careers");
-        if (found) return found;
-      }
-    }
-  }
-
-  if (guessing) {
-    for (const token of guessTokens(candidate.name, candidate.website)) {
-      for (const provider of PROVIDERS) {
-        const found = await attempt({ provider, token }, "guess");
-        if (found) return found;
-      }
-    }
-  }
-
-  return unreachable ? { kind: "unreachable", tried, reason: unreachable } : { kind: "missing", tried, notes };
-}
 
 run(async () => {
   const { values } = parseArgs({
@@ -138,9 +56,10 @@ run(async () => {
     done++;
     const prefix = `${String(done).padStart(3)}/${candidates.length} ${column(candidate.name, 24)}`;
     if (detection.kind === "found") {
-      const flag = detection.via === "guess" ? yellow(" check it") : "";
+      const { name, domain } = detection.evidence;
+      const proof = name + domain === 0 ? red("  nothing in it mentions the company: is it the right board?") : dim(`  name x${name}, address x${domain}`);
       const host = detection.sampleHost ? dim(`  jobs link to ${detection.sampleHost}`) : "";
-      console.log(`${prefix} ${green(column(spec(detection.ref), 34))} ${String(detection.roles).padStart(4)} roles  ${dim(`(${detection.via})`)}${flag}${host}`);
+      console.log(`${prefix} ${green(column(spec(detection.ref), 34))} ${String(detection.roles).padStart(4)} roles  ${dim(`(${detection.via})`)}${proof}${host}`);
     } else if (detection.kind === "unreachable") {
       console.log(`${prefix} ${red("could not tell")}  ${detection.reason}`);
     } else {
@@ -188,7 +107,7 @@ run(async () => {
   console.log(dim(`  roles:       ${entries.reduce((sum, e) => sum + e.rolesWhenConfirmed, 0)} open across them`));
   const guesses = entries.filter((e) => e.confirmedVia === "guess");
   if (guesses.length > 0) {
-    console.log(yellow(`  ${guesses.length} came from a guess. Check each one really is that company, then add it to "boards" in the candidate list.`));
+    console.log(yellow(`  ${guesses.length} came from a guess that the board's own text backs up. Add each to "boards" in the candidate list so the next run does not have to guess.`));
   }
 
   if (values.dry) {

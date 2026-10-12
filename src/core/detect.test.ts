@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { findBoardRefs, guessTokens } from "./detect.ts";
+import { boardEvidence, findBoardRefs, guessTokens } from "./detect.ts";
 
 describe("findBoardRefs", () => {
   it("finds hosted boards for all three providers, in order of appearance", () => {
@@ -59,5 +59,44 @@ describe("guessTokens", () => {
   it("ignores a website that is not a URL, and names with nothing usable", () => {
     expect(guessTokens("Acme", "not a url")).toEqual(["acme"]);
     expect(guessTokens("***")).toEqual([]);
+  });
+});
+
+describe("boardEvidence", () => {
+  it("counts how often the company's name appears, ignoring case", () => {
+    const text = JSON.stringify({ company_name: "Stripe", jobs: [{ title: "Engineer at STRIPE" }, { note: "stripe is hiring" }] });
+    expect(boardEvidence(text, "Stripe", "https://stripe.com")).toEqual({ name: 3, domain: 0 });
+  });
+
+  it("counts the website's address wherever it appears, with or without www and a path", () => {
+    const text = "apply at https://stripe.com/jobs/1, mail jobs@stripe.com, see www.stripe.com and careers.stripe.com";
+    expect(boardEvidence(text, "Stripe", "https://www.stripe.com/en-in").domain).toBe(4);
+  });
+
+  it("matches whole words only: a name inside another word is not the company", () => {
+    expect(boardEvidence("a nonlinear problem, linearly", "Linear").name).toBe(0);
+    expect(boardEvidence("Join Linear. Linear's team", "Linear").name).toBe(2);
+  });
+
+  it("does not mistake a different address for the company's own", () => {
+    expect(boardEvidence("see notstripe.com, stripe-payments.com and stripe.company", "Stripe", "https://stripe.com").domain).toBe(0);
+  });
+
+  it("takes names with punctuation and spaces literally", () => {
+    expect(boardEvidence("About Observe.AI: we build. Observe.AI is", "Observe.AI").name).toBe(2);
+    expect(boardEvidence("ObserveXAI", "Observe.AI").name).toBe(0);
+    expect(boardEvidence("Scale AI hires. scale ai too", "Scale AI").name).toBe(2);
+  });
+
+  it("also looks for a longer first word of a name with several words, since boards often say just 'Grafana'", () => {
+    expect(boardEvidence("Grafana is open source", "Grafana Labs").name).toBe(1);
+    // A short first word is too common to count.
+    expect(boardEvidence("a new approach to new things", "New Relic").name).toBe(0);
+  });
+
+  it("finds nothing when there is nothing to look for", () => {
+    expect(boardEvidence("anything", "").name).toBe(0);
+    expect(boardEvidence("anything", "Acme", "not a url").domain).toBe(0);
+    expect(boardEvidence("", "Acme", "https://acme.com")).toEqual({ name: 0, domain: 0 });
   });
 });
