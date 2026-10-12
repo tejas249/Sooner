@@ -202,3 +202,32 @@ describe("seedBoards", () => {
     expect(report).toMatchObject({ companiesAdded: 0, boardsAdded: 0 });
   });
 });
+
+describe("the default spread", () => {
+  const many = (count: number): BoardEntry[] => Array.from({ length: count }, (_, i) => entry(`board-${i}`));
+
+  it("is about two seconds for each new board, so a worker meets them at a pace it can keep up with", async () => {
+    const report = await seedBoards(db.pool, many(100), { now: NOW });
+    expect(report.spreadSec).toBe(200);
+    const { boards } = await tables();
+    const offsets = boards.map((b) => (b.next_poll_at.getTime() - NOW.getTime()) / 1000);
+    expect(Math.min(...offsets)).toBe(0);
+    expect(Math.max(...offsets)).toBe(198); // the last of a hundred, two seconds after the one before
+  });
+
+  it("is never under a minute, however few boards are new", async () => {
+    const report = await seedBoards(db.pool, many(3), { now: NOW });
+    expect(report.spreadSec).toBe(60);
+  });
+
+  it("counts only the boards that are new", async () => {
+    await seedBoards(db.pool, many(100), { now: NOW });
+    const report = await seedBoards(db.pool, many(110), { now: NOW });
+    expect(report.boardsAdded).toBe(10);
+    expect(report.spreadSec).toBe(60);
+  });
+
+  it("does what it is told when it is told", async () => {
+    expect((await seedBoards(db.pool, many(100), { now: NOW, spreadSec: 5 })).spreadSec).toBe(5);
+  });
+});

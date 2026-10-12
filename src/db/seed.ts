@@ -4,13 +4,18 @@ import { withTransaction, type Pool } from "./pool.ts";
 export interface SeedOptions {
   /** The moment the new boards' first polls are measured from. */
   now: Date;
-  /** The first polls of the boards added by this run are spread evenly over this many seconds, not all at once. */
+  /**
+   * The first polls of the boards added by this run are spread evenly over this many seconds, not all at once. Without it,
+   * see defaultSpreadSec.
+   */
   spreadSec?: number;
   /** Also switch off boards that are in the database but no longer in the list. */
   deactivateMissing?: boolean;
 }
 
 export interface SeedReport {
+  /** How long the first polls of the new boards were spread over, in seconds. */
+  spreadSec: number;
   companiesAdded: number;
   companiesUpdated: number;
   boardsAdded: number;
@@ -28,16 +33,25 @@ export interface SeedReport {
 const key = (provider: string, token: string): string => `${provider}:${token}`;
 
 /**
+ * How long to spread the first polls of `count` new boards over when nobody says: about two seconds for each, never under a
+ * minute or over half an hour. The first poll of a board downloads all of it and writes every role, so three hundred boards
+ * that fell due in the same minute would look like a backlog (and could raise the queue-lag alert) while the worker caught
+ * up. Two seconds each is a pace it can keep up with.
+ */
+export function defaultSpreadSec(count: number): number {
+  return Math.min(1800, Math.max(60, count * 2));
+}
+
+/**
  * Puts the companies and boards of the list into the database. It only ever adds and corrects descriptions:
  *  - a company that exists keeps its row, with its name, segment and country brought up to date;
  *  - a board that exists is left as it is, apart from whether it is a priority, so a re-run never resets a schedule, an ETag
  *    or a failure count, and never switches a board back on;
- *  - a board that is new becomes due shortly, staggered across `spreadSec` so fifty boards do not all start in one second.
+ *  - a board that is new becomes due shortly, staggered across `spreadSec` so hundreds of boards do not all start in one second.
  *
  * Running it twice in a row changes nothing the second time.
  */
 export async function seedBoards(pool: Pool, entries: readonly BoardEntry[], options: SeedOptions): Promise<SeedReport> {
-  const spreadSec = options.spreadSec ?? 60;
   return withTransaction(pool, async (client) => {
     // Two seeds at once would both see "no such board" and race to add it. They queue instead.
     await client.query("lock table company, board in share row exclusive mode");
@@ -48,6 +62,7 @@ export async function seedBoards(pool: Pool, entries: readonly BoardEntry[], opt
     );
     const known = new Map(companies.rows.map((row) => [row.slug, row]));
     const report: SeedReport = {
+      spreadSec: 0,
       companiesAdded: 0,
       companiesUpdated: 0,
       boardsAdded: 0,
@@ -90,6 +105,8 @@ export async function seedBoards(pool: Pool, entries: readonly BoardEntry[], opt
     const present = new Map(boards.rows.map((row) => [key(row.provider, row.token), row.active]));
     const priorityNow = new Map(boards.rows.map((row) => [key(row.provider, row.token), row.priority]));
     const fresh = entries.filter((entry) => !present.has(key(entry.provider, entry.token)));
+    const spreadSec = options.spreadSec ?? defaultSpreadSec(fresh.length);
+    report.spreadSec = spreadSec;
 
     for (const [index, entry] of fresh.entries()) {
       const delaySec = Math.floor((index * spreadSec) / Math.max(fresh.length, 1));

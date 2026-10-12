@@ -4,7 +4,11 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { promisify } from "node:util";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import boardsFile from "../data/boards.json";
+import { BoardEntries } from "../src/core/boards.ts";
+import { formatSeconds } from "../src/core/health.ts";
 import { loadMigrations } from "../src/db/migrate.ts";
+import { defaultSpreadSec } from "../src/db/seed.ts";
 import { testDatabase } from "../src/db/testing/database.ts";
 import { waitFor } from "../src/worker/testing.ts";
 
@@ -90,17 +94,25 @@ describe("npm run db:seed", () => {
   const db = testDatabase();
   const env = () => ({ DATABASE_URL: db.url });
 
-  it("seeds the 50 boards, and a second run adds nothing", async () => {
+  it("seeds every board in the list, spread over about two seconds each, and a second run adds nothing", async () => {
+    const count = BoardEntries.parse(boardsFile).length;
+    const spread = formatSeconds(defaultSpreadSec(count));
     const first = await node(["scripts/db-seed.ts"], env());
     expect(first.code).toBe(0);
-    expect(plain(first.output)).toMatch(/companies: 50 added, 0 updated/);
-    expect(plain(first.output)).toMatch(/boards:\s+50 added \(first polls spread over 1m\), 0 already there/);
+    expect(plain(first.output)).toMatch(new RegExp(`companies: ${count} added, 0 updated`));
+    expect(plain(first.output)).toMatch(new RegExp(`boards:\\s+${count} added \\(first polls spread over ${spread}\\), 0 already there`));
 
     const second = await node(["scripts/db-seed.ts"], env());
     expect(plain(second.output)).toMatch(/companies: 0 added, 0 updated/);
-    expect(plain(second.output)).toMatch(/boards:\s+0 added, 50 already there/);
+    expect(plain(second.output)).toMatch(new RegExp(`boards:\\s+0 added, ${count} already there`));
     const { rows } = await db.pool.query<{ n: number }>("select count(*)::int as n from board");
-    expect(rows[0]?.n).toBe(50);
+    expect(rows[0]?.n).toBe(count);
+  });
+
+  it("spreads the first polls over the time it is told", async () => {
+    const result = await node(["scripts/db-seed.ts", "--spread", "5m"], env());
+    expect(result.code).toBe(0);
+    expect(plain(result.output)).toMatch(/first polls spread over 5 min/);
   });
 
   it("refuses a spread that is not a duration", async () => {
