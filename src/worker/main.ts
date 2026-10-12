@@ -6,6 +6,7 @@ import { describeDatabase } from "../db/url.ts";
 import { loadConfig } from "./config.ts";
 import { createFetcher } from "./fetcher.ts";
 import { HostGate } from "./gate.ts";
+import { createLiveness, runHeartbeat } from "./heartbeat.ts";
 import { defaultLoopSettings, runWorker } from "./loop.ts";
 import { createLogger } from "./log.ts";
 import { runMonitor } from "./monitor.ts";
@@ -19,8 +20,8 @@ const HELP = `Sooner worker: polls the job boards that are due and records what 
   node src/worker/index.ts --check    check the configuration and exit; connects to nothing
 
 Environment: DATABASE_URL and HR_CONTACT are required. POLLING_ENABLED, ALL_BOARDS_FOLLOWED, DB_POOL_MAX,
-SHUTDOWN_GRACE_SEC, WORKER_ID, MIGRATIONS_DIR, ALERT_WEBHOOK_URL (or ALERT_TELEGRAM_BOT_TOKEN and ALERT_TELEGRAM_CHAT_ID)
-and MONITOR_INTERVAL_SEC are optional. See .env.example.
+SHUTDOWN_GRACE_SEC, WORKER_ID, MIGRATIONS_DIR, ALERT_WEBHOOK_URL (or ALERT_TELEGRAM_BOT_TOKEN and ALERT_TELEGRAM_CHAT_ID),
+MONITOR_INTERVAL_SEC, HEARTBEAT_URL and HEARTBEAT_INTERVAL_SEC are optional. See .env.example.
 `;
 
 export interface MainIO {
@@ -70,7 +71,7 @@ export async function main(argv: readonly string[], env: Readonly<Record<string,
     io.stdout(
       `configuration is valid: database ${describeDatabase(config.databaseUrl)}, polling ${config.pollingEnabled ? "on" : "OFF"}, ` +
         `${config.allBoardsFollowed ? "every board followed (5 minutes)" : "priority boards every 5 minutes, the rest adaptive"}, ` +
-        `alerts ${notifier ? `to ${notifier.channel}` : "logged only"}, User-Agent "${userAgent}"\n`,
+        `alerts ${notifier ? `to ${notifier.channel}` : "logged only"}, heartbeat ${config.heartbeatUrl ? "on" : "off"}, User-Agent "${userAgent}"\n`,
     );
     return 0;
   }
@@ -122,9 +123,20 @@ export async function main(argv: readonly string[], env: Readonly<Record<string,
       : runMonitor({ pool, notifier, log, now }, stop.signal, config.monitorIntervalSec * 1000);
     if (monitoring) log.info("alerts", { channel: notifier?.channel ?? "none (logged only)" });
 
+    // The heartbeat is sent only while the loop is really completing passes: see heartbeat.ts.
+    const liveness = createLiveness();
+    const heartbeat =
+      flags.once || !config.heartbeatUrl
+        ? null
+        : runHeartbeat(
+            { url: config.heartbeatUrl, intervalMs: config.heartbeatIntervalSec * 1000, staleAfterMs: 120_000, liveness, log },
+            stop.signal,
+          );
+    if (heartbeat) log.info("heartbeat on", { every_s: config.heartbeatIntervalSec });
+
     try {
       await runWorker(
-        { pool, fetcher: createFetcher({ userAgent, gate: new HostGate() }), now, random: deps.random ?? Math.random, log },
+        { pool, fetcher: createFetcher({ userAgent, gate: new HostGate() }), now, random: deps.random ?? Math.random, log, liveness },
         defaultLoopSettings({
           followed: config.allBoardsFollowed,
           pollingEnabled: config.pollingEnabled,
@@ -135,7 +147,7 @@ export async function main(argv: readonly string[], env: Readonly<Record<string,
       );
     } finally {
       stop.abort();
-      await monitoring;
+      await Promise.allSettled([monitoring, heartbeat]);
     }
     return 0;
   } catch (error) {

@@ -8,6 +8,7 @@ import { insertBoard, insertCompany } from "../db/testing/factories.ts";
 import type { FetchOutcome } from "./fetcher.ts";
 import { createMemoryLogger } from "./log.ts";
 import { defaultLoopSettings, leaseSecFor, runWorker, type LoopSettings } from "./loop.ts";
+import { createLiveness } from "./heartbeat.ts";
 import { bodyFor, boardRow, notModifiedAnswer, okAnswer, pollRuns, retryAnswer, scriptedFetcher, waitFor, type FetchCall } from "./testing.ts";
 
 const db = testDatabase();
@@ -164,6 +165,45 @@ describe("the lanes", () => {
     expect(leaseSecFor("ashby", 4)).toBe(30 * 2 + 60);
     expect(leaseSecFor("lever", 3)).toBe(120 * 2 + 60);
     expect(leaseSecFor("lever", 1)).toBe(120 + 60);
+  });
+});
+
+describe("liveness, which the heartbeat depends on", () => {
+  it("is touched by every pass of the loop", async () => {
+    await seedBoards("ashby", 2);
+    const liveness = createLiveness();
+    expect(liveness.idleMs()).toBeNull();
+    const ctx = context();
+    await runWorker({ ...ctx, fetcher: scriptedFetcher(respond), log: ctx.logger, liveness }, settings(), new AbortController().signal, { once: true });
+    expect(liveness.idleMs()).not.toBeNull();
+    expect(liveness.idleMs() as number).toBeLessThan(2000);
+  });
+
+  it("is touched while polling is switched off: idle on purpose is not stuck", async () => {
+    const liveness = createLiveness();
+    const stop = new AbortController();
+    const ctx = context();
+    const running = runWorker({ ...ctx, fetcher: scriptedFetcher(respond), log: ctx.logger, liveness }, settings({ pollingEnabled: false }), stop.signal);
+    await waitFor(() => liveness.idleMs() !== null, "the idle loop to show it is alive");
+    stop.abort();
+    await running;
+  });
+
+  it("is not touched while every pass fails, so a worker that cannot reach its database stops sending the heartbeat", async () => {
+    const liveness = createLiveness();
+    const broken = new Proxy(db.pool, {
+      get(target, property, receiver) {
+        if (property === "query") return () => Promise.reject(new Error("connection refused"));
+        return Reflect.get(target, property, receiver) as unknown;
+      },
+    });
+    const stop = new AbortController();
+    const ctx = context({ pool: broken });
+    const running = runWorker({ ...ctx, fetcher: scriptedFetcher(respond), log: ctx.logger, liveness }, settings(), stop.signal);
+    await waitFor(() => ctx.entries.filter((e) => e.msg === "the worker loop hit an error; retrying shortly").length >= 3, "three failed passes");
+    stop.abort();
+    await running;
+    expect(liveness.idleMs()).toBeNull();
   });
 });
 

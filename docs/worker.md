@@ -106,6 +106,17 @@ To receive them, set one of these where the worker runs, and treat the address l
 Check the choice with `npm run worker -- --check`, which says where alerts go but never prints the address. The worker cannot
 alert you when it is down; that is what the heartbeat is for.
 
+### The heartbeat
+
+Every minute (`HEARTBEAT_INTERVAL_SEC`) the worker makes a GET request to `HEARTBEAT_URL`, an address at an outside monitoring
+service. When the requests stop, that service messages you. Healthchecks.io has a free plan: create a check with a one-minute
+period and a five-minute grace time, add your phone or chat as the way to be told, and copy its ping URL. Better Stack and
+Uptime Kuma work the same way. Treat the address like a password: it is never logged or printed.
+
+The heartbeat is sent only while the worker loop has **completed a pass in the last two minutes**, database included. A worker
+that is stuck, or cannot reach its database, goes quiet on purpose and the monitor notices. A worker that is idle because
+`POLLING_ENABLED=false` still sends it, since that is a choice, not a fault.
+
 ### The kill switch
 
 `POLLING_ENABLED=false` keeps the process running but stops all polling. To stop one board, switch it off:
@@ -179,7 +190,9 @@ The [Dockerfile](../Dockerfile) builds the worker and the migration runner into 
 | --- | --- | --- |
 | `DATABASE_URL` | yes | The direct connection string |
 | `HR_CONTACT` | yes | An email address or a URL a company can reach you at. No parentheses |
-| `POLLING_ENABLED`, `ALL_BOARDS_FOLLOWED`, `DB_POOL_MAX`, `SHUTDOWN_GRACE_SEC`, `WORKER_ID` | no | See [.env.example](../.env.example) |
+| `POLLING_ENABLED`, `ALL_BOARDS_FOLLOWED`, `DB_POOL_MAX`, `SHUTDOWN_GRACE_SEC`, `WORKER_ID`, `MONITOR_INTERVAL_SEC` | no | See [.env.example](../.env.example) |
+| `ALERT_WEBHOOK_URL` (or `ALERT_TELEGRAM_BOT_TOKEN` and `ALERT_TELEGRAM_CHAT_ID`) | recommended | Where [alerts](#alerts-to-yourself) go |
+| `HEARTBEAT_URL`, `HEARTBEAT_INTERVAL_SEC` | recommended | The [heartbeat](#the-heartbeat): without it nothing tells you the worker is down |
 
 Run **one** instance. More would work (claiming is built for it) but fifty boards do not need it, and each instance has its
 own politeness gate, so two would double the request rate to each provider.
@@ -245,7 +258,6 @@ Rows in `poll_run` are deleted after a week, by the worker itself. Everything el
 
 These are week 2. Until then the worker is safe (a failing board backs off, nothing closes on a failed poll) but quiet.
 
-- No heartbeat to an outside monitor, so nothing tells you when the worker itself is down.
 - No admin page: "poll now" and "pause" are SQL for now.
 - No mock job-board server for proving politeness and back-off end to end (the gate and the fetcher have their own tests).
 - Alerts to users, the web app's use of the database, and follows are weeks 3 and 4.

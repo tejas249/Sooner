@@ -52,6 +52,12 @@ describe("main", () => {
     expect(hook.out.join("")).toMatch(/alerts to discord/);
     expect(hook.out.join("")).not.toContain("very-secret-token");
 
+    expect(logged.out.join("")).toMatch(/heartbeat off/);
+    const beating = setup();
+    await main(["--check"], { ...env, HEARTBEAT_URL: "https://hc-ping.com/very-secret-uuid" }, beating.deps);
+    expect(beating.out.join("")).toMatch(/heartbeat on/);
+    expect(beating.out.join("")).not.toContain("very-secret-uuid");
+
     const telegram = setup();
     await main(["--check"], { ...env, ALERT_TELEGRAM_BOT_TOKEN: "1:secret-bot-token", ALERT_TELEGRAM_CHAT_ID: "-100" }, telegram.deps);
     expect(telegram.out.join("")).toMatch(/alerts to telegram/);

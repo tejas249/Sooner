@@ -4,6 +4,7 @@ import type { Pool } from "../db/pool.ts";
 import { claimDueBoards, earliestClaimableAt, releaseLeases } from "./claim.ts";
 import type { Fetcher } from "./fetcher.ts";
 import { DEFAULT_MAX_IN_FLIGHT } from "./gate.ts";
+import type { Liveness } from "./heartbeat.ts";
 import type { Logger } from "./log.ts";
 import { pollClaimedBoard, type PollTaskOutcome } from "./poll-task.ts";
 import { pruneOldPollRuns } from "./settle.ts";
@@ -76,6 +77,8 @@ export interface LoopDeps {
   now: () => Date;
   random: () => number;
   log: Logger;
+  /** Touched each time the loop completes a pass, so the heartbeat can tell a working loop from a stuck one. */
+  liveness?: Liveness;
 }
 
 export interface LoopSummary {
@@ -149,6 +152,7 @@ export async function runWorker(
   while (!signal.aborted) {
     if (!settings.pollingEnabled) {
       if (options.once) break;
+      deps.liveness?.touch(); // idle on purpose is not stuck
       await wake.wait(settings.idleMaxMs, signal);
       continue;
     }
@@ -171,6 +175,7 @@ export async function runWorker(
         if (deleted > 0) log.info("deleted old poll runs", { deleted });
       }
 
+      deps.liveness?.touch(); // a whole pass, database included, went well
       if (options.once && claimedThisPass === 0 && running.size === 0) break;
 
       // Sleep until the next board that this worker could take falls due. A lane that is full is not waited for: its

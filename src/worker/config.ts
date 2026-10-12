@@ -27,6 +27,9 @@ export interface WorkerConfig {
   alertTelegram: { botToken: string; chatId: string } | null;
   /** How often the worker looks at its own health. */
   monitorIntervalSec: number;
+  /** An address at an outside monitoring service that the worker pings while it is healthy. A secret. Null: no heartbeat. */
+  heartbeatUrl: string | null;
+  heartbeatIntervalSec: number;
 }
 
 type Env = Readonly<Record<string, string | undefined>>;
@@ -53,16 +56,16 @@ function whole(env: Env, name: string, fallback: number, min: number, max: numbe
 
 const LOOPBACK = new Set(["localhost", "127.0.0.1", "[::1]"]);
 
-/** The webhook address is a secret, so a problem with it is described without repeating it. */
-function webhookProblem(value: string): string | null {
+/** These addresses are secrets, so a problem with one is described without repeating it. */
+function addressProblem(name: string, value: string): string | null {
   let url: URL;
   try {
     url = new URL(value);
   } catch {
-    return "ALERT_WEBHOOK_URL is not a valid URL";
+    return `${name} is not a valid URL`;
   }
   if (url.protocol === "https:" || (url.protocol === "http:" && LOOPBACK.has(url.hostname))) return null;
-  return "ALERT_WEBHOOK_URL must be an https address";
+  return `${name} must be an https address`;
 }
 
 /** Reads and checks the environment. Every problem is reported together, so one restart fixes them all. */
@@ -85,7 +88,12 @@ export function loadConfig(env: Env): WorkerConfig {
   }, "");
   const webhook = env["ALERT_WEBHOOK_URL"]?.trim() || null;
   if (webhook) {
-    const problem = webhookProblem(webhook);
+    const problem = addressProblem("ALERT_WEBHOOK_URL", webhook);
+    if (problem) problems.push(problem);
+  }
+  const heartbeat = env["HEARTBEAT_URL"]?.trim() || null;
+  if (heartbeat) {
+    const problem = addressProblem("HEARTBEAT_URL", heartbeat);
     if (problem) problems.push(problem);
   }
   const botToken = env["ALERT_TELEGRAM_BOT_TOKEN"]?.trim() || null;
@@ -104,6 +112,8 @@ export function loadConfig(env: Env): WorkerConfig {
     alertWebhookUrl: webhook,
     alertTelegram: botToken !== null && chatId !== null ? { botToken, chatId } : null,
     monitorIntervalSec: whole(env, "MONITOR_INTERVAL_SEC", 60, 10, 600, problems),
+    heartbeatUrl: heartbeat,
+    heartbeatIntervalSec: whole(env, "HEARTBEAT_INTERVAL_SEC", 60, 5, 300, problems),
   };
   if (problems.length > 0) throw new Error(`the worker is not configured correctly:\n${problems.map((p) => `  - ${p}`).join("\n")}`);
   return config;

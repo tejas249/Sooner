@@ -97,6 +97,32 @@ describe("loadConfig", () => {
     });
   });
 
+  describe("the heartbeat", () => {
+    it("is off with no address, and pings every minute once there is one", () => {
+      expect(loadConfig(valid)).toMatchObject({ heartbeatUrl: null, heartbeatIntervalSec: 60 });
+      expect(loadConfig({ ...valid, HEARTBEAT_URL: "https://hc-ping.com/abc", HEARTBEAT_INTERVAL_SEC: "30" })).toMatchObject({
+        heartbeatUrl: "https://hc-ping.com/abc",
+        heartbeatIntervalSec: 30,
+      });
+    });
+
+    it("refuses an address that is not https, without repeating it", () => {
+      let message = "";
+      try {
+        loadConfig({ ...valid, HEARTBEAT_URL: "http://hc.example.com/very-secret-uuid" });
+      } catch (error) {
+        message = (error as Error).message;
+      }
+      expect(message).toMatch(/HEARTBEAT_URL must be an https address/);
+      expect(message).not.toContain("secret");
+    });
+
+    it("pings between every 5 seconds and every 5 minutes", () => {
+      expect(() => loadConfig({ ...valid, HEARTBEAT_INTERVAL_SEC: "4" })).toThrow(/HEARTBEAT_INTERVAL_SEC must be a whole number from 5 to 300/);
+      expect(() => loadConfig({ ...valid, HEARTBEAT_INTERVAL_SEC: "301" })).toThrow(/HEARTBEAT_INTERVAL_SEC/);
+    });
+  });
+
   it("never puts the database password into an error", () => {
     let message = "";
     try {

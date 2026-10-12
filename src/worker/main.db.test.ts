@@ -88,6 +88,38 @@ describe("main, against a database that has been migrated", () => {
     }
   });
 
+  it("pings the heartbeat address while it runs, and stops when it stops", async () => {
+    let pings = 0;
+    const server = http.createServer((req, res) => {
+      if (req.url === "/ping/secret-uuid") pings++;
+      res.writeHead(200).end("OK");
+    });
+    await new Promise<void>((resolve) => server.listen(0, "127.0.0.1", resolve));
+    try {
+      const { deps, signals, logs } = setup();
+      const running = main(
+        [],
+        {
+          ...env(),
+          HEARTBEAT_URL: `http://127.0.0.1:${(server.address() as AddressInfo).port}/ping/secret-uuid`,
+          HEARTBEAT_INTERVAL_SEC: "5",
+        },
+        deps,
+      );
+      await waitFor(() => pings >= 1, "the first heartbeat", 15_000);
+      signals.emit("SIGTERM");
+      expect(await running).toBe(0);
+      const after = pings;
+      await new Promise((resolve) => setTimeout(resolve, 300));
+      expect(pings).toBe(after);
+      expect(logs().some((l) => l.msg === "heartbeat on")).toBe(true);
+      expect(JSON.stringify(logs())).not.toContain("secret-uuid");
+    } finally {
+      server.closeAllConnections();
+      await new Promise((resolve) => server.close(resolve));
+    }
+  });
+
   it("does not poll when polling is switched off", async () => {
     const { deps, logs } = setup();
     expect(await main(["--once"], { ...env(), POLLING_ENABLED: "false" }, deps)).toBe(0);
