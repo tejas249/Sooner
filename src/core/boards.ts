@@ -21,6 +21,11 @@ export const BoardEntry = z.object({
   token: z.string().regex(TOKEN_RE),
   /** How many roles the board listed when it was confirmed. Only for reading the file; polling does not use it. */
   rolesWhenConfirmed: z.number().int().nonnegative(),
+  /**
+   * Poll this board at the fast rhythm (every five minutes) even though nobody follows it yet. Until users can follow
+   * companies, this is how the companies that matter most get a short detection delay; the rest slow down when quiet.
+   */
+  priority: z.boolean().optional(),
   confirmedVia: z.enum(["hint", "careers", "guess"]),
 });
 export type BoardEntry = z.infer<typeof BoardEntry>;

@@ -48,14 +48,18 @@ until a poll finishes and frees a lane, or until it is told to stop.
 
 | Board | Interval |
 | --- | --- |
-| Followed by someone | Every 5 minutes, always |
+| Followed by someone, or marked `priority` in [data/boards.json](../data/boards.json) | Every 5 minutes, always |
 | Not followed, busy | Halves each time it changes, never below 30 minutes |
 | Not followed, quiet | Grows by half each quiet poll, never above 6 hours |
 | Waiting for a confirmation (a role missing once) | 2 minutes later, or 10 when so many roles vanished at once that three checks over 20 minutes are needed |
 | Any board | At least the provider's own minimum (Ashby caches for 60 seconds), plus up to 10% of jitter either way |
 
-Until users can follow companies (week 4), nobody does, so `ALL_BOARDS_FOLLOWED` (on by default) treats every board as
-followed: the 50 starter boards are polled every five minutes and build history. A 304 costs a few hundred bytes.
+Until users can follow companies (week 4), nobody does, so the boards that matter most are marked `priority` in the list
+(the original 50) and are polled every five minutes: they build history at a rhythm worth having and give the shortest
+detection delay. Every other board speeds up when it changes and slows down when it is quiet, which keeps the whole list at
+roughly 22,000 requests a day (about a quarter of a request per second) however long it gets. Treating all boards as priority
+would be 86,000 a day for 300 boards, more than the politeness gate can serve on time, so `ALL_BOARDS_FOLLOWED` is off by
+default; it exists for a small list. A 304 costs a few hundred bytes.
 
 ### When things go wrong
 

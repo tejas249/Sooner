@@ -65,7 +65,7 @@ export async function main(argv: readonly string[], env: Readonly<Record<string,
   if (flags.check) {
     io.stdout(
       `configuration is valid: database ${describeDatabase(config.databaseUrl)}, polling ${config.pollingEnabled ? "on" : "OFF"}, ` +
-        `${config.allBoardsFollowed ? "every board followed (5 minutes)" : "adaptive intervals"}, User-Agent "${userAgent}"\n`,
+        `${config.allBoardsFollowed ? "every board followed (5 minutes)" : "priority boards every 5 minutes, the rest adaptive"}, User-Agent "${userAgent}"\n`,
     );
     return 0;
   }

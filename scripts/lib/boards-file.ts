@@ -17,6 +17,8 @@ export const Candidate = z.object({
   careers: z.url().optional(),
   /** Boards you already believe it uses. They are confirmed against the provider before anything is written. */
   boards: z.array(boardSpec).optional(),
+  /** Passed on to the board: poll it at the fast rhythm. See BoardEntry. */
+  priority: z.boolean().optional(),
 });
 export type Candidate = z.infer<typeof Candidate>;
 export const Candidates = z.array(Candidate);

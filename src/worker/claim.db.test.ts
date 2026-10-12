@@ -39,6 +39,16 @@ describe("claimDueBoards", () => {
     expect(board).toMatchObject({ companySlug: "stripe", token: "stripe-jobs", etag: 'W/"abc"', baselinedAt: at(-3600) });
   });
 
+  it("says whether a board is a priority", async () => {
+    const companyId = await insertCompany(db.pool);
+    await insertBoard(db.pool, companyId, { token: "vip", nextPollAt: at(-20), priority: true });
+    await insertBoard(db.pool, companyId, { token: "plain", nextPollAt: at(-10) });
+    expect((await claim()).map((b) => [b.token, b.priority])).toEqual([
+      ["vip", true],
+      ["plain", false],
+    ]);
+  });
+
   it("skips boards that are not due yet", async () => {
     await seedBoards(1, { nextPollAt: at(1) });
     expect(await claim()).toEqual([]);

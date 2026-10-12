@@ -62,16 +62,39 @@ describe("seedBoards", () => {
     ]);
   });
 
-  it("seeds the real list of 50 boards", async () => {
+  it("seeds the real list", async () => {
     const entries = BoardEntries.parse(JSON.parse(readFileSync("data/boards.json", "utf8")));
     const report = await seedBoards(db.pool, entries, { now: NOW });
-    expect(report).toMatchObject({ companiesAdded: 50, boardsAdded: 50 });
+    const companies = new Set(entries.map((e) => e.slug)).size;
+    expect(report).toMatchObject({ companiesAdded: companies, boardsAdded: entries.length });
     const { rows } = await db.pool.query<{ provider: string; n: number }>("select provider, count(*)::int as n from board group by provider order by provider");
+    const expected = new Map<string, number>();
+    for (const e of entries) expected.set(e.provider, (expected.get(e.provider) ?? 0) + 1);
+    expect(rows).toEqual([...expected].sort(([a], [b]) => (a < b ? -1 : 1)).map(([provider, n]) => ({ provider, n })));
+    const priorities = await db.pool.query<{ n: number }>("select count(*)::int as n from board where priority");
+    expect(priorities.rows[0]?.n).toBe(entries.filter((e) => e.priority).length);
+  });
+
+  it("marks priority boards, and an entry without the flag is an ordinary board", async () => {
+    await seedBoards(db.pool, [entry("vip", { priority: true }), entry("plain")], { now: NOW });
+    const { rows } = await db.pool.query<{ token: string; priority: boolean }>("select token, priority from board order by token");
     expect(rows).toEqual([
-      { provider: "ashby", n: 16 },
-      { provider: "greenhouse", n: 26 },
-      { provider: "lever", n: 8 },
+      { token: "plain", priority: false },
+      { token: "vip", priority: true },
     ]);
+  });
+
+  it("brings a board's priority in line with the list when it changes, and says so", async () => {
+    await seedBoards(db.pool, [entry("a", { priority: true }), entry("b")], { now: NOW });
+    const again = await seedBoards(db.pool, [entry("a"), entry("b", { priority: true })], { now: NOW });
+    expect(again).toMatchObject({ boardsAdded: 0, boardsAlreadyThere: 2, boardsRepriced: 2 });
+    const { rows } = await db.pool.query<{ token: string; priority: boolean }>("select token, priority from board order by token");
+    expect(rows).toEqual([
+      { token: "a", priority: false },
+      { token: "b", priority: true },
+    ]);
+    const third = await seedBoards(db.pool, [entry("a"), entry("b", { priority: true })], { now: NOW });
+    expect(third.boardsRepriced).toBe(0);
   });
 
   it("changes nothing when it is run again", async () => {

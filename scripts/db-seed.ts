@@ -42,7 +42,11 @@ run(async () => {
       deactivateMissing: values["deactivate-missing"],
     });
     console.log(`  companies: ${report.companiesAdded} added, ${report.companiesUpdated} updated`);
-    console.log(`  boards:    ${report.boardsAdded} added${report.boardsAdded > 0 ? ` (first polls spread over ${values.spread})` : ""}, ${report.boardsAlreadyThere} already there`);
+    console.log(dim(`  priority:  ${entries.filter((e) => e.priority).length} of ${entries.length} boards are polled every five minutes; the rest adapt`));
+    console.log(
+      `  boards:    ${report.boardsAdded} added${report.boardsAdded > 0 ? ` (first polls spread over ${values.spread})` : ""}, ` +
+        `${report.boardsAlreadyThere} already there${report.boardsRepriced > 0 ? ` (${report.boardsRepriced} had their priority corrected)` : ""}`,
+    );
     if (report.boardsSwitchedOff.length > 0) {
       console.log(yellow(`  ${plural(report.boardsSwitchedOff.length, "board")} in the list ${report.boardsSwitchedOff.length === 1 ? "is" : "are"} switched off in the database and stay off: ${report.boardsSwitchedOff.join(", ")}`));
     }

@@ -31,7 +31,7 @@ export function leaseSecFor(provider: Provider, lane: number): number {
 export interface LoopSettings {
   lanes: Record<Provider, number>;
   leaseSec: Record<Provider, number>;
-  /** Treat every board as followed (polled every five minutes). */
+  /** Treat every board as followed (polled every five minutes). Boards marked priority are polled that fast regardless. */
   followed: boolean;
   /** false: stay up, claim nothing. The kill switch. */
   pollingEnabled: boolean;
@@ -58,7 +58,7 @@ export function defaultLoopSettings(overrides: Partial<LoopSettings> = {}): Loop
       ashby: leaseSecFor("ashby", lanes.ashby),
       ...overrides.leaseSec,
     },
-    followed: true,
+    followed: false,
     pollingEnabled: true,
     idleMaxMs: 15_000,
     minWaitMs: 100,

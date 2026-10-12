@@ -171,6 +171,7 @@ run(async () => {
       token: detection.ref.token,
       rolesWhenConfirmed: detection.roles,
       confirmedVia: detection.via,
+      ...(candidate.priority ? { priority: true } : {}),
     });
   });
   entries.sort((a, b) => a.segment.localeCompare(b.segment) || a.name.localeCompare(b.name));

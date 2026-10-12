@@ -9,8 +9,9 @@ export interface WorkerConfig {
   /** false stops all polling while the process stays up. */
   pollingEnabled: boolean;
   /**
-   * Treat every board as followed, so it is polled every five minutes. Until users can follow companies (week 4) nobody
-   * does, and the point of running now is to collect history at a rhythm worth having.
+   * Treat every board as followed, so it is polled every five minutes. Off by default: with hundreds of boards that is more
+   * requests than the politeness gate can serve on time. The boards marked priority in data/boards.json are polled that fast
+   * anyway; the rest speed up when they change and slow down when they are quiet.
    */
   allBoardsFollowed: boolean;
   dbPoolMax: number;
@@ -64,7 +65,7 @@ export function loadConfig(env: Env): WorkerConfig {
     databaseUrl,
     contact,
     pollingEnabled: flag(env, "POLLING_ENABLED", true, problems),
-    allBoardsFollowed: flag(env, "ALL_BOARDS_FOLLOWED", true, problems),
+    allBoardsFollowed: flag(env, "ALL_BOARDS_FOLLOWED", false, problems),
     dbPoolMax: whole(env, "DB_POOL_MAX", 10, 2, 50, problems),
     shutdownGraceSec: whole(env, "SHUTDOWN_GRACE_SEC", 25, 1, 300, problems),
     workerId: (env["WORKER_ID"]?.trim() || `${hostname()}-${process.pid}`).slice(0, 80),

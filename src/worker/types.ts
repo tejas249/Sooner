@@ -17,4 +17,6 @@ export interface ClaimedBoard {
   pollIntervalSec: number;
   consecutiveFailures: number;
   baselinedAt: string | null;
+  /** Polled at the fast rhythm even though nobody follows it. See BoardEntry.priority. */
+  priority: boolean;
 }

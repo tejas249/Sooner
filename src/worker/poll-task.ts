@@ -15,6 +15,7 @@ export interface PollTaskDeps {
   /** A number in [0, 1), for jitter. */
   random: () => number;
   log: Logger;
+  /** Treat every board as followed. A board can also be followed on its own account: see ClaimedBoard.priority. */
   followed: boolean;
   /** Fires when the worker gives up waiting for polls in flight. The request is cancelled and the lease is given back. */
   signal: AbortSignal;
@@ -72,7 +73,7 @@ export async function pollClaimedBoard(deps: PollTaskDeps, board: ClaimedBoard):
       meta,
       {
         now: deps.now(),
-        followed: deps.followed,
+        followed: deps.followed || board.priority,
         floorSec: adapter.minIntervalSec,
         random: deps.random(),
         beforeCommit: deps.beforeCommit,

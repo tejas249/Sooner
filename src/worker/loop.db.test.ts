@@ -17,7 +17,7 @@ const secondsAfterStart = (s: number): string => new Date(T0 + s * 1000).toISOSt
 
 /** Quick settings for tests: short sleeps, short grace. */
 const settings = (over: Partial<LoopSettings> = {}): LoopSettings =>
-  defaultLoopSettings({ idleMaxMs: 40, minWaitMs: 5, graceMs: 300, abortWaitMs: 300, errorWaitMs: 20, ...over });
+  defaultLoopSettings({ idleMaxMs: 40, minWaitMs: 5, graceMs: 300, abortWaitMs: 300, errorWaitMs: 20, followed: true, ...over });
 
 let counter = 0;
 async function seedBoards(provider: Provider, count: number, over: { nextPollAt?: string } = {}): Promise<string[]> {
@@ -90,6 +90,29 @@ describe("a pass over the due boards", () => {
     }
     expect((await pollRuns(db.pool, id as string)).map((r) => r.http_status)).toEqual([200, 304, 304, 304]);
     expect(fetcher.calls.map((c) => c.options.etag ?? null)).toEqual([null, 'W/"1"', 'W/"1"', 'W/"1"']);
+  });
+});
+
+describe("which boards are polled fast", () => {
+  it("polls a priority board every five minutes while an ordinary one slows down, when nothing is followed", async () => {
+    const companyId = await insertCompany(db.pool, { slug: "pair" });
+    const fast = await insertBoard(db.pool, companyId, { provider: "ashby", token: "fast", nextPollAt: secondsAfterStart(-60), priority: true });
+    const slow = await insertBoard(db.pool, companyId, { provider: "ashby", token: "slow", nextPollAt: secondsAfterStart(-60) });
+    const ctx = context();
+    await runWorker({ ...ctx, fetcher: scriptedFetcher(respond), log: ctx.logger }, settings({ followed: false }), new AbortController().signal, { once: true });
+
+    const gap = async (id: string) => ((await boardRow(db.pool, id)).next_poll_at.getTime() - T0) / 1000;
+    expect(await gap(fast)).toBeGreaterThanOrEqual(270); // five minutes, give or take the jitter
+    expect(await gap(fast)).toBeLessThanOrEqual(330);
+    expect(await gap(slow)).toBeGreaterThanOrEqual(1620); // thirty minutes after the baseline, give or take the jitter
+    expect(await gap(slow)).toBeLessThanOrEqual(1980);
+  });
+
+  it("polls everything every five minutes when every board is followed", async () => {
+    const [id] = await seedBoards("ashby", 1);
+    const ctx = context();
+    await runWorker({ ...ctx, fetcher: scriptedFetcher(respond), log: ctx.logger }, settings({ followed: true }), new AbortController().signal, { once: true });
+    expect(((await boardRow(db.pool, id as string)).next_poll_at.getTime() - T0) / 1000).toBeLessThanOrEqual(330);
   });
 });
 

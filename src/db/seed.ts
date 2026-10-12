@@ -15,6 +15,8 @@ export interface SeedReport {
   companiesUpdated: number;
   boardsAdded: number;
   boardsAlreadyThere: number;
+  /** Boards that were already there whose priority was brought in line with the list. */
+  boardsRepriced: number;
   /** In the list, but switched off in the database. They stay off: switching a board off is how an opt-out is honoured. */
   boardsSwitchedOff: string[];
   /** In the database but not in the list. Still polled unless `deactivateMissing` was set. */
@@ -28,8 +30,8 @@ const key = (provider: string, token: string): string => `${provider}:${token}`;
 /**
  * Puts the companies and boards of the list into the database. It only ever adds and corrects descriptions:
  *  - a company that exists keeps its row, with its name, segment and country brought up to date;
- *  - a board that exists is left exactly as it is, so a re-run never resets a schedule, an ETag or a failure count, and
- *    never switches a board back on;
+ *  - a board that exists is left as it is, apart from whether it is a priority, so a re-run never resets a schedule, an ETag
+ *    or a failure count, and never switches a board back on;
  *  - a board that is new becomes due shortly, staggered across `spreadSec` so fifty boards do not all start in one second.
  *
  * Running it twice in a row changes nothing the second time.
@@ -50,6 +52,7 @@ export async function seedBoards(pool: Pool, entries: readonly BoardEntry[], opt
       companiesUpdated: 0,
       boardsAdded: 0,
       boardsAlreadyThere: 0,
+      boardsRepriced: 0,
       boardsSwitchedOff: [],
       boardsNotInList: [],
       boardsDeactivated: [],
@@ -81,17 +84,24 @@ export async function seedBoards(pool: Pool, entries: readonly BoardEntry[], opt
       }
     }
 
-    const boards = await client.query<{ provider: string; token: string; active: boolean }>(
-      "select provider, token, active from board",
+    const boards = await client.query<{ provider: string; token: string; active: boolean; priority: boolean }>(
+      "select provider, token, active, priority from board",
     );
     const present = new Map(boards.rows.map((row) => [key(row.provider, row.token), row.active]));
+    const priorityNow = new Map(boards.rows.map((row) => [key(row.provider, row.token), row.priority]));
     const fresh = entries.filter((entry) => !present.has(key(entry.provider, entry.token)));
 
     for (const [index, entry] of fresh.entries()) {
       const delaySec = Math.floor((index * spreadSec) / Math.max(fresh.length, 1));
       await client.query(
-        "insert into board (company_id, provider, token, next_poll_at) values ($1, $2, $3, $4::timestamptz)",
-        [companyIds.get(entry.slug), entry.provider, entry.token, new Date(options.now.getTime() + delaySec * 1000).toISOString()],
+        "insert into board (company_id, provider, token, next_poll_at, priority) values ($1, $2, $3, $4::timestamptz, $5)",
+        [
+          companyIds.get(entry.slug),
+          entry.provider,
+          entry.token,
+          new Date(options.now.getTime() + delaySec * 1000).toISOString(),
+          entry.priority ?? false,
+        ],
       );
       report.boardsAdded++;
     }
@@ -102,6 +112,11 @@ export async function seedBoards(pool: Pool, entries: readonly BoardEntry[], opt
       if (present.has(id)) {
         report.boardsAlreadyThere++;
         if (present.get(id) === false) report.boardsSwitchedOff.push(id);
+        const wanted = entry.priority ?? false;
+        if (priorityNow.get(id) !== wanted) {
+          await client.query("update board set priority = $3 where provider = $1 and token = $2", [entry.provider, entry.token, wanted]);
+          report.boardsRepriced++;
+        }
       }
     }
     report.boardsNotInList = [...present.entries()].filter(([id, active]) => active && !listed.has(id)).map(([id]) => id).sort();

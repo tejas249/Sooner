@@ -75,6 +75,16 @@ describe("a poll that gets a good answer", () => {
     expect(rows[0]?.n).toBe(2);
   });
 
+  it("polls a priority board every five minutes even when nobody follows it, and an ordinary board less often", async () => {
+    const companyId = await insertCompany(db.pool, { slug: "pair" });
+    const vip = await insertBoard(db.pool, companyId, { provider: "ashby", token: "vip", priority: true });
+    const plain = await insertBoard(db.pool, companyId, { provider: "ashby", token: "plain" });
+    await runTask(vip, answering(jobs("a")), 0, { followed: false });
+    await runTask(plain, answering(jobs("a")), 0, { followed: false });
+    expect((await boardRow(db.pool, vip)).poll_interval_sec).toBe(300);
+    expect((await boardRow(db.pool, plain)).poll_interval_sec).toBe(1800);
+  });
+
   it("logs one line per poll with the numbers, and no role titles", async () => {
     const { boardId } = await newBoard();
     const { entries } = await runTask(boardId, answering(jobs("a", "b", "c")), 0);

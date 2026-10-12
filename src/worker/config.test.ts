@@ -10,7 +10,7 @@ describe("loadConfig", () => {
       databaseUrl: valid.DATABASE_URL,
       contact: valid.HR_CONTACT,
       pollingEnabled: true,
-      allBoardsFollowed: true,
+      allBoardsFollowed: false,
       dbPoolMax: 10,
       shutdownGraceSec: 25,
     });
@@ -21,12 +21,12 @@ describe("loadConfig", () => {
     const config = loadConfig({
       ...valid,
       POLLING_ENABLED: "false",
-      ALL_BOARDS_FOLLOWED: "0",
+      ALL_BOARDS_FOLLOWED: "true",
       DB_POOL_MAX: "4",
       SHUTDOWN_GRACE_SEC: "60",
       WORKER_ID: "fly-1",
     });
-    expect(config).toMatchObject({ pollingEnabled: false, allBoardsFollowed: false, dbPoolMax: 4, shutdownGraceSec: 60, workerId: "fly-1" });
+    expect(config).toMatchObject({ pollingEnabled: false, allBoardsFollowed: true, dbPoolMax: 4, shutdownGraceSec: 60, workerId: "fly-1" });
   });
 
   it("accepts true and false in any case, and ignores empty values", () => {
