@@ -208,8 +208,8 @@ proof that the whole path works on real data; days of polling are what will show
 
 - **The hosted database and the worker's host.** Everything a deploy needs is built and tested ([docs/worker.md](docs/worker.md)),
   but creating them takes accounts and a real contact address, so that step is yours. Until then nothing polls around the clock.
-- **Week 2:** a heartbeat and a message to you when something needs a human, switching off a board that keeps returning 404,
-  an admin page, and a mock job-board server that proves politeness and back-off end to end.
+- **Week 2 (in progress):** a heartbeat and a message to you when something needs a human, an admin page, a mock job-board
+  server that proves politeness and back-off end to end, and a list of 300 boards.
 - **Week 3:** the website using the data: the live feed, search, company and role pages, and the stale-role signal.
 - **Week 4:** sign-in, watches and alerts. Their tables arrive with them.
 

@@ -177,11 +177,26 @@ describe("a poll that does not get a good answer", () => {
     await expectNothingChanged(boardId, 1);
   });
 
-  it("records a board that is gone (404) without closing its roles", async () => {
+  it("records a board that is gone (404) without closing its roles, and switches it off after three", async () => {
     const { boardId } = await establishedBoard();
-    for (let i = 1; i <= 4; i++) await runTask(boardId, scriptedFetcher(() => errorAnswer("HTTP 404", 404)), 10 * i);
-    await expectNothingChanged(boardId, 4);
-    expect((await boardRow(db.pool, boardId)).last_error).toBe("HTTP 404");
+    let last: Awaited<ReturnType<typeof runTask>> | null = null;
+    for (const at of [10, 50, 100]) {
+      // Each check is made at least half an hour after the last, as the schedule would have it.
+      await db.pool.query("update board set next_poll_at = $1 where id = $2", [minutes(at).toISOString(), boardId]);
+      last = await runTask(boardId, scriptedFetcher(() => errorAnswer("HTTP 404", 404)), at);
+    }
+    const board = await boardRow(db.pool, boardId);
+    expect(board).toMatchObject({ active: false, consecutive_failures: 3, consecutive_not_found: 3, last_error: "HTTP 404" });
+    const { rows } = await db.pool.query<{ external_id: string; status: string }>(
+      "select external_id, status from posting where board_id = $1 order by external_id",
+      [boardId],
+    );
+    expect(rows.map((r) => r.status)).toEqual(["open", "open", "open"]);
+    expect(await eventsOf(db.pool, boardId)).toEqual([]);
+    expect(lines(last?.entries ?? [], "board switched off: it keeps answering 404, so the company has probably moved to another provider")[0]).toMatchObject({
+      level: "error",
+      company: expect.any(String) as string,
+    });
   });
 
   it("records a timeout or a dead connection", async () => {

@@ -38,11 +38,15 @@ export async function boardRow(db: Queryable, boardId: string) {
     last_changed_at: Date | null;
     baselined_at: Date | null;
     consecutive_failures: number;
+    consecutive_not_found: number;
     last_error: string | null;
     active: boolean;
+    priority: boolean;
+    deactivated_at: Date | null;
+    deactivated_reason: string | null;
   }>(
     `select etag, next_poll_at, poll_interval_sec, claimed_until, claim_token, last_polled_at, last_changed_at, baselined_at,
-            consecutive_failures, last_error, active
+            consecutive_failures, consecutive_not_found, last_error, active, priority, deactivated_at, deactivated_reason
        from board where id = $1`,
     [boardId],
   );

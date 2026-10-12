@@ -1,6 +1,6 @@
 import { applySnapshot, confirmPending, type ApplyResult } from "../core/changes.ts";
 import { eventRecords, planWrites, strikesOf, type EventType } from "../core/persist.ts";
-import { failureDelaySec, scheduleAfterSuccess } from "../core/schedule.ts";
+import { NOT_FOUND_LIMIT, NOT_FOUND_MIN_WAIT_SEC, failureDelaySec, scheduleAfterSuccess } from "../core/schedule.ts";
 import type { NormalizedJob } from "../core/types.ts";
 import { withTransaction, type Client, type Pool, type Queryable } from "../db/pool.ts";
 import { loadBoardState, writeChanges } from "./postings.ts";
@@ -231,6 +231,7 @@ async function finishBoard(
             poll_interval_sec = $8,
             next_poll_at = $9::timestamptz,
             consecutive_failures = 0,
+            consecutive_not_found = 0,
             last_error = null,
             claimed_until = null,
             claim_token = null
@@ -260,12 +261,17 @@ export interface FailureResult {
   outcome: "recorded" | "lease-lost";
   failures: number;
   nextPollAt: Date | null;
+  /** The board answered 404 often enough in a row that it has been switched off. Its roles were not touched. */
+  deactivated: boolean;
 }
 
 /**
  * Finishes a poll that did not get a usable answer: a 429, a 5xx, a timeout, a 404, an answer that is not the shape the
  * adapter knows. Nothing about the board's roles changes, so a failed poll can never close anything. The board waits
  * longer each time it fails (see failureDelaySec) and the error is kept on the board and in poll_run.
+ *
+ * A 404 is special: it usually means the company has moved to another provider. It is counted separately, waits at least
+ * half an hour before the next try, and after three in a row the board is switched off, with the reason written on it.
  */
 export async function recordFailure(
   pool: Pool,
@@ -277,33 +283,64 @@ export async function recordFailure(
   const message = oneLine(failure.kind === "invalid" ? `the feed changed shape: ${failure.reason}` : failure.reason);
   return withTransaction(pool, async (client) => {
     await limitTransaction(client);
-    const { rows } = await client.query<{ consecutive_failures: number; poll_interval_sec: number }>(
-      "select consecutive_failures, poll_interval_sec from board where id = $1 and claim_token = $2 for update",
+    const { rows } = await client.query<{ consecutive_failures: number; poll_interval_sec: number; consecutive_not_found: number }>(
+      "select consecutive_failures, poll_interval_sec, consecutive_not_found from board where id = $1 and claim_token = $2 for update",
       [board.id, board.claimToken],
     );
     const current = rows[0];
-    if (!current) return { outcome: "lease-lost" as const, failures: 0, nextPollAt: null };
+    if (!current) return { outcome: "lease-lost" as const, failures: 0, nextPollAt: null, deactivated: false };
 
     const failures = current.consecutive_failures + 1;
-    const delaySec = failureDelaySec({
-      failures,
-      intervalSec: current.poll_interval_sec,
-      retryAfterSec: failure.retryAfterSec,
-      floorSec: options.floorSec,
-      random: options.random,
-    });
+    const notFound = failure.kind === "error" && meta.status === 404;
+    const notFoundInARow = notFound ? current.consecutive_not_found + 1 : 0;
+    const gone = notFoundInARow >= NOT_FOUND_LIMIT;
+    const delaySec = Math.max(
+      failureDelaySec({
+        failures,
+        intervalSec: current.poll_interval_sec,
+        retryAfterSec: failure.retryAfterSec,
+        floorSec: options.floorSec,
+        random: options.random,
+      }),
+      notFound ? NOT_FOUND_MIN_WAIT_SEC : 0,
+    );
     const nextPollAt = new Date(options.now.getTime() + delaySec * 1000);
     await client.query(
       `update board
           set consecutive_failures = $3, last_error = $4, next_poll_at = $5::timestamptz,
+              consecutive_not_found = $6,
+              active = active and not $7::boolean,
+              deactivated_at = case when $7::boolean then $8::timestamptz else deactivated_at end,
+              deactivated_reason = case when $7::boolean then $9::text else deactivated_reason end,
               claimed_until = null, claim_token = null
         where id = $1 and claim_token = $2`,
-      [board.id, board.claimToken, failures, message, nextPollAt.toISOString()],
+      [
+        board.id,
+        board.claimToken,
+        failures,
+        message,
+        nextPollAt.toISOString(),
+        notFoundInARow,
+        gone,
+        options.now.toISOString(),
+        GONE_REASON,
+      ],
     );
-    await recordPollRun(client, board, meta, { jobsSeen: null, newCount: 0, closedCount: 0, error: message, note: null });
-    return { outcome: "recorded" as const, failures, nextPollAt };
+    await recordPollRun(client, board, meta, {
+      jobsSeen: null,
+      newCount: 0,
+      closedCount: 0,
+      error: message,
+      note: gone ? `switched off: ${GONE_REASON}` : null,
+    });
+    return { outcome: "recorded" as const, failures, nextPollAt, deactivated: gone };
   });
 }
+
+/** Written on a board that was switched off for answering 404. */
+export const GONE_REASON =
+  `the feed answered 404 ${NOT_FOUND_LIMIT} times in a row, at least half an hour apart, so the company has probably moved to ` +
+  "another job-board provider. Its roles were left as they were.";
 
 /** How many poll_run rows one clean-up pass deletes. */
 const PRUNE_BATCH = 5000;

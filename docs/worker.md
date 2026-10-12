@@ -68,7 +68,7 @@ default; it exists for a small list. A 304 costs a few hundred bytes.
 | 429, 5xx, a timeout or a dead connection | Counts a failure and waits at least the board's normal interval, or 60 seconds doubled for every failure in a row if that is longer (up to 6 hours). Honours `Retry-After` when it asks for more. A failing board is never asked more often than a healthy one |
 | 8 failures in a row | The board is *degraded* and is tried once every 6 hours until it recovers |
 | An answer that is not JSON, or not the shape its adapter knows | Changes nothing, logs at `error` level, and counts as a failure. It is never read as "every role closed" |
-| A 404 | Counts as a failure like any other (see [what it does not do yet](#what-it-does-not-do-yet)). Roles are not closed |
+| A 404 | Usually a company that moved to another provider. Counted on its own, retried no sooner than half an hour later, and after **three in a row** the board is switched off (`active = false`) with the reason written on it (`deactivated_reason`). Its roles are not closed |
 | The first answer for a board lists no roles | The board is *not* baselined: an empty first answer is more likely a glitch than a company with no jobs, and baselining it would make every real role look new next time. It is baselined by the first answer that lists something |
 | So many roles vanish at once (40% of at least 5, or all of them) | Nothing closes for three checks over 20 minutes, and the poll logs a warning |
 | The database write fails | The transaction rolls back, nothing is applied, the failure is recorded and the board backs off |
@@ -217,7 +217,6 @@ These are week 2. Until then the worker is safe (a failing board backs off, noth
 
 - No heartbeat to an outside monitor, and no message to you when something needs a human (queue lag, a held-back mass
   disappearance, a format change). Read the logs, or run the queries above.
-- A board that returns 404 is retried with backoff for ever instead of being switched off after three.
 - No admin page: "poll now" and "pause" are SQL for now.
 - No mock job-board server for proving politeness and back-off end to end (the gate and the fetcher have their own tests).
 - Alerts to users, the web app's use of the database, and follows are weeks 3 and 4.

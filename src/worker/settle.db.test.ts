@@ -39,13 +39,13 @@ async function poll(boardId: string, answer: PollAnswer, atMinutes: number, over
   return settlePoll(db.pool, board, answer, meta(atMinutes), options(atMinutes, over));
 }
 
-async function fail(boardId: string, atMinutes: number, failure: Partial<PollFailure> = {}, over: { random?: number; floorSec?: number } = {}) {
+async function fail(boardId: string, atMinutes: number, failure: Partial<PollFailure> = {}, over: { random?: number; floorSec?: number; status?: number } = {}) {
   const board = await leaseBoard(db.pool, boardId);
   return recordFailure(
     db.pool,
     board,
     { kind: "retry", reason: "HTTP 503", retryAfterSec: null, ...failure },
-    { ...meta(atMinutes), status: 503 },
+    { ...meta(atMinutes), status: over.status ?? 503 },
     { now: minutes(atMinutes), floorSec: over.floorSec ?? 0, random: over.random ?? 0.5 },
   );
 }
@@ -395,6 +395,91 @@ describe("a failed poll", () => {
     expect(error.startsWith("the feed changed shape: invalid")).toBe(true);
     expect([...error].some((ch) => ch.charCodeAt(0) < 32)).toBe(false);
     expect(error.length).toBeLessThanOrEqual(300);
+  });
+});
+
+describe("a board that keeps answering 404", () => {
+  const notFound = { kind: "error", reason: "HTTP 404" } as const;
+  const gone = (boardId: string, at: number) => fail(boardId, at, notFound, { status: 404 });
+
+  async function established() {
+    const board = await newBoard();
+    await poll(board.boardId, snapshot(jobs("a", "b", "c")), 0);
+    return board;
+  }
+
+  it("is counted, and not asked again for at least half an hour", async () => {
+    const { boardId } = await established();
+    const result = await gone(boardId, 10);
+    expect(result).toMatchObject({ outcome: "recorded", deactivated: false });
+    const board = await boardRow(db.pool, boardId);
+    expect(board).toMatchObject({ active: true, consecutive_not_found: 1, consecutive_failures: 1 });
+    expect(board.next_poll_at.getTime()).toBeGreaterThanOrEqual(minutes(10 + 30).getTime());
+  });
+
+  it("is switched off after three in a row, with the reason written down", async () => {
+    const { boardId } = await established();
+    await gone(boardId, 10);
+    await gone(boardId, 50);
+    const third = await gone(boardId, 100);
+
+    expect(third).toMatchObject({ outcome: "recorded", deactivated: true });
+    const board = await boardRow(db.pool, boardId);
+    expect(board).toMatchObject({ active: false, consecutive_not_found: 3, claim_token: null });
+    const { rows } = await db.pool.query<{ deactivated_at: Date; deactivated_reason: string }>(
+      "select deactivated_at, deactivated_reason from board where id = $1",
+      [boardId],
+    );
+    expect(rows[0]?.deactivated_at.toISOString()).toBe(minutes(100).toISOString());
+    expect(rows[0]?.deactivated_reason).toMatch(/answered 404 3 times in a row.*moved to another job-board provider.*roles were left/s);
+    expect((await pollRuns(db.pool, boardId)).at(-1)?.note).toMatch(/^switched off: /);
+  });
+
+  it("leaves the board's roles exactly as they were: a missing board is not a company that closed everything", async () => {
+    const { boardId } = await established();
+    const before = await postings(boardId);
+    for (const at of [10, 50, 100]) await gone(boardId, at); // the third switches the board off
+    expect((await boardRow(db.pool, boardId)).active).toBe(false);
+    expect(await postings(boardId)).toEqual(before);
+    expect(await eventsOf(db.pool, boardId)).toEqual([]);
+  });
+
+  it("is no longer claimed once switched off", async () => {
+    const { boardId } = await established();
+    for (const at of [10, 50, 100]) await gone(boardId, at);
+    await expect(leaseBoard(db.pool, boardId)).rejects.toThrow(/could not be leased/);
+  });
+
+  it("starts counting again after any other kind of failure: three in a row means in a row", async () => {
+    const { boardId } = await established();
+    await gone(boardId, 10);
+    await gone(boardId, 50);
+    await fail(boardId, 100); // a 503 in between
+    expect((await boardRow(db.pool, boardId)).consecutive_not_found).toBe(0);
+    await gone(boardId, 150);
+    await gone(boardId, 200);
+    const board = await boardRow(db.pool, boardId);
+    expect(board).toMatchObject({ active: true, consecutive_not_found: 2 });
+  });
+
+  it("starts counting again after a good answer", async () => {
+    const { boardId } = await established();
+    await gone(boardId, 10);
+    await gone(boardId, 50);
+    await poll(boardId, snapshot(jobs("a", "b", "c")), 100);
+    expect((await boardRow(db.pool, boardId)).consecutive_not_found).toBe(0);
+  });
+
+  it("is not mistaken for other errors: a 403 or a rejected redirect is just a failure", async () => {
+    const { boardId } = await established();
+    for (const at of [10, 20, 30, 40]) await fail(boardId, at, { kind: "error", reason: "HTTP 403" }, { status: 403 });
+    expect(await boardRow(db.pool, boardId)).toMatchObject({ active: true, consecutive_not_found: 0, consecutive_failures: 4 });
+  });
+
+  it("is not mistaken for a 404 that arrives as something retryable", async () => {
+    const { boardId } = await established();
+    await fail(boardId, 10, { kind: "retry", reason: "HTTP 404" }, { status: 404 });
+    expect((await boardRow(db.pool, boardId)).consecutive_not_found).toBe(0);
   });
 });
 

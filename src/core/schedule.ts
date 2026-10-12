@@ -30,6 +30,14 @@ export const FOLLOWED_INTERVAL_SEC = 300;
 export const UNFOLLOWED_MIN_INTERVAL_SEC = 1800;
 /** After this many failures in a row a board is called degraded and is tried only once every MAX_WAIT_SEC. */
 export const DEGRADED_AFTER_FAILURES = 8;
+/** A board that answers 404 this many times in a row is switched off: the company has probably moved to another provider. */
+export const NOT_FOUND_LIMIT = 3;
+/**
+ * After a 404 the board is not asked again for at least this long. A provider can answer 404 for a minute or two during an
+ * incident; three of them half an hour apart is a board that is gone. (The guide said three in a row, which at a
+ * five-minute rhythm would be ten minutes.)
+ */
+export const NOT_FOUND_MIN_WAIT_SEC = 1800;
 /** A role that is missing once is checked again this soon (the second strike), or this soon in a suspicious case. */
 export const STRIKE_RECHECK_SEC = 120;
 export const SUSPICIOUS_RECHECK_SEC = 600;

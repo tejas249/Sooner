@@ -136,6 +136,12 @@ async function fail(deps: PollTaskDeps, board: ClaimedBoard, failure: PollFailur
       deps.log.warn("the lease was lost to another worker; the failure was not recorded", who);
       return "lease-lost";
     }
+    if (result.deactivated) {
+      deps.log.error("board switched off: it keeps answering 404, so the company has probably moved to another provider", {
+        ...who,
+        status: meta.status,
+      });
+    }
     // A feed that stopped looking like itself needs a human; a timeout or a 503 will most likely pass.
     const level = failure.kind === "invalid" ? "error" : "warn";
     deps.log[level]("poll failed", {
