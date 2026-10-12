@@ -154,7 +154,10 @@ The worker is also tested as a whole, over real HTTP, against a mock job-board s
 404, a redirect, invalid JSON, a body cut off halfway, a slow answer or no answer at all, and it records the time of every
 request. With it the tests prove, with the real fetcher and the real politeness gate:
 
-- **no host receives more than one request per second**, and never more than two at once, however many boards are due;
+- **no host receives more than one request per second**, and never more than two at once, however many boards are due. The
+  gate counts the second from when the previous request actually started, so a late timer cannot shorten it. The test
+  records the moment the gate lets each request go (exact) and checks arrivals at the mock more loosely, because they
+  wobble with how busy the machine is: that check is there to catch a request that skips the gate;
 - a **304** is used whenever there is an ETag, for all three providers, and the request asks "is your copy current?"
   (`max-age=0`) so Lever answers 304 instead of ignoring the ETag;
 - **errors never close roles**: for each of ten kinds of misbehaviour, nothing is closed or announced and the failure is

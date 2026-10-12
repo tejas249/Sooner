@@ -28,12 +28,19 @@ export interface GateOptions {
  *
  * `acquire` resolves when it is this request's turn and gives back a function that must be called when the request has
  * finished, success or not. Callers queue in the order they asked.
+ *
+ * The gap is measured from when the previous request actually started. Planning every start at a fixed multiple of the gap
+ * would not do: a timer that fires late (a big board being parsed, a busy database) would leave the next request closer
+ * than the gap, because its own timer was not late.
  */
 export class HostGate {
   readonly #gapMs: number;
   readonly #maxInFlight: number;
   readonly #clock: GateClock;
-  readonly #nextStart = new Map<string, number>();
+  /** When the latest request to each host really started. */
+  readonly #lastStart = new Map<string, number>();
+  /** Per host, the last caller in line for a start time. A caller begins waiting once the one before it has started. */
+  readonly #turns = new Map<string, Promise<void>>();
   readonly #inFlight = new Map<string, number>();
   readonly #queue = new Map<string, Array<() => void>>();
 
@@ -44,13 +51,9 @@ export class HostGate {
   }
 
   async acquire(host: string): Promise<() => void> {
+    // The slot comes first, so time spent queued for a slot is not also spent waiting for a start time.
     await this.#takeSlot(host);
-    // Reserve the next free start time at once, before sleeping, so concurrent callers line up behind each other
-    // instead of waking together. This happens after the slot is ours, so time spent queued for a slot is not wasted.
-    const now = this.#clock.now();
-    const at = Math.max(now, this.#nextStart.get(host) ?? 0);
-    this.#nextStart.set(host, at + this.#gapMs);
-    if (at > now) await this.#clock.sleep(at - now);
+    await this.#waitForTurn(host);
 
     let released = false;
     return () => {
@@ -58,6 +61,32 @@ export class HostGate {
       released = true;
       this.#giveSlot(host);
     };
+  }
+
+  /** Resolves at the moment this caller may start. Callers to one host go one at a time, in the order they asked. */
+  #waitForTurn(host: string): Promise<void> {
+    const mine = (this.#turns.get(host) ?? Promise.resolve()).then(() => this.#waitForGap(host));
+    this.#turns.set(
+      host,
+      mine.catch(() => undefined), // a failed wait must not hold up the callers behind it
+    );
+    return mine;
+  }
+
+  async #waitForGap(host: string): Promise<void> {
+    for (;;) {
+      const now = this.#clock.now();
+      let last = this.#lastStart.get(host) ?? -Infinity;
+      if (last > now) {
+        // The clock was set back. Count from now, so the host is not kept waiting for a time that has not come: a wait is never more than one gap.
+        last = now;
+        this.#lastStart.set(host, now);
+      }
+      const wait = last + this.#gapMs - now;
+      if (wait <= 0) break;
+      await this.#clock.sleep(wait); // and look again: a timer can fire a little early or late
+    }
+    this.#lastStart.set(host, this.#clock.now());
   }
 
   async #takeSlot(host: string): Promise<void> {

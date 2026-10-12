@@ -40,9 +40,32 @@ async function addBoard(provider: Provider, roles: NormalizedJob[], over: BoardF
 
 const makeDue = (ids: string[]) => db.pool.query("update board set next_poll_at = $1 where id = any($2::bigint[])", [PAST, ids]);
 
+/** The real gate, which also notes the moment it lets each request through. */
+class RecordingGate extends HostGate {
+  readonly released: Array<{ host: string; at: number }> = [];
+  override async acquire(host: string): Promise<() => void> {
+    const release = await super.acquire(host);
+    this.released.push({ host, at: performance.now() });
+    return release;
+  }
+}
+
+/** The shortest time between two of these moments, or Infinity for fewer than two. */
+function shortestGap(moments: number[]): number {
+  const sorted = [...moments].sort((a, b) => a - b);
+  let shortest = Infinity;
+  for (let i = 1; i < sorted.length; i++) shortest = Math.min(shortest, (sorted[i] as number) - (sorted[i - 1] as number));
+  return shortest;
+}
+
+/** The gate counts in whole milliseconds and these moments are not, so the second can come a millisecond or two short. */
+const CLOCK_ROUNDING_MS = 2;
+
 interface RunOptions {
   /** Requests to one host start at least this far apart: 1000 is the real rule, 0 skips the wait. */
   gapMs?: number;
+  /** A gate to use instead of a plain one with `gapMs`. */
+  gate?: HostGate;
   now?: () => Date;
 }
 
@@ -51,7 +74,7 @@ async function pollDue(options: RunOptions = {}) {
   const { logger, entries } = createMemoryLogger();
   const fetcher = createFetcher({
     userAgent: "Sooner/0.1 (+local development run, no public contact yet)",
-    gate: new HostGate({ gapMs: options.gapMs ?? 0 }),
+    gate: options.gate ?? new HostGate({ gapMs: options.gapMs ?? 0 }),
     now: options.now ?? (() => T), // a Retry-After given as a date is turned into seconds on this clock
   });
   const summary = await runWorker(
@@ -79,8 +102,9 @@ describe("politeness", () => {
       ...(await Promise.all([1, 2, 3].map(() => addBoard("lever", mockRoles("lever", 5))))),
     ];
 
+    const gate = new RecordingGate({ gapMs: 1000 }); // the real rule
     const startedAt = performance.now();
-    const { summary } = await pollDue({ gapMs: 1000 }); // the real rule
+    const { summary } = await pollDue({ gate });
     const tookMs = performance.now() - startedAt;
 
     expect(summary.outcomes.applied).toBe(10);
@@ -89,8 +113,13 @@ describe("politeness", () => {
     for (const provider of PROVIDERS) {
       const count = boards.filter((b) => b.token.startsWith(provider)).length;
       expect(mock.requestsFor(provider), provider).toHaveLength(count);
-      // One request a second per host: the gate spaces them. A little slack for timers.
-      expect(mock.minGapMs(provider), `${provider}: shortest gap between requests`).toBeGreaterThanOrEqual(950);
+      // One request a second per host. The gate's own record is exact: each request was let through a full second after the one before.
+      const letThrough = gate.released.filter((r) => r.host === mock.adapters[provider].host).map((r) => r.at);
+      expect(letThrough, `${provider}: requests let through`).toHaveLength(count);
+      expect(shortestGap(letThrough), `${provider}: shortest gap between requests leaving`).toBeGreaterThanOrEqual(1000 - CLOCK_ROUNDING_MS);
+      // What reaches the host wobbles with how busy this machine is, so this bound is loose. It is here to catch a request that
+      // skips the gate (it would land almost on top of another), not a few milliseconds of scheduling.
+      expect(mock.minGapMs(provider), `${provider}: shortest gap between requests arriving`).toBeGreaterThanOrEqual(700);
       expect(mock.maxConcurrent(provider), `${provider}: most requests open at once`).toBeLessThanOrEqual(2);
     }
     // Hosts do not wait for each other: ten requests took as long as the longest queue (4 requests, 3 gaps), not ten gaps.
@@ -103,11 +132,12 @@ describe("politeness", () => {
     await pollDue();
     await makeDue(boards.map((b) => b.id));
     const before = mock.requestsFor("ashby").length;
-    await pollDue({ gapMs: 1000 });
+    const gate = new RecordingGate({ gapMs: 1000 });
+    await pollDue({ gate });
     const second = mock.requestsFor("ashby").slice(before);
     expect(second).toHaveLength(3);
-    const gaps = second.slice(1).map((r, i) => r.at - (second[i] as { at: number }).at);
-    for (const gap of gaps) expect(gap).toBeGreaterThanOrEqual(950);
+    expect(shortestGap(gate.released.map((r) => r.at))).toBeGreaterThanOrEqual(1000 - CLOCK_ROUNDING_MS);
+    expect(shortestGap(second.map((r) => r.at))).toBeGreaterThanOrEqual(700);
   }, 30_000);
 
   it("identifies itself on every request", async () => {
