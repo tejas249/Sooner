@@ -109,3 +109,33 @@ export function boardEvidence(text: string, name: string, website?: string): Evi
     domain: count([host], "\\p{L}\\p{N}-"),
   };
 }
+
+/** Words that say a role is in India: the country and its larger cities, as whole words. */
+const INDIA =
+  /(?<![\p{L}\p{N}])(?:india|bengaluru|bangalore|mumbai|navi mumbai|thane|delhi|gurgaon|gurugram|noida|ghaziabad|faridabad|hyderabad|secunderabad|pune|chennai|kolkata|ahmedabad|surat|vadodara|jaipur|lucknow|kochi|cochin|thiruvananthapuram|trivandrum|coimbatore|chandigarh|mohali|indore|bhopal|nagpur|visakhapatnam|bhubaneswar|patna|mysuru|mysore|mangaluru)(?![\p{L}\p{N}])/iu;
+
+const PLACES: Record<string, RegExp> = { IN: INDIA };
+
+/**
+ * Whether any of a board's places is in the company's own country, or null where there is nothing to judge by (only India has
+ * a list of places so far). A company that is based in India and lists no role there is almost certainly someone else with
+ * the same name: that is how a Minnesota company called BlueStone, a San Francisco startup called Navi and a pizza marketplace
+ * called Slice were each mistaken for an Indian one.
+ */
+export function locatedIn(country: string | undefined, places: ReadonlyArray<string | null>): boolean | null {
+  const pattern = country === undefined ? undefined : PLACES[country.toUpperCase()];
+  if (!pattern) return null;
+  return places.some((place) => place !== null && pattern.test(place));
+}
+
+/** The commonest places among a board's roles with how many are in each, for a person deciding whether it is the right company. */
+export function topPlaces(places: ReadonlyArray<string | null>, limit: number): string {
+  const counts = new Map<string, number>();
+  for (const place of places) if (place !== null) counts.set(place, (counts.get(place) ?? 0) + 1);
+  if (counts.size === 0) return "no places listed";
+  return [...counts]
+    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+    .slice(0, limit)
+    .map(([place, n]) => `${place} (${n})`)
+    .join(", ");
+}

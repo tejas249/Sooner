@@ -1,4 +1,4 @@
-import { boardEvidence, findBoardRefs, guessTokens, type Evidence } from "../../src/core/detect.ts";
+import { boardEvidence, findBoardRefs, guessTokens, locatedIn, topPlaces, type Evidence } from "../../src/core/detect.ts";
 import { PROVIDERS, isProvider } from "../../src/core/types.ts";
 import { fetchBoard, type BoardRef } from "../../src/worker/fetch-board.ts";
 import type { Fetcher } from "../../src/worker/fetcher.ts";
@@ -8,12 +8,12 @@ import { type BoardEntry, type Candidate } from "./boards-file.ts";
 export type Via = BoardEntry["confirmedVia"];
 
 export type Detection =
-  | { kind: "found"; ref: BoardRef; roles: number; via: Via; sampleHost: string | null; evidence: Evidence }
+  | { kind: "found"; ref: BoardRef; roles: number; via: Via; sampleHost: string | null; evidence: Evidence; places: string }
   | { kind: "missing"; tried: string[]; notes: string[] }
   | { kind: "unreachable"; tried: string[]; reason: string };
 
 type Probe =
-  | { kind: "found"; roles: number; sampleHost: string | null; evidence: Evidence }
+  | { kind: "found"; roles: number; sampleHost: string | null; evidence: Evidence; places: string; inCountry: boolean | null }
   | { kind: "missing" }
   | { kind: "unreachable"; reason: string };
 
@@ -24,11 +24,14 @@ async function probe(fetcher: Fetcher, ref: BoardRef, candidate: Candidate): Pro
   switch (out.kind) {
     case "ok": {
       const first = out.jobs[0];
+      const places = out.jobs.map((job) => job.location);
       return {
         kind: "found",
         roles: out.jobs.length,
         sampleHost: first ? new URL(first.url).host : null,
         evidence: boardEvidence(out.text ?? "", candidate.name, candidate.website),
+        places: topPlaces(places, 2),
+        inCountry: locatedIn(candidate.country, places),
       };
     }
     case "error":
@@ -44,8 +47,9 @@ async function probe(fetcher: Fetcher, ref: BoardRef, candidate: Candidate): Pro
 /**
  * Works out which board a company uses, trying in order the boards the list names, the links on its careers page and (when
  * `guessing`) guesses from its name and website. A board only counts when the provider's own API answers with a shape its
- * adapter understands. A guess must also mention the company, and must not be empty: either way it is more likely someone
- * else's board. A hint is believed, but the evidence is returned for it too, so a typo shows.
+ * adapter understands. A guess must also mention the company, must not be empty and, for a company in India, must have a role
+ * in India: any of those missing makes it more likely someone else's board. A hint is believed, but the evidence is returned
+ * for it too, so a typo shows.
  */
 export async function detect(fetcher: Fetcher, candidate: Candidate, guessing: boolean): Promise<Detection> {
   const tried: string[] = [];
@@ -66,8 +70,13 @@ export async function detect(fetcher: Fetcher, candidate: Candidate, guessing: b
         notes.push(`${spec(ref)} exists but never mentions ${candidate.name}, so it was ignored`);
         return null;
       }
+      // A company based in India with no role in India: the same name, another company. (Only India has a list of places.)
+      if (result.inCountry === false) {
+        notes.push(`${spec(ref)} mentions ${candidate.name}, but none of its roles is in India, so it was ignored`);
+        return null;
+      }
     }
-    return { kind: "found", ref, roles: result.roles, via, sampleHost: result.sampleHost, evidence: result.evidence };
+    return { kind: "found", ref, roles: result.roles, via, sampleHost: result.sampleHost, evidence: result.evidence, places: result.places };
   };
 
   for (const hint of candidate.boards ?? []) {

@@ -12,8 +12,9 @@
  *   3. guesses from the company's name and website, on all three providers.
  * A board only counts when the provider's API answers 200 with a shape its adapter understands. A guess can land on another
  * company's board, so a guessed board must also mention the company: its name or its website's address has to appear in
- * the board's own answer, or the guess is ignored. Every guess is shown with that evidence for you to check, and so is
- * every hint, since a hint can be a typo.
+ * the board's own answer, and for a company in India at least one role has to be in India, or the guess is ignored. Every
+ * result is shown with that evidence and the commonest places for you to check, and so is every hint, since a hint can be
+ * a typo.
  *
  * Every request goes through the same politeness gate as polling (one per second per host).
  * The careers page is fetched from the list you wrote. Never point this at addresses other people can type.
@@ -59,7 +60,10 @@ run(async () => {
       const { name, domain } = detection.evidence;
       const proof = name + domain === 0 ? red("  nothing in it mentions the company: is it the right board?") : dim(`  name x${name}, address x${domain}`);
       const host = detection.sampleHost ? dim(`  jobs link to ${detection.sampleHost}`) : "";
-      console.log(`${prefix} ${green(column(spec(detection.ref), 34))} ${String(detection.roles).padStart(4)} roles  ${dim(`(${detection.via})`)}${proof}${host}`);
+      console.log(
+        `${prefix} ${green(column(spec(detection.ref), 34))} ${String(detection.roles).padStart(4)} roles  ${dim(`(${detection.via})`)}${proof}${host}` +
+          dim(`  places: ${detection.places}`),
+      );
     } else if (detection.kind === "unreachable") {
       console.log(`${prefix} ${red("could not tell")}  ${detection.reason}`);
     } else {

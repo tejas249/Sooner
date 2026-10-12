@@ -132,3 +132,31 @@ describe("detect: when it cannot tell", () => {
     ]);
   });
 });
+
+describe("detect: a company in India", () => {
+  // One Greenhouse role, placed where the test says, naming the company.
+  const board = (place: string, company = "Zeta") => ({ jobs: [{ ...stripe.jobs[0], location: { name: place }, company_name: company }], meta: { total: 1 } });
+  const zeta = (over: Partial<Candidate> = {}): Candidate => candidate({ name: "Zeta", website: "https://zeta.tech", country: "IN", ...over });
+
+  it("ignores a guessed board none of whose roles is in India: it is another company with the same name", async () => {
+    const { fetcher } = fakeFetcher({ [greenhouse("zeta")]: ok(board("San Francisco, CA")) });
+    const result = await detect(fetcher, zeta(), true);
+    expect(result.kind).toBe("missing");
+    expect(result.kind === "missing" && result.notes).toEqual(["greenhouse:zeta mentions Zeta, but none of its roles is in India, so it was ignored"]);
+  });
+
+  it("accepts a guessed board with a role in India", async () => {
+    const { fetcher } = fakeFetcher({ [greenhouse("zeta")]: ok(board("Bengaluru, Karnataka, India")) });
+    expect(await detect(fetcher, zeta(), true)).toMatchObject({ kind: "found", via: "guess", places: "Bengaluru, Karnataka, India (1)" });
+  });
+
+  it("believes a hint even when no role is in India: the list's own word is taken over a guess", async () => {
+    const { fetcher } = fakeFetcher({ [greenhouse("zeta")]: ok(board("Remote")) });
+    expect(await detect(fetcher, zeta({ boards: ["greenhouse:zeta"] }), true)).toMatchObject({ kind: "found", via: "hint" });
+  });
+
+  it("does not ask the question of a company elsewhere", async () => {
+    const { fetcher } = fakeFetcher({ [greenhouse("zeta")]: ok(board("San Francisco, CA")) });
+    expect(await detect(fetcher, zeta({ country: "US" }), true)).toMatchObject({ kind: "found", via: "guess" });
+  });
+});

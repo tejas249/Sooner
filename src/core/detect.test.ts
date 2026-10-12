@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { boardEvidence, findBoardRefs, guessTokens } from "./detect.ts";
+import { boardEvidence, findBoardRefs, guessTokens, locatedIn, topPlaces } from "./detect.ts";
 
 describe("findBoardRefs", () => {
   it("finds hosted boards for all three providers, in order of appearance", () => {
@@ -98,5 +98,37 @@ describe("boardEvidence", () => {
     expect(boardEvidence("anything", "").name).toBe(0);
     expect(boardEvidence("anything", "Acme", "not a url").domain).toBe(0);
     expect(boardEvidence("", "Acme", "https://acme.com")).toEqual({ name: 0, domain: 0 });
+  });
+});
+
+describe("locatedIn", () => {
+  it("has no opinion for a country it has no list of places for, or none given", () => {
+    expect(locatedIn("US", ["San Francisco, CA"])).toBeNull();
+    expect(locatedIn(undefined, ["Bengaluru"])).toBeNull();
+  });
+
+  it("says whether any role is in India, by country or by city, in any case", () => {
+    expect(locatedIn("IN", ["Remote", "Bengaluru, Karnataka"])).toBe(true);
+    expect(locatedIn("IN", ["Gurugram"])).toBe(true);
+    expect(locatedIn("IN", ["New Delhi, India"])).toBe(true);
+    expect(locatedIn("IN", ["PUNE"])).toBe(true);
+    expect(locatedIn("IN", ["San Francisco", null, "London"])).toBe(false);
+    expect(locatedIn("IN", [])).toBe(false);
+  });
+
+  it("matches whole words: Indiana and Indianapolis are not India", () => {
+    expect(locatedIn("IN", ["Indianapolis, IN", "Indiana", "Pune Street, Portland"])).toBe(true); // Pune is a word here
+    expect(locatedIn("IN", ["Indianapolis, IN", "Indiana"])).toBe(false);
+  });
+});
+
+describe("topPlaces", () => {
+  it("names the commonest places with how many roles are there", () => {
+    expect(topPlaces(["Pune", "Remote", "Pune", null, "Pune", "Remote", "London"], 2)).toBe("Pune (3), Remote (2)");
+  });
+
+  it("says so when no role has a place, and copes with nothing at all", () => {
+    expect(topPlaces([null, null], 2)).toBe("no places listed");
+    expect(topPlaces([], 2)).toBe("no places listed");
   });
 });
