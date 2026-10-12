@@ -74,6 +74,14 @@ const SUSPICIOUS = { needed: 3, minGapMinutes: 20 };
 const SUSPICIOUS_SHARE = 0.4;
 const SUSPICIOUS_MIN_OPEN = 5;
 
+/**
+ * Whether `missing` of `open` roles vanishing at once is too many to believe: all of them, or at least 40% of a board of at
+ * least five. The same rule decides how many checks closing takes and when the owner is told, so it lives in one place.
+ */
+export function isSuspiciousDrop(open: number, missing: number): boolean {
+  return open > 0 && (missing === open || (open >= SUSPICIOUS_MIN_OPEN && missing / open >= SUSPICIOUS_SHARE));
+}
+
 const FIELDS: readonly FieldName[] = ["title", "location", "department", "remote", "url"];
 
 function track(job: NormalizedJob, at: string, baseline: boolean): TrackedJob {
@@ -133,10 +141,7 @@ function strikeMissing(
   missing: readonly TrackedJob[],
   now: Date,
 ): Pick<ApplyResult, "events" | "onStrike" | "suspicious"> {
-  const suspicious =
-    openCount > 0 &&
-    (missing.length === openCount ||
-      (openCount >= SUSPICIOUS_MIN_OPEN && missing.length / openCount >= SUSPICIOUS_SHARE));
+  const suspicious = isSuspiciousDrop(openCount, missing.length);
   const rule = suspicious ? SUSPICIOUS : NORMAL;
   const at = now.toISOString();
   const events: JobEvent[] = [];

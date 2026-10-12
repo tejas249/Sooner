@@ -1,4 +1,5 @@
 import { applySnapshot, confirmPending, type ApplyResult } from "../core/changes.ts";
+import { GONE_REASON } from "../core/health.ts";
 import { eventRecords, planWrites, strikesOf, type EventType } from "../core/persist.ts";
 import { NOT_FOUND_LIMIT, NOT_FOUND_MIN_WAIT_SEC, failureDelaySec, scheduleAfterSuccess } from "../core/schedule.ts";
 import type { NormalizedJob } from "../core/types.ts";
@@ -336,11 +337,6 @@ export async function recordFailure(
     return { outcome: "recorded" as const, failures, nextPollAt, deactivated: gone };
   });
 }
-
-/** Written on a board that was switched off for answering 404. */
-export const GONE_REASON =
-  `the feed answered 404 ${NOT_FOUND_LIMIT} times in a row, at least half an hour apart, so the company has probably moved to ` +
-  "another job-board provider. Its roles were left as they were.";
 
 /** How many poll_run rows one clean-up pass deletes. */
 const PRUNE_BATCH = 5000;
