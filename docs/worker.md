@@ -149,6 +149,19 @@ npm test                        # unit tests, no database; this is what Vercel's
 npm run test:db                 # the tests that need Postgres; starts a throwaway one for you
 ```
 
+The worker is also tested as a whole, over real HTTP, against a mock job-board server ([mock-boards.ts](../src/worker/mock-boards.ts),
+[e2e.db.test.ts](../src/worker/e2e.db.test.ts)). The mock speaks all three providers' formats and can be told to answer 429, 5xx,
+404, a redirect, invalid JSON, a body cut off halfway, a slow answer or no answer at all, and it records the time of every
+request. With it the tests prove, with the real fetcher and the real politeness gate:
+
+- **no host receives more than one request per second**, and never more than two at once, however many boards are due;
+- a **304** is used whenever there is an ETag, for all three providers, and the request asks "is your copy current?"
+  (`max-age=0`) so Lever answers 304 instead of ignoring the ETag;
+- **errors never close roles**: for each of ten kinds of misbehaviour, nothing is closed or announced and the failure is
+  written down;
+- **back-off follows the schedule** and obeys `Retry-After`, as seconds or as a date;
+- a **SIGTERM in the middle of a poll** cancels the request, gives the lease back and counts no failure.
+
 In CI the database tests run against a `postgres:17` service container instead (`TEST_DATABASE_URL`).
 
 ## Deploy it
@@ -259,5 +272,4 @@ Rows in `poll_run` are deleted after a week, by the worker itself. Everything el
 These are week 2. Until then the worker is safe (a failing board backs off, nothing closes on a failed poll) but quiet.
 
 - No admin page: "poll now" and "pause" are SQL for now.
-- No mock job-board server for proving politeness and back-off end to end (the gate and the fetcher have their own tests).
 - Alerts to users, the web app's use of the database, and follows are weeks 3 and 4.
