@@ -33,6 +33,7 @@ npm run worker        # poll them until Ctrl-C (or `npm run worker -- --once`)
 
 The worker prints one JSON line per poll. [docs/worker.md](docs/worker.md) explains how it works, how to deploy it and how to
 look after it; [docs/operating.sql](docs/operating.sql) has the queries for checking on it.
+The website has an admin page for you (health, alerts, every board, poll now / pause / resume): [docs/admin.md](docs/admin.md).
 
 Requires Node 24 or newer (the scripts run as TypeScript directly, with no build step).
 
@@ -94,8 +95,8 @@ startup called Navi and a pizza marketplace called Slice).
 src/core/      pure TypeScript: adapters (parse only), text normalising, change detection, schedule maths, write planning
 src/db/        the database layer: connection pool, migration runner, seeding, and the test harness (src/db/testing)
 src/worker/    the worker: politeness gate, fetcher, claiming, the transaction that applies a poll, the loop, the entry point
-src/web/       small pure helpers for the website: security headers, the health report, the page's numbers
-src/app/       the Next.js site: the landing page, /api/health, robots and sitemap
+src/web/       helpers for the website: security headers, the health report, the page's numbers, the admin page's data and password check
+src/app/       the Next.js site: the landing page, the admin page, /api/health, robots and sitemap
 migrations/    the schema as numbered SQL files, never edited once applied
 scripts/       the commands above (poll, detect, db:migrate, db:seed, build:worker), their helpers and the smoke test
 tools/dev-db/  a Postgres for machines without Docker, installed on demand and not part of the app's dependencies
@@ -208,8 +209,8 @@ proof that the whole path works on real data; days of polling are what will show
 
 - **The hosted database and the worker's host.** Everything a deploy needs is built and tested ([docs/worker.md](docs/worker.md)),
   but creating them takes accounts and a real contact address, so that step is yours. Until then nothing polls around the clock.
-- **Week 2 (in progress):** an admin page, a mock job-board server that proves politeness and back-off end to end, and a list
-  of 300 boards. Alerts to you (Discord, Slack, Telegram or any webhook) and the heartbeat are in.
+- **Week 2 (in progress):** a list of 300 boards. Alerts to you (Discord, Slack, Telegram or any webhook), the heartbeat, a
+  mock job-board server that proves politeness and back-off end to end, and the [admin page](docs/admin.md) are in.
 - **Week 3:** the website using the data: the live feed, search, company and role pages, and the stale-role signal.
 - **Week 4:** sign-in, watches and alerts. Their tables arrive with them.
 

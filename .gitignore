@@ -23,6 +23,7 @@
 # local tooling configuration
 /.claude/
 /CLAUDE.md
+/AGENTS.md
 
 # next.js
 /.next/

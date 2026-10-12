@@ -272,7 +272,5 @@ Rows in `poll_run` are deleted after a week, by the worker itself. Everything el
 
 ## What it does not do yet
 
-These are week 2. Until then the worker is safe (a failing board backs off, nothing closes on a failed poll) but quiet.
-
-- No admin page: "poll now" and "pause" are SQL for now.
-- Alerts to users, the web app's use of the database, and follows are weeks 3 and 4.
+- Alerts to users, the web app's use of the database for visitors, and follows are weeks 3 and 4. The only part of the website
+  that reads the database today is the [admin page](admin.md), for you.
