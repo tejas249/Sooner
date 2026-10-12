@@ -25,13 +25,18 @@ export interface BoardFields {
   consecutiveFailures?: number;
   claimedUntil?: string | null;
   claimToken?: string | null;
+  priority?: boolean;
+  consecutiveNotFound?: number;
+  deactivatedReason?: string | null;
 }
 
 export async function insertBoard(db: Queryable, companyId: string, fields: BoardFields = {}): Promise<string> {
   const { rows } = await db.query<{ id: string }>(
     `insert into board (company_id, provider, token, active, next_poll_at, poll_interval_sec, etag, baselined_at,
-                        consecutive_failures, claimed_until, claim_token)
-     values ($1, $2, $3, $4, coalesce($5::timestamptz, now()), $6, $7, $8, $9, $10, $11)
+                        consecutive_failures, claimed_until, claim_token, priority, consecutive_not_found,
+                        deactivated_at, deactivated_reason)
+     values ($1, $2, $3, $4, coalesce($5::timestamptz, now()), $6, $7, $8, $9, $10, $11, $12, $13,
+             case when $14::text is null then null else now() end, $14)
      returning id`,
     [
       companyId,
@@ -45,6 +50,9 @@ export async function insertBoard(db: Queryable, companyId: string, fields: Boar
       fields.consecutiveFailures ?? 0,
       fields.claimedUntil ?? null,
       fields.claimToken ?? null,
+      fields.priority ?? false,
+      fields.consecutiveNotFound ?? 0,
+      fields.deactivatedReason ?? null,
     ],
   );
   return (rows[0] as { id: string }).id;

@@ -63,7 +63,7 @@ describe("main, against a database that is not ready", () => {
     expect(await main(["--once"], { DATABASE_URL: blank.url, HR_CONTACT: "https://example.com/bot" }, deps)).toBe(1);
     const error = logs().find((l) => l.level === "error");
     expect(error?.msg).toMatch(/behind this code; run the migrations first \(npm run db:migrate\)/);
-    expect(error?.["pending"]).toEqual(["0001_init.sql"]);
+    expect(error?.["pending"]).toEqual(loadMigrations("migrations").map((m) => m.file));
   });
 
   it("starts once the migrations have been applied", async () => {
@@ -77,7 +77,8 @@ describe("main, against a database that is not ready", () => {
     const newer = mkdtempSync(join(tmpdir(), "sooner-newer-"));
     try {
       for (const m of real) writeFileSync(join(newer, m.file), m.sql);
-      writeFileSync(join(newer, "0002_something_new.sql"), "select 1;");
+      // One more than the real ones, as a newer release would have.
+      writeFileSync(join(newer, `${String(real.length + 1).padStart(4, "0")}_something_new.sql`), "select 1;");
       await migrate(blank.pool, loadMigrations(newer));
       const { deps } = setup();
       expect(await main(["--once"], { DATABASE_URL: blank.url, HR_CONTACT: "https://example.com/bot" }, deps)).toBe(0);

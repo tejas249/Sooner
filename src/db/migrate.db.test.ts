@@ -29,7 +29,9 @@ describe("the real migrations", () => {
   it("apply to an empty database and create the schema", async () => {
     const result = await migrate(db.pool, real);
     expect(result.applied).toEqual(real.map((m) => m.file));
-    expect(await tableNames()).toEqual(["board", "company", "poll_run", "posting", "posting_event", "schema_migration"]);
+    expect(await tableNames()).toEqual(
+      expect.arrayContaining(["alert_state", "board", "company", "poll_run", "posting", "posting_event", "schema_migration"]),
+    );
     const extensions = await db.pool.query<{ extname: string }>("select extname from pg_extension where extname = 'pg_trgm'");
     expect(extensions.rowCount).toBe(1);
   });

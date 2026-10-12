@@ -4,6 +4,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { promisify } from "node:util";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { loadMigrations } from "../src/db/migrate.ts";
 import { testDatabase } from "../src/db/testing/database.ts";
 import { waitFor } from "../src/worker/testing.ts";
 
@@ -34,32 +35,35 @@ const plain = (text: string) => text.replace(new RegExp(`${ESCAPE}\\[[0-9;]*m`, 
 describe("npm run db:migrate", () => {
   const blank = testDatabase({ migrated: false });
   const env = () => ({ DATABASE_URL: blank.url });
+  const files = loadMigrations("migrations").map((m) => m.file);
+  const count = files.length;
+  const migrationWord = `migration${count === 1 ? "" : "s"}`;
 
   it("applies the migrations, and says so", async () => {
     const result = await node(["scripts/db-migrate.ts"], env());
     expect(result.code).toBe(0);
-    expect(plain(result.output)).toMatch(/applied 0001_init\.sql in \d+ ms/);
-    expect(plain(result.output)).toMatch(/Applied 1 migration\./);
+    for (const file of files) expect(plain(result.output)).toMatch(new RegExp(`applied ${file.replace(".", "\\.")} in \\d+ ms`));
+    expect(plain(result.output)).toContain(`Applied ${count} ${migrationWord}.`);
   });
 
   it("finds nothing to do the second time", async () => {
     await node(["scripts/db-migrate.ts"], env());
     const again = await node(["scripts/db-migrate.ts"], env());
     expect(again.code).toBe(0);
-    expect(plain(again.output)).toMatch(/Up to date: all 1 migrations were already applied/);
+    expect(plain(again.output)).toContain(`Up to date: all ${count} migrations were already applied`);
   });
 
   it("shows what is pending with --status, and changes nothing", async () => {
     const before = await node(["scripts/db-migrate.ts", "--status"], env());
-    expect(plain(before.output)).toMatch(/pending\s+0001_init\.sql/);
-    expect(plain(before.output)).toMatch(/0 applied, 1 pending/);
+    for (const file of files) expect(plain(before.output)).toMatch(new RegExp(`pending\\s+${file.replace(".", "\\.")}`));
+    expect(plain(before.output)).toContain(`0 applied, ${count} pending`);
     const tables = await blank.pool.query("select to_regclass('company') as company");
     expect(tables.rows[0]).toEqual({ company: null });
 
     await node(["scripts/db-migrate.ts"], env());
     const after = await node(["scripts/db-migrate.ts", "--status"], env());
-    expect(plain(after.output)).toMatch(/applied\s+0001_init\.sql/);
-    expect(plain(after.output)).toMatch(/1 applied, 0 pending/);
+    for (const file of files) expect(plain(after.output)).toMatch(new RegExp(`applied\\s+${file.replace(".", "\\.")}`));
+    expect(plain(after.output)).toContain(`${count} applied, 0 pending`);
   });
 
   it("names the database it is about to change, without its password", async () => {
@@ -152,7 +156,7 @@ describe("the bundled worker", () => {
 
     const migrated = await node([join(bundle, "migrate.mjs")], env(), dir);
     expect(migrated.code, migrated.output).toBe(0);
-    expect(plain(migrated.output)).toMatch(/Applied 1 migration\./);
+    expect(plain(migrated.output)).toContain(`Applied ${loadMigrations("migrations").length} migrations.`);
 
     const started = await node([join(bundle, "worker.mjs"), "--once"], env(), dir);
     expect(started.code, started.output).toBe(0);

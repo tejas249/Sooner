@@ -69,6 +69,42 @@ describe("board", () => {
   });
 });
 
+describe("what a board remembers about trouble (migration 0002)", () => {
+  it("starts as an ordinary board: not a priority, no 404s, never switched off", async () => {
+    const { boardId } = await setup();
+    const { rows } = await db.pool.query(
+      "select priority, consecutive_not_found, deactivated_at, deactivated_reason, active from board where id = $1",
+      [boardId],
+    );
+    expect(rows[0]).toEqual({ priority: false, consecutive_not_found: 0, deactivated_at: null, deactivated_reason: null, active: true });
+  });
+
+  it("cannot count a negative number of 404s", async () => {
+    const { boardId } = await setup();
+    expect(await refusedBy("update board set consecutive_not_found = -1 where id = $1", [boardId])).toBe("board_not_found_not_negative");
+  });
+});
+
+describe("alert_state", () => {
+  const insert = (key: string, severity = "warning") =>
+    db.pool.query("insert into alert_state (key, severity, title, opened_at) values ($1, $2, 'Something', now())", [key, severity]);
+
+  it("keeps one row per kind of problem", async () => {
+    await insert("queue-lag");
+    expect(await refusedBy("insert into alert_state (key, severity, title, opened_at) values ('queue-lag', 'warning', 'x', now())")).toBe(
+      "alert_state_pkey",
+    );
+  });
+
+  it("knows two severities, and counts sends from zero", async () => {
+    await insert("a", "critical");
+    expect(await refusedBy("insert into alert_state (key, severity, title, opened_at) values ('b', 'meh', 'x', now())")).toBe("alert_severity_known");
+    expect(await refusedBy("update alert_state set send_count = -1 where key = 'a'")).toBe("alert_send_count_not_negative");
+    const { rows } = await db.pool.query("select send_count, last_sent_at, resolved_at, detail from alert_state where key = 'a'");
+    expect(rows[0]).toEqual({ send_count: 0, last_sent_at: null, resolved_at: null, detail: "" });
+  });
+});
+
 describe("posting", () => {
   it("identifies a role by board and external ID", async () => {
     const ids = await setup();
@@ -176,6 +212,8 @@ describe("indexes", () => {
       "posting_event_posting_idx",
       "posting_event_unalerted_idx",
       "poll_run_board_idx",
+      "board_inactive_idx",
+      "alert_state_open_idx",
     ]) {
       expect(names.has(wanted), wanted).toBe(true);
     }
