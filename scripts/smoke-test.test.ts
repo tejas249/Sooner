@@ -10,6 +10,8 @@ let host = "";
 let reportedCommit = "41a9c07";
 let reportedEnv = "production";
 let dropHeaders = false;
+/** What the fake site answers for /admin without a password: 404 when it is switched off, 401 when it asks for one. */
+let adminStatus = 404;
 
 const HOME = "<html><h1>Know when a role opens, sooner.</h1><h2>Companies it watches</h2></html>";
 
@@ -28,6 +30,8 @@ beforeAll(async () => {
     } else if (req.url === "/") {
       res.writeHead(200, { "content-type": "text/html", ...headers });
       res.end(HOME);
+    } else if (req.url === "/admin") {
+      res.writeHead(adminStatus, adminStatus === 401 ? { "www-authenticate": 'Basic realm="Sooner admin"' } : {}).end("x");
     } else if (req.url === "/robots.txt") {
       res.writeHead(200, { "content-type": "text/plain" });
       res.end("User-Agent: *\nAllow: /\nDisallow: /api/\n");
@@ -92,6 +96,22 @@ describe("scripts/smoke-test.sh", () => {
     expect(out).toContain("FAIL  sends HSTS");
     expect(code).toBe(1);
     dropHeaders = false;
+  });
+
+  it.each([404, 401])("accepts an admin page that is switched off (404) or asks for a password (401): it answered %s", async (status) => {
+    adminStatus = status;
+    const { code, out } = await smoke(undefined);
+    expect(out).toContain("the admin page is not open to the public");
+    expect(code).toBe(0);
+    adminStatus = 404;
+  });
+
+  it.each([200, 500, 302])("fails when the admin page answers %s without a password", async (status) => {
+    adminStatus = status;
+    const { code, out } = await smoke(undefined);
+    expect(out).toContain(`FAIL  the admin page is not open to the public (got HTTP ${status}, expected 401 or 404)`);
+    expect(code).toBe(1);
+    adminStatus = 404;
   });
 
   it("checks any commit when none is expected, and refuses to run without a host", async () => {

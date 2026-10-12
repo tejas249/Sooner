@@ -4,7 +4,8 @@
 #   EXPECTED_SHA=<commit> bash scripts/smoke-test.sh <host>        for example: sooner.vercel.app
 #
 # With EXPECTED_SHA set, /api/health must report that exact commit. That proves the public address serves the build that was
-# just pushed rather than a stale one. Exits non-zero and says what failed.
+# just pushed rather than a stale one. /admin must answer 404 (switched off) or 401 (asks for a password) and never 200 or
+# anything else, so a broken guard on the admin page fails the deploy. Exits non-zero and says what failed.
 #
 # Tunables (env): SMOKE_RETRIES (default 18) and SMOKE_DELAY seconds (default 5). A domain's alias can trail the
 # "deployment ready" event by a few seconds, so the health check retries before giving up. SMOKE_SCHEME (default https) is
@@ -71,6 +72,12 @@ check_status() { # path, expected HTTP status, label
   if [[ $code == "$2" ]]; then pass "$3"; else fail "$3 (got HTTP $code, expected $2)"; fi
 }
 
+check_not_open() { # path, label: the page must be switched off (404) or ask for a password (401), never open
+  local code
+  code=$(curl -sS -m 15 -o /dev/null -w '%{http_code}' "$BASE$1" 2>/dev/null)
+  if [[ $code == 401 || $code == 404 ]]; then pass "$2 (HTTP $code)"; else fail "$2 (got HTTP $code, expected 401 or 404)"; fi
+}
+
 check_header() { # path, header name, text its value must contain, label
   local value
   value=$(curl -sS -m 15 -D - -o /dev/null "$BASE$1" 2>/dev/null | tr -d '\r' | awk -v h="$(printf '%s' "$2" | tr 'A-Z' 'a-z'):" 'tolower($1)==h { $1=""; print; exit }')
@@ -84,6 +91,7 @@ check_page "/" "Know when a role opens" "home page renders"
 check_page "/" "Companies it watches" "home page lists the companies"
 check_page "/robots.txt" "Disallow: /api/" "robots.txt keeps crawlers off the API"
 check_status "/this-page-does-not-exist" 404 "an unknown page returns 404"
+check_not_open "/admin" "the admin page is not open to the public"
 
 check_header "/" "Content-Security-Policy" "frame-ancestors 'none'" "sends a Content-Security-Policy that forbids framing"
 check_header "/" "Strict-Transport-Security" "max-age=" "sends HSTS"
