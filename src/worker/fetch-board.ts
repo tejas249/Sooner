@@ -1,4 +1,5 @@
-import { adapters } from "../core/adapters/index.ts";
+import { adapters as realAdapters } from "../core/adapters/index.ts";
+import type { Adapter } from "../core/adapters/shared.ts";
 import { FeedFormatError } from "../core/errors.ts";
 import type { NormalizedJob, Provider } from "../core/types.ts";
 import type { FetchMeta, Fetcher } from "./fetcher.ts";
@@ -25,13 +26,16 @@ export type BoardFetch =
 /**
  * Fetch one board politely and turn the answer into roles. This is the only place a feed URL is built, and it is built
  * from an adapter and a token from our own list, never from text a user typed.
+ *
+ * `adapters` is the set of adapters to use. Nothing but a test passes one: it lets the whole worker be pointed at a mock
+ * job-board server on this machine without a single line of the real code knowing it is a test.
  */
 export async function fetchBoard(
   fetcher: Fetcher,
   board: BoardRef & { etag?: string | null },
-  options: { signal?: AbortSignal } = {},
+  options: { signal?: AbortSignal; adapters?: Record<Provider, Adapter> } = {},
 ): Promise<BoardFetch> {
-  const adapter = adapters[board.provider];
+  const adapter = (options.adapters ?? realAdapters)[board.provider];
   const outcome = await fetcher.get(adapter.url(board.token), {
     etag: board.etag,
     timeoutMs: adapter.timeoutMs,

@@ -2,6 +2,7 @@ import { PROVIDERS, type NormalizedJob, type Provider } from "../core/types.ts";
 import type { Queryable } from "../db/pool.ts";
 import { claimDueBoards } from "./claim.ts";
 import type { FetchOutcome, Fetcher, GetOptions } from "./fetcher.ts";
+import { providerBody } from "./mock-boards.ts";
 import type { ClaimedBoard } from "./types.ts";
 
 /** Helpers for the worker's database tests. */
@@ -113,21 +114,7 @@ export function scriptedFetcher(
 }
 
 /** What an Ashby board answers with when it lists these roles. The adapter turns it back into the same roles. */
-export function ashbyBody(roles: readonly NormalizedJob[]): string {
-  return JSON.stringify({
-    apiVersion: "1",
-    jobs: roles.map((role) => ({
-      id: role.externalId,
-      title: role.title,
-      jobUrl: role.url,
-      isListed: true,
-      publishedAt: role.postedAt,
-      location: role.location,
-      department: role.department,
-      workplaceType: role.remote === true ? "Remote" : role.remote === false ? "OnSite" : null,
-    })),
-  });
-}
+export const ashbyBody = (roles: readonly NormalizedJob[]): string => providerBody("ashby", roles);
 
 export const okAnswer = (body: string, etag: string | null = 'W/"1"', ms = 40): FetchOutcome => ({
   kind: "ok",

@@ -1,4 +1,5 @@
 import { adapters } from "../core/adapters/index.ts";
+import type { Adapter } from "../core/adapters/shared.ts";
 import { PROVIDERS, type Provider } from "../core/types.ts";
 import type { Pool } from "../db/pool.ts";
 import { claimDueBoards, earliestClaimableAt, releaseLeases } from "./claim.ts";
@@ -79,6 +80,8 @@ export interface LoopDeps {
   log: Logger;
   /** Touched each time the loop completes a pass, so the heartbeat can tell a working loop from a stuck one. */
   liveness?: Liveness;
+  /** The adapters to use. Only a test sets this: see fetchBoard. */
+  adapters?: Record<Provider, Adapter>;
 }
 
 export interface LoopSummary {
@@ -127,7 +130,16 @@ export async function runWorker(
     summary.claimed++;
     claims.set(board.claimToken, board);
     const task = pollClaimedBoard(
-      { pool: deps.pool, fetcher: deps.fetcher, now: deps.now, random: deps.random, log, followed: settings.followed, signal: cancelPolls.signal },
+      {
+        pool: deps.pool,
+        fetcher: deps.fetcher,
+        now: deps.now,
+        random: deps.random,
+        log,
+        followed: settings.followed,
+        signal: cancelPolls.signal,
+        adapters: deps.adapters,
+      },
       board,
     )
       .then((outcome) => {

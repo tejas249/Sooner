@@ -1,4 +1,6 @@
-import { adapters } from "../core/adapters/index.ts";
+import { adapters as realAdapters } from "../core/adapters/index.ts";
+import type { Adapter } from "../core/adapters/shared.ts";
+import type { Provider } from "../core/types.ts";
 import type { Pool } from "../db/pool.ts";
 import { releaseLeases } from "./claim.ts";
 import { fetchBoard, type BoardFetch } from "./fetch-board.ts";
@@ -21,6 +23,8 @@ export interface PollTaskDeps {
   signal: AbortSignal;
   /** Passed on to settlePoll. Only tests set it. */
   beforeCommit?: SettleOptions["beforeCommit"];
+  /** The adapters to use. Only a test sets this: see fetchBoard. */
+  adapters?: Record<Provider, Adapter>;
 }
 
 export type PollTaskOutcome = "applied" | "held" | "failed" | "lease-lost" | "aborted";
@@ -35,13 +39,13 @@ export type PollTaskOutcome = "applied" | "held" | "failed" | "lease-lost" | "ab
  */
 export async function pollClaimedBoard(deps: PollTaskDeps, board: ClaimedBoard): Promise<PollTaskOutcome> {
   const { log } = deps;
-  const adapter = adapters[board.provider];
+  const adapter = (deps.adapters ?? realAdapters)[board.provider];
   const startedAt = deps.now();
   const who = { board_id: board.id, company: board.companySlug, provider: board.provider };
 
   let fetched: BoardFetch;
   try {
-    fetched = await fetchBoard(deps.fetcher, board, { signal: deps.signal });
+    fetched = await fetchBoard(deps.fetcher, board, { signal: deps.signal, adapters: deps.adapters });
   } catch (error) {
     // fetchBoard turns every provider problem into a result, so reaching here means a bug in our own code.
     log.error("fetching crashed", { ...who, error });
@@ -129,7 +133,7 @@ async function fail(deps: PollTaskDeps, board: ClaimedBoard, failure: PollFailur
   try {
     const result = await recordFailure(deps.pool, board, failure, meta, {
       now: deps.now(),
-      floorSec: adapters[board.provider].minIntervalSec,
+      floorSec: (deps.adapters ?? realAdapters)[board.provider].minIntervalSec,
       random: deps.random(),
     });
     if (result.outcome === "lease-lost") {
