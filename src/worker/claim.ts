@@ -11,6 +11,7 @@ interface ClaimRow {
   etag: string | null;
   claim_token: string;
   poll_interval_sec: number;
+  next_poll_at: Date;
   consecutive_failures: number;
   baselined_at: Date | null;
   priority: boolean;
@@ -55,7 +56,7 @@ export async function claimDueBoards(
        returning b.*
      )
      select c.id, c.company_id, co.slug as company_slug, c.provider, c.token, c.etag, c.claim_token,
-            c.poll_interval_sec, c.consecutive_failures, c.baselined_at, c.priority
+            c.poll_interval_sec, c.next_poll_at, c.consecutive_failures, c.baselined_at, c.priority
        from claimed c
        join company co on co.id = c.company_id
       order by c.next_poll_at, c.id`,
@@ -75,6 +76,7 @@ function toClaimedBoard(row: ClaimRow): ClaimedBoard {
     etag: row.etag,
     claimToken: row.claim_token,
     pollIntervalSec: row.poll_interval_sec,
+    dueAt: row.next_poll_at.toISOString(),
     consecutiveFailures: row.consecutive_failures,
     baselinedAt: row.baselined_at?.toISOString() ?? null,
     priority: row.priority,

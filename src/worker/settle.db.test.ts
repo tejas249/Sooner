@@ -281,6 +281,46 @@ describe("later polls", () => {
   });
 });
 
+describe("queue lag", () => {
+  /** A bigint comes back from the driver as text. */
+  const lagsOf = async (boardId: string) =>
+    (await db.pool.query<{ queue_lag_ms: string | null }>("select queue_lag_ms from poll_run where board_id = $1 order by id", [boardId])).rows.map(
+      (row) => (row.queue_lag_ms === null ? null : Number(row.queue_lag_ms)),
+    );
+
+  async function boardDueAt(minuteDue: number): Promise<string> {
+    const companyId = await insertCompany(db.pool, { slug: `co-${++tokenCounter}` });
+    return insertBoard(db.pool, companyId, { token: `board-${++tokenCounter}`, nextPollAt: minutes(minuteDue).toISOString() });
+  }
+
+  it("is written with every poll: how long after it fell due the poll started", async () => {
+    const boardId = await boardDueAt(-3);
+    await poll(boardId, snapshot(jobs("a")), 0); // started at minute 0, due at minute -3
+    expect(await lagsOf(boardId)).toEqual([180_000]);
+  });
+
+  it("is written for a failed poll too", async () => {
+    const boardId = await boardDueAt(-2);
+    await fail(boardId, 0);
+    expect(await lagsOf(boardId)).toEqual([120_000]);
+  });
+
+  it("is recorded however late: a worker that was off for a month polls boards that are billions of milliseconds overdue", async () => {
+    const boardId = await boardDueAt(-60 * 24 * 40); // due forty days before the poll starts
+    await poll(boardId, snapshot(jobs("a")), 0);
+    expect(await lagsOf(boardId)).toEqual([40 * 24 * 3600 * 1000]);
+  });
+
+  it("is zero for a poll that starts on time, and never negative", async () => {
+    const onTime = await boardDueAt(0);
+    await poll(onTime, snapshot(jobs("a")), 0);
+    const early = await boardDueAt(5); // a clock that stepped back, or a test clock: the poll starts before the due time
+    await poll(early, snapshot(jobs("a")), 0);
+    expect(await lagsOf(onTime)).toEqual([0]);
+    expect(await lagsOf(early)).toEqual([0]);
+  });
+});
+
 describe("a suspicious drop", () => {
   it("is held back: an empty list does not close anything for twenty minutes, and says why", async () => {
     const { boardId } = await newBoard();

@@ -148,6 +148,15 @@ describe("politeness", () => {
   });
 });
 
+describe("queue lag", () => {
+  it("is written down for every poll, counted from the moment the board fell due", async () => {
+    const { id } = await addBoard("greenhouse", mockRoles("greenhouse", 2)); // due an hour before the worker's clock
+    await pollDue();
+    const { rows } = await db.pool.query("select queue_lag_ms::float8 as lag from poll_run where board_id = $1", [id]);
+    expect(rows).toEqual([{ lag: 3_600_000 }]);
+  });
+});
+
 describe("conditional requests", () => {
   it.each(PROVIDERS)("%s: the second poll sends the ETag it was given and gets a 304, which costs no bytes", async (provider) => {
     const { id, token } = await addBoard(provider, mockRoles(provider, 6));

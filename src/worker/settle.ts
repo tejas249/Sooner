@@ -78,6 +78,11 @@ async function lockBoard(client: Queryable, board: ClaimedBoard) {
   return rows[0] ?? null;
 }
 
+/** How long after it fell due the poll started, in milliseconds. Never negative. */
+export function queueLagMs(board: ClaimedBoard, startedAt: Date): number {
+  return Math.max(0, Math.round(startedAt.getTime() - Date.parse(board.dueAt)));
+}
+
 async function recordPollRun(
   db: Queryable,
   board: ClaimedBoard,
@@ -85,11 +90,12 @@ async function recordPollRun(
   fields: { jobsSeen: number | null; newCount: number; closedCount: number; error: string | null; note: string | null },
 ): Promise<void> {
   await db.query(
-    `insert into poll_run (board_id, started_at, duration_ms, http_status, bytes, jobs_seen, new_count, closed_count, error, note)
-     values ($1, $2::timestamptz, $3, $4, $5, $6, $7, $8, $9, $10)`,
+    `insert into poll_run (board_id, started_at, queue_lag_ms, duration_ms, http_status, bytes, jobs_seen, new_count, closed_count, error, note)
+     values ($1, $2::timestamptz, $3, $4, $5, $6, $7, $8, $9, $10, $11)`,
     [
       board.id,
       meta.startedAt.toISOString(),
+      queueLagMs(board, meta.startedAt),
       meta.ms,
       meta.status,
       meta.bytes,

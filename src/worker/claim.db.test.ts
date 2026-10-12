@@ -39,6 +39,12 @@ describe("claimDueBoards", () => {
     expect(board).toMatchObject({ companySlug: "stripe", token: "stripe-jobs", etag: 'W/"abc"', baselinedAt: at(-3600) });
   });
 
+  it("reports when the board fell due, so that how late its poll starts can be measured", async () => {
+    const [id] = await seedBoards(1, { nextPollAt: at(-90) });
+    const [board] = await claim();
+    expect(board).toMatchObject({ id, dueAt: at(-90) });
+  });
+
   it("says whether a board is a priority", async () => {
     const companyId = await insertCompany(db.pool);
     await insertBoard(db.pool, companyId, { token: "vip", nextPollAt: at(-20), priority: true });

@@ -15,6 +15,8 @@ export interface ClaimedBoard {
    */
   claimToken: string;
   pollIntervalSec: number;
+  /** When it fell due (ISO): its next_poll_at when it was claimed. How late its poll starts is measured from here. */
+  dueAt: string;
   consecutiveFailures: number;
   baselinedAt: string | null;
   /** Polled at the fast rhythm even though nobody follows it. See BoardEntry.priority. */
