@@ -16,8 +16,6 @@ updates:
     directory: /
     schedule:
       interval: monthly
-  # The worker's base image (node:24-slim) and the database image the tests use are updated by hand when Node or Postgres moves on.
-  - package-ecosystem: docker
-    directory: /
-    schedule:
-      interval: monthly
+  # Deliberately not watched: the worker image's Node version (Dockerfile), the Postgres the database tests run against
+  # (ci.yml), .nvmrc and the engines field in package.json. They name the long-term-support line, and are moved together by
+  # hand when the next one arrives. A Docker watcher would propose node:25-slim, a short-lived release.
