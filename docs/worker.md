@@ -56,10 +56,11 @@ until a poll finishes and frees a lane, or until it is told to stop.
 
 Until users can follow companies (week 4), nobody does, so the boards that matter most are marked `priority` in the list
 (the original 50) and are polled every five minutes: they build history at a rhythm worth having and give the shortest
-detection delay. Every other board speeds up when it changes and slows down when it is quiet, which keeps the whole list at
-roughly 22,000 requests a day (about a quarter of a request per second) however long it gets. Treating all boards as priority
-would be 86,000 a day for 300 boards, more than the politeness gate can serve on time, so `ALL_BOARDS_FOLLOWED` is off by
-default; it exists for a small list. A 304 costs a few hundred bytes.
+detection delay. Every other board speeds up when it changes and slows down when it is quiet. With 422 boards that comes to
+between about 16,000 requests a day (every other board quiet, four a day each) and about 32,000 (every one of them busy, 48 a day
+each), so 0.2 to 0.4 requests a second in all, about half of them to Greenhouse, whose gate allows one a second. Treating every board as a
+priority would be 122,000 a day (86,000 for 300 boards), more than the politeness gate can serve on time, so
+`ALL_BOARDS_FOLLOWED` is off by default; it exists for a small list. A 304 costs a few hundred bytes.
 
 ### When things go wrong
 
@@ -135,7 +136,7 @@ npm run db:dev                  # terminal 1: Postgres on 127.0.0.1:54329, data 
 ```bash
 cp .env.example .env            # then put an address you read in HR_CONTACT; DATABASE_URL is already right
 npm run db:migrate              # create the tables
-npm run db:seed                 # add the 50 companies and boards from data/boards.json
+npm run db:seed                 # add the 422 companies and boards from data/boards.json
 npm run worker                  # poll until Ctrl-C; or `npm run worker -- --once` to poll what is due and stop
 ```
 
@@ -192,8 +193,8 @@ Any Postgres 14 or newer works; the tests and CI use 17. On Neon:
    ```
 
 3. Know the cost. A hosted database that scales to zero when idle will never idle: the worker queries it every few
-   seconds, around the clock. Check your plan's compute allowance before choosing the free tier. The 50 starter boards take
-   about 20 MB, including Postgres's own catalogs.
+   seconds, around the clock. Check your plan's compute allowance before choosing the free tier. The 422 boards take about 46 MB
+   once all are baselined (41,000 roles, about 1.1 KB each with their indexes), and it grows with the history of changes.
 
 Neon's connection strings end in `?sslmode=require`; the `pg` library accepts that and will print a one-time note about it.
 
@@ -210,8 +211,8 @@ The [Dockerfile](../Dockerfile) builds the worker and the migration runner into 
 | `ALERT_WEBHOOK_URL` (or `ALERT_TELEGRAM_BOT_TOKEN` and `ALERT_TELEGRAM_CHAT_ID`) | recommended | Where [alerts](#alerts-to-yourself) go |
 | `HEARTBEAT_URL`, `HEARTBEAT_INTERVAL_SEC` | recommended | The [heartbeat](#the-heartbeat): without it nothing tells you the worker is down |
 
-Run **one** instance. More would work (claiming is built for it) but fifty boards do not need it, and each instance has its
-own politeness gate, so two would double the request rate to each provider.
+Run **one** instance. More would work (claiming is built for it) but even 422 boards do not need it (about a third of a
+request a second at the most), and each instance has its own politeness gate, so two would double the request rate to each provider.
 
 Run migrations as their own step before a new version starts, never on worker start:
 
