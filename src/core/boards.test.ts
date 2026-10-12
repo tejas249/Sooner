@@ -46,8 +46,14 @@ describe("a board entry", () => {
 describe("data/boards.json", () => {
   const boards = BoardEntries.parse(boardsFile);
 
-  it("is the 50 boards the prototype polls", () => {
-    expect(boards).toHaveLength(50);
+  it("lists at least the 300 boards the guide asks for", () => {
+    expect(boards.length).toBeGreaterThanOrEqual(300);
+  });
+
+  it("keeps the five-minute rhythm for the 50 boards picked first, and for no others", () => {
+    // The worker's capacity is worked out for exactly this: fifty boards every five minutes, the rest adapting between half an
+    // hour and six hours (docs/worker.md). More boards on the fast rhythm would not fit under one request a second to each host.
+    expect(boards.filter((b) => b.priority)).toHaveLength(50);
   });
 
   it("has no company or board listed twice", () => {

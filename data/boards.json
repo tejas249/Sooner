@@ -1,14 +1,194 @@
 [
   {
+    "slug": "6sense",
+    "name": "6sense",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "6sense",
+    "rolesWhenConfirmed": 29,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "abnormal-security",
+    "name": "Abnormal Security",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "abnormalsecurity",
+    "rolesWhenConfirmed": 87,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "abridge",
+    "name": "Abridge",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "abridge",
+    "rolesWhenConfirmed": 46,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "acorns",
+    "name": "Acorns",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "acorns",
+    "rolesWhenConfirmed": 9,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "affirm",
+    "name": "Affirm",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "affirm",
+    "rolesWhenConfirmed": 203,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "agility-robotics",
+    "name": "Agility Robotics",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "agilityrobotics",
+    "rolesWhenConfirmed": 78,
+    "confirmedVia": "hint"
+  },
+  {
     "slug": "airbnb",
     "name": "Airbnb",
     "segment": "global",
     "country": "US",
     "provider": "greenhouse",
     "token": "airbnb",
-    "rolesWhenConfirmed": 163,
+    "rolesWhenConfirmed": 159,
     "confirmedVia": "hint",
     "priority": true
+  },
+  {
+    "slug": "airbyte",
+    "name": "Airbyte",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "airbyte",
+    "rolesWhenConfirmed": 12,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "airtable",
+    "name": "Airtable",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "airtable",
+    "rolesWhenConfirmed": 4,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "airwallex",
+    "name": "Airwallex",
+    "segment": "global",
+    "country": "AU",
+    "provider": "ashby",
+    "token": "airwallex",
+    "rolesWhenConfirmed": 518,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "akasa",
+    "name": "Akasa",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "akasa",
+    "rolesWhenConfirmed": 9,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "alan",
+    "name": "Alan",
+    "segment": "global",
+    "country": "FR",
+    "provider": "ashby",
+    "token": "alan",
+    "rolesWhenConfirmed": 119,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "alchemy",
+    "name": "Alchemy",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "alchemy",
+    "rolesWhenConfirmed": 20,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "algolia",
+    "name": "Algolia",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "algolia",
+    "rolesWhenConfirmed": 38,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "alphasense",
+    "name": "AlphaSense",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "alphasense",
+    "rolesWhenConfirmed": 191,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "ambience-healthcare",
+    "name": "Ambience Healthcare",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "ambiencehealthcare",
+    "rolesWhenConfirmed": 18,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "amplitude",
+    "name": "Amplitude",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "amplitude",
+    "rolesWhenConfirmed": 39,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "anchorage-digital",
+    "name": "Anchorage Digital",
+    "segment": "global",
+    "country": "US",
+    "provider": "lever",
+    "token": "anchorage",
+    "rolesWhenConfirmed": 22,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "anduril",
+    "name": "Anduril",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "andurilindustries",
+    "rolesWhenConfirmed": 2492,
+    "confirmedVia": "hint"
   },
   {
     "slug": "anthropic",
@@ -22,15 +202,465 @@
     "priority": true
   },
   {
+    "slug": "anyscale",
+    "name": "Anyscale",
+    "segment": "global",
+    "country": "US",
+    "provider": "lever",
+    "token": "anyscale",
+    "rolesWhenConfirmed": 1,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "apollo-graphql",
+    "name": "Apollo GraphQL",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "apollo-graphql",
+    "rolesWhenConfirmed": 7,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "apollo-io",
+    "name": "Apollo.io",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "apolloio",
+    "rolesWhenConfirmed": 50,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "apptronik",
+    "name": "Apptronik",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "apptronik",
+    "rolesWhenConfirmed": 80,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "asana",
+    "name": "Asana",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "asana",
+    "rolesWhenConfirmed": 103,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "assemblyai",
+    "name": "AssemblyAI",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "assemblyai",
+    "rolesWhenConfirmed": 9,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "astranis",
+    "name": "Astranis",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "astranis",
+    "rolesWhenConfirmed": 182,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "astronomer",
+    "name": "Astronomer",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "astronomer",
+    "rolesWhenConfirmed": 23,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "attentive",
+    "name": "Attentive",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "attentive",
+    "rolesWhenConfirmed": 26,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "attio",
+    "name": "Attio",
+    "segment": "global",
+    "country": "GB",
+    "provider": "ashby",
+    "token": "attio",
+    "rolesWhenConfirmed": 36,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "babbel",
+    "name": "Babbel",
+    "segment": "global",
+    "country": "DE",
+    "provider": "ashby",
+    "token": "babbel",
+    "rolesWhenConfirmed": 11,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "back-market",
+    "name": "Back Market",
+    "segment": "global",
+    "country": "FR",
+    "provider": "ashby",
+    "token": "backmarket",
+    "rolesWhenConfirmed": 33,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "baseten",
+    "name": "Baseten",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "baseten",
+    "rolesWhenConfirmed": 109,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "benchling",
+    "name": "Benchling",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "benchling",
+    "rolesWhenConfirmed": 58,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "betterment",
+    "name": "Betterment",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "betterment",
+    "rolesWhenConfirmed": 26,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "bill-com",
+    "name": "Bill.com",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "billcom",
+    "rolesWhenConfirmed": 40,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "bitgo",
+    "name": "BitGo",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "bitgo",
+    "rolesWhenConfirmed": 52,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "bitwarden",
+    "name": "Bitwarden",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "bitwarden",
+    "rolesWhenConfirmed": 36,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "blablacar",
+    "name": "BlaBlaCar",
+    "segment": "global",
+    "country": "FR",
+    "provider": "lever",
+    "token": "blablacar",
+    "rolesWhenConfirmed": 12,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "black-forest-labs",
+    "name": "Black Forest Labs",
+    "segment": "global",
+    "country": "DE",
+    "provider": "ashby",
+    "token": "black-forest-labs",
+    "rolesWhenConfirmed": 14,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "bland-ai",
+    "name": "Bland AI",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "bland",
+    "rolesWhenConfirmed": 16,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "blend",
+    "name": "Blend",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "blend",
+    "rolesWhenConfirmed": 14,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "block",
+    "name": "Block",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "block",
+    "rolesWhenConfirmed": 231,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "blockchain-com",
+    "name": "Blockchain.com",
+    "segment": "global",
+    "country": "GB",
+    "provider": "greenhouse",
+    "token": "blockchain",
+    "rolesWhenConfirmed": 39,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "braze",
+    "name": "Braze",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "braze",
+    "rolesWhenConfirmed": 330,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "brex",
+    "name": "Brex",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "brex",
+    "rolesWhenConfirmed": 277,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "brilliant",
+    "name": "Brilliant",
+    "segment": "global",
+    "country": "US",
+    "provider": "lever",
+    "token": "brilliant",
+    "rolesWhenConfirmed": 3,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "browserbase",
+    "name": "Browserbase",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "browserbase",
+    "rolesWhenConfirmed": 9,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "buildkite",
+    "name": "Buildkite",
+    "segment": "global",
+    "country": "AU",
+    "provider": "greenhouse",
+    "token": "buildkite",
+    "rolesWhenConfirmed": 8,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "calm",
+    "name": "Calm",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "calm",
+    "rolesWhenConfirmed": 2,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "carta",
+    "name": "Carta",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "carta",
+    "rolesWhenConfirmed": 72,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "cartesia",
+    "name": "Cartesia",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "cartesia",
+    "rolesWhenConfirmed": 28,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "carvana",
+    "name": "Carvana",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "carvana",
+    "rolesWhenConfirmed": 1804,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "celonis",
+    "name": "Celonis",
+    "segment": "global",
+    "country": "DE",
+    "provider": "greenhouse",
+    "token": "celonis",
+    "rolesWhenConfirmed": 226,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "cerebras",
+    "name": "Cerebras",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "cerebras",
+    "rolesWhenConfirmed": 123,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "chainguard",
+    "name": "Chainguard",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "chainguard",
+    "rolesWhenConfirmed": 77,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "character-ai",
+    "name": "Character.AI",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "character",
+    "rolesWhenConfirmed": 13,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "chime",
+    "name": "Chime",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "chime",
+    "rolesWhenConfirmed": 67,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "circleci",
+    "name": "CircleCI",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "circleci",
+    "rolesWhenConfirmed": 13,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "clerk",
+    "name": "Clerk",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "clerk",
+    "rolesWhenConfirmed": 2,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "clickup",
+    "name": "ClickUp",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "clickup",
+    "rolesWhenConfirmed": 46,
+    "confirmedVia": "hint"
+  },
+  {
     "slug": "cloudflare",
     "name": "Cloudflare",
     "segment": "global",
     "country": "US",
     "provider": "greenhouse",
     "token": "cloudflare",
-    "rolesWhenConfirmed": 427,
+    "rolesWhenConfirmed": 424,
     "confirmedVia": "hint",
     "priority": true
+  },
+  {
+    "slug": "cloudinary",
+    "name": "Cloudinary",
+    "segment": "global",
+    "country": "IL",
+    "provider": "lever",
+    "token": "cloudinary",
+    "rolesWhenConfirmed": 10,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "clover-health",
+    "name": "Clover Health",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "cloverhealth",
+    "rolesWhenConfirmed": 63,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "coalition",
+    "name": "Coalition",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "coalition",
+    "rolesWhenConfirmed": 40,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "cognition",
+    "name": "Cognition",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "cognition",
+    "rolesWhenConfirmed": 102,
+    "confirmedVia": "hint"
   },
   {
     "slug": "cohere",
@@ -39,7 +669,7 @@
     "country": "CA",
     "provider": "ashby",
     "token": "cohere",
-    "rolesWhenConfirmed": 123,
+    "rolesWhenConfirmed": 119,
     "confirmedVia": "hint",
     "priority": true
   },
@@ -55,15 +685,185 @@
     "priority": true
   },
   {
+    "slug": "collibra",
+    "name": "Collibra",
+    "segment": "global",
+    "country": "BE",
+    "provider": "greenhouse",
+    "token": "collibra",
+    "rolesWhenConfirmed": 29,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "color-health",
+    "name": "Color Health",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "color-health",
+    "rolesWhenConfirmed": 18,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "commercetools",
+    "name": "commercetools",
+    "segment": "global",
+    "country": "DE",
+    "provider": "greenhouse",
+    "token": "commercetools",
+    "rolesWhenConfirmed": 31,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "commure",
+    "name": "Commure",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "commure",
+    "rolesWhenConfirmed": 82,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "confluent",
+    "name": "Confluent",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "confluent",
+    "rolesWhenConfirmed": 17,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "consensys",
+    "name": "Consensys",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "consensys",
+    "rolesWhenConfirmed": 10,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "contentful",
+    "name": "Contentful",
+    "segment": "global",
+    "country": "DE",
+    "provider": "greenhouse",
+    "token": "contentful",
+    "rolesWhenConfirmed": 19,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "contentsquare",
+    "name": "Contentsquare",
+    "segment": "global",
+    "country": "FR",
+    "provider": "lever",
+    "token": "contentsquare",
+    "rolesWhenConfirmed": 20,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "contentstack",
+    "name": "Contentstack",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "contentstack",
+    "rolesWhenConfirmed": 7,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "coreweave",
+    "name": "CoreWeave",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "coreweave",
+    "rolesWhenConfirmed": 311,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "coursera",
+    "name": "Coursera",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "coursera",
+    "rolesWhenConfirmed": 17,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "cresta",
+    "name": "Cresta",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "cresta",
+    "rolesWhenConfirmed": 85,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "cribl",
+    "name": "Cribl",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "cribl",
+    "rolesWhenConfirmed": 69,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "crusoe",
+    "name": "Crusoe",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "crusoe",
+    "rolesWhenConfirmed": 355,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "culture-amp",
+    "name": "Culture Amp",
+    "segment": "global",
+    "country": "AU",
+    "provider": "greenhouse",
+    "token": "cultureamp",
+    "rolesWhenConfirmed": 35,
+    "confirmedVia": "hint"
+  },
+  {
     "slug": "cursor",
     "name": "Cursor",
     "segment": "global",
     "country": "US",
     "provider": "ashby",
     "token": "cursor",
-    "rolesWhenConfirmed": 132,
+    "rolesWhenConfirmed": 135,
     "confirmedVia": "hint",
     "priority": true
+  },
+  {
+    "slug": "customer-io",
+    "name": "Customer.io",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "customerio",
+    "rolesWhenConfirmed": 30,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "d-matrix",
+    "name": "d-Matrix",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "d-matrix",
+    "rolesWhenConfirmed": 37,
+    "confirmedVia": "hint"
   },
   {
     "slug": "databricks",
@@ -72,9 +872,19 @@
     "country": "US",
     "provider": "greenhouse",
     "token": "databricks",
-    "rolesWhenConfirmed": 895,
+    "rolesWhenConfirmed": 891,
     "confirmedVia": "hint",
     "priority": true
+  },
+  {
+    "slug": "datacamp",
+    "name": "DataCamp",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "datacamp",
+    "rolesWhenConfirmed": 39,
+    "confirmedVia": "hint"
   },
   {
     "slug": "datadog",
@@ -83,9 +893,99 @@
     "country": "US",
     "provider": "greenhouse",
     "token": "datadog",
-    "rolesWhenConfirmed": 437,
+    "rolesWhenConfirmed": 434,
     "confirmedVia": "hint",
     "priority": true
+  },
+  {
+    "slug": "dataiku",
+    "name": "Dataiku",
+    "segment": "global",
+    "country": "FR",
+    "provider": "greenhouse",
+    "token": "dataiku",
+    "rolesWhenConfirmed": 17,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "dave",
+    "name": "Dave",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "dave",
+    "rolesWhenConfirmed": 9,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "decagon",
+    "name": "Decagon",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "decagon",
+    "rolesWhenConfirmed": 145,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "deepgram",
+    "name": "Deepgram",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "deepgram",
+    "rolesWhenConfirmed": 94,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "degreed",
+    "name": "Degreed",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "degreed",
+    "rolesWhenConfirmed": 2,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "demandbase",
+    "name": "Demandbase",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "demandbase",
+    "rolesWhenConfirmed": 14,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "deputy",
+    "name": "Deputy",
+    "segment": "global",
+    "country": "AU",
+    "provider": "lever",
+    "token": "deputy",
+    "rolesWhenConfirmed": 7,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "descript",
+    "name": "Descript",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "descript",
+    "rolesWhenConfirmed": 11,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "dexterity",
+    "name": "Dexterity",
+    "segment": "global",
+    "country": "US",
+    "provider": "lever",
+    "token": "dexterity",
+    "rolesWhenConfirmed": 22,
+    "confirmedVia": "hint"
   },
   {
     "slug": "discord",
@@ -94,9 +994,39 @@
     "country": "US",
     "provider": "greenhouse",
     "token": "discord",
-    "rolesWhenConfirmed": 47,
+    "rolesWhenConfirmed": 49,
     "confirmedVia": "hint",
     "priority": true
+  },
+  {
+    "slug": "dlocal",
+    "name": "dLocal",
+    "segment": "global",
+    "country": "UY",
+    "provider": "lever",
+    "token": "dlocal",
+    "rolesWhenConfirmed": 53,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "docker",
+    "name": "Docker",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "docker",
+    "rolesWhenConfirmed": 62,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "doctolib",
+    "name": "Doctolib",
+    "segment": "global",
+    "country": "FR",
+    "provider": "greenhouse",
+    "token": "doctolib",
+    "rolesWhenConfirmed": 159,
+    "confirmedVia": "hint"
   },
   {
     "slug": "doordash",
@@ -105,9 +1035,79 @@
     "country": "US",
     "provider": "greenhouse",
     "token": "doordashusa",
-    "rolesWhenConfirmed": 467,
+    "rolesWhenConfirmed": 463,
     "confirmedVia": "hint",
     "priority": true
+  },
+  {
+    "slug": "drata",
+    "name": "Drata",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "drata",
+    "rolesWhenConfirmed": 33,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "dremio",
+    "name": "Dremio",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "dremio",
+    "rolesWhenConfirmed": 7,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "dropbox",
+    "name": "Dropbox",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "dropbox",
+    "rolesWhenConfirmed": 32,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "duolingo",
+    "name": "Duolingo",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "duolingo",
+    "rolesWhenConfirmed": 58,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "e2b",
+    "name": "E2B",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "e2b",
+    "rolesWhenConfirmed": 13,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "elastic",
+    "name": "Elastic",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "elastic",
+    "rolesWhenConfirmed": 407,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "elation-health",
+    "name": "Elation Health",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "elationhealth",
+    "rolesWhenConfirmed": 18,
+    "confirmedVia": "hint"
   },
   {
     "slug": "elevenlabs",
@@ -116,9 +1116,79 @@
     "country": "US",
     "provider": "ashby",
     "token": "elevenlabs",
-    "rolesWhenConfirmed": 141,
+    "rolesWhenConfirmed": 130,
     "confirmedVia": "hint",
     "priority": true
+  },
+  {
+    "slug": "endor-labs",
+    "name": "Endor Labs",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "endorlabs",
+    "rolesWhenConfirmed": 32,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "epic-games",
+    "name": "Epic Games",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "epicgames",
+    "rolesWhenConfirmed": 146,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "etched",
+    "name": "Etched",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "etched",
+    "rolesWhenConfirmed": 111,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "expensify",
+    "name": "Expensify",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "expensify",
+    "rolesWhenConfirmed": 2,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "faire",
+    "name": "Faire",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "faire",
+    "rolesWhenConfirmed": 81,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "fastly",
+    "name": "Fastly",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "fastly",
+    "rolesWhenConfirmed": 50,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "fervo-energy",
+    "name": "Fervo Energy",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "fervoenergy",
+    "rolesWhenConfirmed": 5,
+    "confirmedVia": "hint"
   },
   {
     "slug": "figma",
@@ -127,9 +1197,219 @@
     "country": "US",
     "provider": "greenhouse",
     "token": "figma",
-    "rolesWhenConfirmed": 150,
+    "rolesWhenConfirmed": 151,
     "confirmedVia": "hint",
     "priority": true
+  },
+  {
+    "slug": "figure-ai",
+    "name": "Figure AI",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "figureai",
+    "rolesWhenConfirmed": 96,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "fireblocks",
+    "name": "Fireblocks",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "fireblocks",
+    "rolesWhenConfirmed": 28,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "fireworks-ai",
+    "name": "Fireworks AI",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "fireworks",
+    "rolesWhenConfirmed": 85,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "fivetran",
+    "name": "Fivetran",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "fivetran",
+    "rolesWhenConfirmed": 188,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "flatiron-health",
+    "name": "Flatiron Health",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "flatironhealth",
+    "rolesWhenConfirmed": 23,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "fly-io",
+    "name": "Fly.io",
+    "segment": "global",
+    "country": "US",
+    "provider": "lever",
+    "token": "fly",
+    "rolesWhenConfirmed": 1,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "form-energy",
+    "name": "Form Energy",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "formenergy",
+    "rolesWhenConfirmed": 205,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "forto",
+    "name": "Forto",
+    "segment": "global",
+    "country": "DE",
+    "provider": "ashby",
+    "token": "forto",
+    "rolesWhenConfirmed": 10,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "fullstory",
+    "name": "FullStory",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "fullstory",
+    "rolesWhenConfirmed": 9,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "gainsight",
+    "name": "Gainsight",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "gainsight",
+    "rolesWhenConfirmed": 16,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "gemini",
+    "name": "Gemini",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "gemini",
+    "rolesWhenConfirmed": 35,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "getyourguide",
+    "name": "GetYourGuide",
+    "segment": "global",
+    "country": "DE",
+    "provider": "greenhouse",
+    "token": "getyourguide",
+    "rolesWhenConfirmed": 60,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "ginkgo-bioworks",
+    "name": "Ginkgo Bioworks",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "ginkgobioworks",
+    "rolesWhenConfirmed": 20,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "glossier",
+    "name": "Glossier",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "glossier",
+    "rolesWhenConfirmed": 22,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "gocardless",
+    "name": "GoCardless",
+    "segment": "global",
+    "country": "GB",
+    "provider": "greenhouse",
+    "token": "gocardless",
+    "rolesWhenConfirmed": 29,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "gofundme",
+    "name": "GoFundMe",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "gofundme",
+    "rolesWhenConfirmed": 22,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "gopuff",
+    "name": "Gopuff",
+    "segment": "global",
+    "country": "US",
+    "provider": "lever",
+    "token": "gopuff",
+    "rolesWhenConfirmed": 797,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "gorgias",
+    "name": "Gorgias",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "gorgias",
+    "rolesWhenConfirmed": 17,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "granola",
+    "name": "Granola",
+    "segment": "global",
+    "country": "GB",
+    "provider": "ashby",
+    "token": "granola",
+    "rolesWhenConfirmed": 22,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "greenlight",
+    "name": "Greenlight",
+    "segment": "global",
+    "country": "US",
+    "provider": "lever",
+    "token": "greenlight",
+    "rolesWhenConfirmed": 15,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "gusto",
+    "name": "Gusto",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "gusto",
+    "rolesWhenConfirmed": 97,
+    "confirmedVia": "hint"
   },
   {
     "slug": "harvey",
@@ -138,9 +1418,179 @@
     "country": "US",
     "provider": "ashby",
     "token": "harvey",
-    "rolesWhenConfirmed": 337,
+    "rolesWhenConfirmed": 350,
     "confirmedVia": "hint",
     "priority": true
+  },
+  {
+    "slug": "headway",
+    "name": "Headway",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "headway",
+    "rolesWhenConfirmed": 86,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "heirloom-carbon",
+    "name": "Heirloom Carbon",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "heirloomcarbon",
+    "rolesWhenConfirmed": 2,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "hellofresh",
+    "name": "HelloFresh",
+    "segment": "global",
+    "country": "DE",
+    "provider": "greenhouse",
+    "token": "hellofresh",
+    "rolesWhenConfirmed": 409,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "help-scout",
+    "name": "Help Scout",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "helpscout",
+    "rolesWhenConfirmed": 7,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "helsing",
+    "name": "Helsing",
+    "segment": "global",
+    "country": "DE",
+    "provider": "greenhouse",
+    "token": "helsing",
+    "rolesWhenConfirmed": 156,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "hermeus",
+    "name": "Hermeus",
+    "segment": "global",
+    "country": "US",
+    "provider": "lever",
+    "token": "hermeus",
+    "rolesWhenConfirmed": 81,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "hex",
+    "name": "Hex",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "hex",
+    "rolesWhenConfirmed": 39,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "hightouch",
+    "name": "Hightouch",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "hightouch",
+    "rolesWhenConfirmed": 1,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "hinge-health",
+    "name": "Hinge Health",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "hinge-health",
+    "rolesWhenConfirmed": 80,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "honeycomb",
+    "name": "Honeycomb",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "honeycomb",
+    "rolesWhenConfirmed": 17,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "hume-ai",
+    "name": "Hume AI",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "humeai",
+    "rolesWhenConfirmed": 5,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "immutable",
+    "name": "Immutable",
+    "segment": "global",
+    "country": "AU",
+    "provider": "lever",
+    "token": "immutable",
+    "rolesWhenConfirmed": 3,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "incident-io",
+    "name": "incident.io",
+    "segment": "global",
+    "country": "GB",
+    "provider": "ashby",
+    "token": "incident",
+    "rolesWhenConfirmed": 36,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "included-health",
+    "name": "Included Health",
+    "segment": "global",
+    "country": "US",
+    "provider": "lever",
+    "token": "includedhealth",
+    "rolesWhenConfirmed": 50,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "inflection-ai",
+    "name": "Inflection AI",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "inflectionai",
+    "rolesWhenConfirmed": 6,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "inngest",
+    "name": "Inngest",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "inngest",
+    "rolesWhenConfirmed": 1,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "insitro",
+    "name": "Insitro",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "insitro",
+    "rolesWhenConfirmed": 14,
+    "confirmedVia": "hint"
   },
   {
     "slug": "instacart",
@@ -149,9 +1599,249 @@
     "country": "US",
     "provider": "greenhouse",
     "token": "instacart",
-    "rolesWhenConfirmed": 126,
+    "rolesWhenConfirmed": 119,
     "confirmedVia": "hint",
     "priority": true
+  },
+  {
+    "slug": "instructure",
+    "name": "Instructure",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "instructure",
+    "rolesWhenConfirmed": 47,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "intercom",
+    "name": "Intercom",
+    "segment": "global",
+    "country": "IE",
+    "provider": "greenhouse",
+    "token": "intercom",
+    "rolesWhenConfirmed": 104,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "ionq",
+    "name": "IonQ",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "ionq",
+    "rolesWhenConfirmed": 134,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "island",
+    "name": "Island",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "island",
+    "rolesWhenConfirmed": 25,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "iterable",
+    "name": "Iterable",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "iterable",
+    "rolesWhenConfirmed": 13,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "jfrog",
+    "name": "JFrog",
+    "segment": "global",
+    "country": "IL",
+    "provider": "greenhouse",
+    "token": "jfrog",
+    "rolesWhenConfirmed": 64,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "justworks",
+    "name": "Justworks",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "justworks",
+    "rolesWhenConfirmed": 90,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "kalshi",
+    "name": "Kalshi",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "kalshi",
+    "rolesWhenConfirmed": 28,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "kavak",
+    "name": "Kavak",
+    "segment": "global",
+    "country": "MX",
+    "provider": "lever",
+    "token": "kavak",
+    "rolesWhenConfirmed": 10,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "khan-academy",
+    "name": "Khan Academy",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "khanacademy",
+    "rolesWhenConfirmed": 6,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "kickstarter",
+    "name": "Kickstarter",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "kickstarter",
+    "rolesWhenConfirmed": 1,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "klaviyo",
+    "name": "Klaviyo",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "klaviyo",
+    "rolesWhenConfirmed": 145,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "knock",
+    "name": "Knock",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "knock",
+    "rolesWhenConfirmed": 7,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "kodiak-robotics",
+    "name": "Kodiak Robotics",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "kodiak",
+    "rolesWhenConfirmed": 69,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "komodo-health",
+    "name": "Komodo Health",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "komodohealth",
+    "rolesWhenConfirmed": 29,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "kong",
+    "name": "Kong",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "kong",
+    "rolesWhenConfirmed": 87,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "labelbox",
+    "name": "Labelbox",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "labelbox",
+    "rolesWhenConfirmed": 8,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "lambda",
+    "name": "Lambda",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "lambda",
+    "rolesWhenConfirmed": 91,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "lattice",
+    "name": "Lattice",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "lattice",
+    "rolesWhenConfirmed": 13,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "launchdarkly",
+    "name": "LaunchDarkly",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "launchdarkly",
+    "rolesWhenConfirmed": 56,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "ledger",
+    "name": "Ledger",
+    "segment": "global",
+    "country": "FR",
+    "provider": "ashby",
+    "token": "ledger",
+    "rolesWhenConfirmed": 11,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "lemonade",
+    "name": "Lemonade",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "lemonade",
+    "rolesWhenConfirmed": 40,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "lightmatter",
+    "name": "Lightmatter",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "lightmatter",
+    "rolesWhenConfirmed": 61,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "lightning-ai",
+    "name": "Lightning AI",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "lightningai",
+    "rolesWhenConfirmed": 53,
+    "confirmedVia": "hint"
   },
   {
     "slug": "linear",
@@ -165,15 +1855,405 @@
     "priority": true
   },
   {
+    "slug": "logrocket",
+    "name": "LogRocket",
+    "segment": "global",
+    "country": "US",
+    "provider": "lever",
+    "token": "logrocket",
+    "rolesWhenConfirmed": 9,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "lokalise",
+    "name": "Lokalise",
+    "segment": "global",
+    "country": "LV",
+    "provider": "greenhouse",
+    "token": "lokalise",
+    "rolesWhenConfirmed": 3,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "lucid-motors",
+    "name": "Lucid Motors",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "lucidmotors",
+    "rolesWhenConfirmed": 446,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "lucid-software",
+    "name": "Lucid Software",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "lucidsoftware",
+    "rolesWhenConfirmed": 31,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "luma-ai",
+    "name": "Luma AI",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "lumaai",
+    "rolesWhenConfirmed": 35,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "lyft",
+    "name": "Lyft",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "lyft",
+    "rolesWhenConfirmed": 187,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "lyra-health",
+    "name": "Lyra Health",
+    "segment": "global",
+    "country": "US",
+    "provider": "lever",
+    "token": "lyrahealth",
+    "rolesWhenConfirmed": 563,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "mapbox",
+    "name": "Mapbox",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "mapbox",
+    "rolesWhenConfirmed": 33,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "masterclass",
+    "name": "MasterClass",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "masterclass",
+    "rolesWhenConfirmed": 6,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "material-security",
+    "name": "Material Security",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "materialsecurity",
+    "rolesWhenConfirmed": 2,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "maven-clinic",
+    "name": "Maven Clinic",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "mavenclinic",
+    "rolesWhenConfirmed": 34,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "melio",
+    "name": "Melio",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "melio",
+    "rolesWhenConfirmed": 23,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "mercor",
+    "name": "Mercor",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "mercor",
+    "rolesWhenConfirmed": 111,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "mercury",
+    "name": "Mercury",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "mercury",
+    "rolesWhenConfirmed": 69,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "metabase",
+    "name": "Metabase",
+    "segment": "global",
+    "country": "US",
+    "provider": "lever",
+    "token": "metabase",
+    "rolesWhenConfirmed": 18,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "mintlify",
+    "name": "Mintlify",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "mintlify",
+    "rolesWhenConfirmed": 13,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "mirakl",
+    "name": "Mirakl",
+    "segment": "global",
+    "country": "FR",
+    "provider": "greenhouse",
+    "token": "mirakl",
+    "rolesWhenConfirmed": 29,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "mixpanel",
+    "name": "Mixpanel",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "mixpanel",
+    "rolesWhenConfirmed": 55,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "modal",
+    "name": "Modal",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "modal",
+    "rolesWhenConfirmed": 41,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "mollie",
+    "name": "Mollie",
+    "segment": "global",
+    "country": "NL",
+    "provider": "ashby",
+    "token": "mollie",
+    "rolesWhenConfirmed": 47,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "moneybox",
+    "name": "Moneybox",
+    "segment": "global",
+    "country": "GB",
+    "provider": "ashby",
+    "token": "moneybox",
+    "rolesWhenConfirmed": 21,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "mongodb",
+    "name": "MongoDB",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "mongodb",
+    "rolesWhenConfirmed": 388,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "monte-carlo",
+    "name": "Monte Carlo",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "montecarlodata",
+    "rolesWhenConfirmed": 7,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "monzo",
+    "name": "Monzo",
+    "segment": "global",
+    "country": "GB",
+    "provider": "greenhouse",
+    "token": "monzo",
+    "rolesWhenConfirmed": 66,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "mural",
+    "name": "Mural",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "mural",
+    "rolesWhenConfirmed": 11,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "mux",
+    "name": "Mux",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "mux",
+    "rolesWhenConfirmed": 1,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "n26",
+    "name": "N26",
+    "segment": "global",
+    "country": "DE",
+    "provider": "greenhouse",
+    "token": "n26",
+    "rolesWhenConfirmed": 40,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "nabla",
+    "name": "Nabla",
+    "segment": "global",
+    "country": "FR",
+    "provider": "ashby",
+    "token": "nabla",
+    "rolesWhenConfirmed": 11,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "neo4j",
+    "name": "Neo4j",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "neo4j",
+    "rolesWhenConfirmed": 65,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "netskope",
+    "name": "Netskope",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "netskope",
+    "rolesWhenConfirmed": 147,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "new-relic",
+    "name": "New Relic",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "newrelic",
+    "rolesWhenConfirmed": 54,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "nextdoor",
+    "name": "Nextdoor",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "nextdoor",
+    "rolesWhenConfirmed": 22,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "ninja-van",
+    "name": "Ninja Van",
+    "segment": "global",
+    "country": "SG",
+    "provider": "lever",
+    "token": "ninjavan",
+    "rolesWhenConfirmed": 150,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "nium",
+    "name": "Nium",
+    "segment": "global",
+    "country": "SG",
+    "provider": "lever",
+    "token": "nium",
+    "rolesWhenConfirmed": 17,
+    "confirmedVia": "hint"
+  },
+  {
     "slug": "notion",
     "name": "Notion",
     "segment": "global",
     "country": "US",
     "provider": "ashby",
     "token": "notion",
-    "rolesWhenConfirmed": 135,
+    "rolesWhenConfirmed": 131,
     "confirmedVia": "hint",
     "priority": true
+  },
+  {
+    "slug": "nubank",
+    "name": "Nubank",
+    "segment": "global",
+    "country": "BR",
+    "provider": "ashby",
+    "token": "nubank",
+    "rolesWhenConfirmed": 98,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "nuro",
+    "name": "Nuro",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "nuro",
+    "rolesWhenConfirmed": 105,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "offerup",
+    "name": "OfferUp",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "offerup",
+    "rolesWhenConfirmed": 6,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "okta",
+    "name": "Okta",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "okta",
+    "rolesWhenConfirmed": 376,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "olo",
+    "name": "Olo",
+    "segment": "global",
+    "country": "US",
+    "provider": "lever",
+    "token": "olo",
+    "rolesWhenConfirmed": 11,
+    "confirmedVia": "hint"
   },
   {
     "slug": "openai",
@@ -182,9 +2262,169 @@
     "country": "US",
     "provider": "ashby",
     "token": "openai",
-    "rolesWhenConfirmed": 816,
+    "rolesWhenConfirmed": 811,
     "confirmedVia": "hint",
     "priority": true
+  },
+  {
+    "slug": "opensea",
+    "name": "OpenSea",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "opensea",
+    "rolesWhenConfirmed": 2,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "opslevel",
+    "name": "OpsLevel",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "opslevel",
+    "rolesWhenConfirmed": 2,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "orca-security",
+    "name": "Orca Security",
+    "segment": "global",
+    "country": "IL",
+    "provider": "greenhouse",
+    "token": "orcasecurity",
+    "rolesWhenConfirmed": 10,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "otter-ai",
+    "name": "Otter.ai",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "otterai",
+    "rolesWhenConfirmed": 26,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "oura",
+    "name": "Oura",
+    "segment": "global",
+    "country": "FI",
+    "provider": "greenhouse",
+    "token": "oura",
+    "rolesWhenConfirmed": 75,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "outreach",
+    "name": "Outreach",
+    "segment": "global",
+    "country": "US",
+    "provider": "lever",
+    "token": "outreach",
+    "rolesWhenConfirmed": 26,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "outschool",
+    "name": "Outschool",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "outschool",
+    "rolesWhenConfirmed": 7,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "pagerduty",
+    "name": "PagerDuty",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "pagerduty",
+    "rolesWhenConfirmed": 51,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "palantir",
+    "name": "Palantir",
+    "segment": "global",
+    "country": "US",
+    "provider": "lever",
+    "token": "palantir",
+    "rolesWhenConfirmed": 309,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "patreon",
+    "name": "Patreon",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "patreon",
+    "rolesWhenConfirmed": 13,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "paxos",
+    "name": "Paxos",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "paxos",
+    "rolesWhenConfirmed": 18,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "payoneer",
+    "name": "Payoneer",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "payoneer",
+    "rolesWhenConfirmed": 97,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "peloton",
+    "name": "Peloton",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "peloton",
+    "rolesWhenConfirmed": 54,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "pendo",
+    "name": "Pendo",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "pendo",
+    "rolesWhenConfirmed": 23,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "pennylane",
+    "name": "Pennylane",
+    "segment": "global",
+    "country": "FR",
+    "provider": "ashby",
+    "token": "pennylane",
+    "rolesWhenConfirmed": 147,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "perk",
+    "name": "Perk",
+    "segment": "global",
+    "country": "ES",
+    "provider": "ashby",
+    "token": "perk",
+    "rolesWhenConfirmed": 131,
+    "confirmedVia": "hint"
   },
   {
     "slug": "perplexity",
@@ -193,9 +2433,59 @@
     "country": "US",
     "provider": "ashby",
     "token": "perplexity",
-    "rolesWhenConfirmed": 129,
+    "rolesWhenConfirmed": 132,
     "confirmedVia": "hint",
     "priority": true
+  },
+  {
+    "slug": "phrase",
+    "name": "Phrase",
+    "segment": "global",
+    "country": "DE",
+    "provider": "ashby",
+    "token": "phrase",
+    "rolesWhenConfirmed": 9,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "physical-intelligence",
+    "name": "Physical Intelligence",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "physicalintelligence",
+    "rolesWhenConfirmed": 38,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "pika",
+    "name": "Pika",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "pika",
+    "rolesWhenConfirmed": 15,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "pinecone",
+    "name": "Pinecone",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "pinecone",
+    "rolesWhenConfirmed": 5,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "ping-identity",
+    "name": "Ping Identity",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "pingidentity",
+    "rolesWhenConfirmed": 50,
+    "confirmedVia": "hint"
   },
   {
     "slug": "pinterest",
@@ -204,9 +2494,19 @@
     "country": "US",
     "provider": "greenhouse",
     "token": "pinterest",
-    "rolesWhenConfirmed": 180,
+    "rolesWhenConfirmed": 179,
     "confirmedVia": "hint",
     "priority": true
+  },
+  {
+    "slug": "pinwheel",
+    "name": "Pinwheel",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "pinwheelapi",
+    "rolesWhenConfirmed": 5,
+    "confirmedVia": "hint"
   },
   {
     "slug": "plaid",
@@ -215,9 +2515,129 @@
     "country": "US",
     "provider": "ashby",
     "token": "plaid",
-    "rolesWhenConfirmed": 122,
+    "rolesWhenConfirmed": 121,
     "confirmedVia": "hint",
     "priority": true
+  },
+  {
+    "slug": "plain",
+    "name": "Plain",
+    "segment": "global",
+    "country": "GB",
+    "provider": "ashby",
+    "token": "plain",
+    "rolesWhenConfirmed": 4,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "planet-labs",
+    "name": "Planet Labs",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "planetlabs",
+    "rolesWhenConfirmed": 117,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "planetscale",
+    "name": "PlanetScale",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "planetscale",
+    "rolesWhenConfirmed": 12,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "pleo",
+    "name": "Pleo",
+    "segment": "global",
+    "country": "DK",
+    "provider": "ashby",
+    "token": "pleo",
+    "rolesWhenConfirmed": 33,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "poolside",
+    "name": "Poolside",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "poolside",
+    "rolesWhenConfirmed": 2,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "preply",
+    "name": "Preply",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "preply",
+    "rolesWhenConfirmed": 127,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "psiquantum",
+    "name": "PsiQuantum",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "psiquantum",
+    "rolesWhenConfirmed": 78,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "qonto",
+    "name": "Qonto",
+    "segment": "global",
+    "country": "FR",
+    "provider": "lever",
+    "token": "qonto",
+    "rolesWhenConfirmed": 53,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "qualtrics",
+    "name": "Qualtrics",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "qualtrics",
+    "rolesWhenConfirmed": 65,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "quora",
+    "name": "Quora",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "quora",
+    "rolesWhenConfirmed": 6,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "railway",
+    "name": "Railway",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "railway",
+    "rolesWhenConfirmed": 8,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "raisin",
+    "name": "Raisin",
+    "segment": "global",
+    "country": "DE",
+    "provider": "greenhouse",
+    "token": "raisin",
+    "rolesWhenConfirmed": 41,
+    "confirmedVia": "hint"
   },
   {
     "slug": "ramp",
@@ -226,7 +2646,7 @@
     "country": "US",
     "provider": "ashby",
     "token": "ramp",
-    "rolesWhenConfirmed": 161,
+    "rolesWhenConfirmed": 165,
     "confirmedVia": "hint",
     "priority": true
   },
@@ -237,9 +2657,149 @@
     "country": "US",
     "provider": "greenhouse",
     "token": "reddit",
-    "rolesWhenConfirmed": 156,
+    "rolesWhenConfirmed": 147,
     "confirmedVia": "hint",
     "priority": true
+  },
+  {
+    "slug": "redis",
+    "name": "Redis",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "redis",
+    "rolesWhenConfirmed": 31,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "redwood-materials",
+    "name": "Redwood Materials",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "redwoodmaterials",
+    "rolesWhenConfirmed": 138,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "reka",
+    "name": "Reka",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "reka",
+    "rolesWhenConfirmed": 9,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "relevance-ai",
+    "name": "Relevance AI",
+    "segment": "global",
+    "country": "AU",
+    "provider": "ashby",
+    "token": "relevanceai",
+    "rolesWhenConfirmed": 1,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "render",
+    "name": "Render",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "render",
+    "rolesWhenConfirmed": 38,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "rent-the-runway",
+    "name": "Rent the Runway",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "renttherunway",
+    "rolesWhenConfirmed": 28,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "replit",
+    "name": "Replit",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "replit",
+    "rolesWhenConfirmed": 69,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "resend",
+    "name": "Resend",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "resend",
+    "rolesWhenConfirmed": 14,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "retell-ai",
+    "name": "Retell AI",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "retell-ai",
+    "rolesWhenConfirmed": 28,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "rev",
+    "name": "Rev",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "rev",
+    "rolesWhenConfirmed": 1,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "rho",
+    "name": "Rho",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "rho",
+    "rolesWhenConfirmed": 45,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "riot-games",
+    "name": "Riot Games",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "riotgames",
+    "rolesWhenConfirmed": 158,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "ripple",
+    "name": "Ripple",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "ripple",
+    "rolesWhenConfirmed": 120,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "ro",
+    "name": "Ro",
+    "segment": "global",
+    "country": "US",
+    "provider": "lever",
+    "token": "ro",
+    "rolesWhenConfirmed": 55,
+    "confirmedVia": "hint"
   },
   {
     "slug": "robinhood",
@@ -248,9 +2808,269 @@
     "country": "US",
     "provider": "greenhouse",
     "token": "robinhood",
-    "rolesWhenConfirmed": 163,
+    "rolesWhenConfirmed": 180,
     "confirmedVia": "hint",
     "priority": true
+  },
+  {
+    "slug": "roblox",
+    "name": "Roblox",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "roblox",
+    "rolesWhenConfirmed": 266,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "rocket-lab",
+    "name": "Rocket Lab",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "rocketlab",
+    "rolesWhenConfirmed": 580,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "rogo",
+    "name": "Rogo",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "rogo",
+    "rolesWhenConfirmed": 88,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "rover",
+    "name": "Rover",
+    "segment": "global",
+    "country": "US",
+    "provider": "lever",
+    "token": "rover",
+    "rolesWhenConfirmed": 34,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "rubrik",
+    "name": "Rubrik",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "rubrik",
+    "rolesWhenConfirmed": 129,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "salesloft",
+    "name": "Salesloft",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "salesloft",
+    "rolesWhenConfirmed": 26,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "samsara",
+    "name": "Samsara",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "samsara",
+    "rolesWhenConfirmed": 238,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "saronic",
+    "name": "Saronic",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "saronic",
+    "rolesWhenConfirmed": 210,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "scale-ai",
+    "name": "Scale AI",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "scaleai",
+    "rolesWhenConfirmed": 182,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "seatgeek",
+    "name": "SeatGeek",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "seatgeek",
+    "rolesWhenConfirmed": 34,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "secureframe",
+    "name": "Secureframe",
+    "segment": "global",
+    "country": "US",
+    "provider": "lever",
+    "token": "secureframe",
+    "rolesWhenConfirmed": 15,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "semgrep",
+    "name": "Semgrep",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "semgrep",
+    "rolesWhenConfirmed": 12,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "sentry",
+    "name": "Sentry",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "sentry",
+    "rolesWhenConfirmed": 46,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "sesame",
+    "name": "Sesame",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "sesame",
+    "rolesWhenConfirmed": 26,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "shield-ai",
+    "name": "Shield AI",
+    "segment": "global",
+    "country": "US",
+    "provider": "lever",
+    "token": "shieldai",
+    "rolesWhenConfirmed": 615,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "sierra",
+    "name": "Sierra",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "sierra",
+    "rolesWhenConfirmed": 194,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "sigma-computing",
+    "name": "Sigma Computing",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "sigmacomputing",
+    "rolesWhenConfirmed": 73,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "singlestore",
+    "name": "SingleStore",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "singlestore",
+    "rolesWhenConfirmed": 44,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "skydio",
+    "name": "Skydio",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "skydio",
+    "rolesWhenConfirmed": 157,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "smartling",
+    "name": "Smartling",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "smartling",
+    "rolesWhenConfirmed": 10,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "smartsheet",
+    "name": "Smartsheet",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "smartsheet",
+    "rolesWhenConfirmed": 96,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "snorkel-ai",
+    "name": "Snorkel AI",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "snorkelai",
+    "rolesWhenConfirmed": 44,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "snyk",
+    "name": "Snyk",
+    "segment": "global",
+    "country": "GB",
+    "provider": "ashby",
+    "token": "snyk",
+    "rolesWhenConfirmed": 22,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "sofi",
+    "name": "SoFi",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "sofi",
+    "rolesWhenConfirmed": 52,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "spacex",
+    "name": "SpaceX",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "spacex",
+    "rolesWhenConfirmed": 2725,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "speechmatics",
+    "name": "Speechmatics",
+    "segment": "global",
+    "country": "GB",
+    "provider": "greenhouse",
+    "token": "speechmatics",
+    "rolesWhenConfirmed": 15,
+    "confirmedVia": "hint"
   },
   {
     "slug": "spotify",
@@ -259,9 +3079,19 @@
     "country": "SE",
     "provider": "lever",
     "token": "spotify",
-    "rolesWhenConfirmed": 76,
+    "rolesWhenConfirmed": 83,
     "confirmedVia": "hint",
     "priority": true
+  },
+  {
+    "slug": "sprout-social",
+    "name": "Sprout Social",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "sproutsocial",
+    "rolesWhenConfirmed": 25,
+    "confirmedVia": "hint"
   },
   {
     "slug": "squarespace",
@@ -270,9 +3100,69 @@
     "country": "US",
     "provider": "greenhouse",
     "token": "squarespace",
-    "rolesWhenConfirmed": 32,
+    "rolesWhenConfirmed": 33,
     "confirmedVia": "hint",
     "priority": true
+  },
+  {
+    "slug": "stability-ai",
+    "name": "Stability AI",
+    "segment": "global",
+    "country": "GB",
+    "provider": "greenhouse",
+    "token": "stabilityai",
+    "rolesWhenConfirmed": 6,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "stackblitz",
+    "name": "StackBlitz",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "stackblitz",
+    "rolesWhenConfirmed": 7,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "staffbase",
+    "name": "Staffbase",
+    "segment": "global",
+    "country": "DE",
+    "provider": "greenhouse",
+    "token": "staffbase",
+    "rolesWhenConfirmed": 23,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "starburst",
+    "name": "Starburst",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "starburst",
+    "rolesWhenConfirmed": 32,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "stockx",
+    "name": "StockX",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "stockx",
+    "rolesWhenConfirmed": 36,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "strava",
+    "name": "Strava",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "strava",
+    "rolesWhenConfirmed": 33,
+    "confirmedVia": "hint"
   },
   {
     "slug": "stripe",
@@ -286,15 +3176,595 @@
     "priority": true
   },
   {
+    "slug": "substack",
+    "name": "Substack",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "substack",
+    "rolesWhenConfirmed": 18,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "sumo-logic",
+    "name": "Sumo Logic",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "sumologic",
+    "rolesWhenConfirmed": 9,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "sumup",
+    "name": "SumUp",
+    "segment": "global",
+    "country": "GB",
+    "provider": "greenhouse",
+    "token": "sumup",
+    "rolesWhenConfirmed": 345,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "suno",
+    "name": "Suno",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "suno",
+    "rolesWhenConfirmed": 73,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "supercell",
+    "name": "Supercell",
+    "segment": "global",
+    "country": "FI",
+    "provider": "ashby",
+    "token": "supercell",
+    "rolesWhenConfirmed": 31,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "surge-ai",
+    "name": "Surge AI",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "surge-ai",
+    "rolesWhenConfirmed": 28,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "sword-health",
+    "name": "Sword Health",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "swordhealth",
+    "rolesWhenConfirmed": 46,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "synthesia",
+    "name": "Synthesia",
+    "segment": "global",
+    "country": "GB",
+    "provider": "ashby",
+    "token": "synthesia",
+    "rolesWhenConfirmed": 45,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "sysdig",
+    "name": "Sysdig",
+    "segment": "global",
+    "country": "US",
+    "provider": "lever",
+    "token": "sysdig",
+    "rolesWhenConfirmed": 33,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "talkspace",
+    "name": "Talkspace",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "talkspace",
+    "rolesWhenConfirmed": 26,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "tanium",
+    "name": "Tanium",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "tanium",
+    "rolesWhenConfirmed": 60,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "taskrabbit",
+    "name": "TaskRabbit",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "taskrabbit",
+    "rolesWhenConfirmed": 17,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "teleport",
+    "name": "Teleport",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "goteleport",
+    "rolesWhenConfirmed": 26,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "tenstorrent",
+    "name": "Tenstorrent",
+    "segment": "global",
+    "country": "CA",
+    "provider": "greenhouse",
+    "token": "tenstorrent",
+    "rolesWhenConfirmed": 131,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "thinking-machines-lab",
+    "name": "Thinking Machines Lab",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "thinkingmachines",
+    "rolesWhenConfirmed": 55,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "thought-machine",
+    "name": "Thought Machine",
+    "segment": "global",
+    "country": "GB",
+    "provider": "ashby",
+    "token": "thought-machine",
+    "rolesWhenConfirmed": 40,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "thumbtack",
+    "name": "Thumbtack",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "thumbtack",
+    "rolesWhenConfirmed": 58,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "thunes",
+    "name": "Thunes",
+    "segment": "global",
+    "country": "SG",
+    "provider": "greenhouse",
+    "token": "thunes",
+    "rolesWhenConfirmed": 46,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "tide",
+    "name": "Tide",
+    "segment": "global",
+    "country": "GB",
+    "provider": "greenhouse",
+    "token": "tide",
+    "rolesWhenConfirmed": 91,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "tines",
+    "name": "Tines",
+    "segment": "global",
+    "country": "IE",
+    "provider": "greenhouse",
+    "token": "tines",
+    "rolesWhenConfirmed": 27,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "toast",
+    "name": "Toast",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "toast",
+    "rolesWhenConfirmed": 319,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "together-ai",
+    "name": "Together AI",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "togetherai",
+    "rolesWhenConfirmed": 80,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "trigger-dev",
+    "name": "Trigger.dev",
+    "segment": "global",
+    "country": "GB",
+    "provider": "ashby",
+    "token": "triggerdev",
+    "rolesWhenConfirmed": 6,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "truecaller",
+    "name": "Truecaller",
+    "segment": "global",
+    "country": "SE",
+    "provider": "greenhouse",
+    "token": "truecaller",
+    "rolesWhenConfirmed": 29,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "truelayer",
+    "name": "TrueLayer",
+    "segment": "global",
+    "country": "GB",
+    "provider": "greenhouse",
+    "token": "truelayer",
+    "rolesWhenConfirmed": 3,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "turing",
+    "name": "Turing",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "turing",
+    "rolesWhenConfirmed": 29,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "twilio",
+    "name": "Twilio",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "twilio",
+    "rolesWhenConfirmed": 143,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "typeform",
+    "name": "Typeform",
+    "segment": "global",
+    "country": "ES",
+    "provider": "greenhouse",
+    "token": "typeform",
+    "rolesWhenConfirmed": 13,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "udemy",
+    "name": "Udemy",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "udemy",
+    "rolesWhenConfirmed": 7,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "udio",
+    "name": "Udio",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "udio",
+    "rolesWhenConfirmed": 5,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "uniswap-labs",
+    "name": "Uniswap Labs",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "uniswap",
+    "rolesWhenConfirmed": 5,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "upbound",
+    "name": "Upbound",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "upbound",
+    "rolesWhenConfirmed": 5,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "upstart",
+    "name": "Upstart",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "upstart",
+    "rolesWhenConfirmed": 88,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "vanta",
+    "name": "Vanta",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "vanta",
+    "rolesWhenConfirmed": 82,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "vapi",
+    "name": "Vapi",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "vapi",
+    "rolesWhenConfirmed": 24,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "varda-space",
+    "name": "Varda Space",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "vardaspace",
+    "rolesWhenConfirmed": 110,
+    "confirmedVia": "hint"
+  },
+  {
     "slug": "vercel",
     "name": "Vercel",
     "segment": "global",
     "country": "US",
     "provider": "greenhouse",
     "token": "vercel",
-    "rolesWhenConfirmed": 86,
+    "rolesWhenConfirmed": 89,
     "confirmedVia": "hint",
     "priority": true
+  },
+  {
+    "slug": "verkada",
+    "name": "Verkada",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "verkada",
+    "rolesWhenConfirmed": 307,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "wallapop",
+    "name": "Wallapop",
+    "segment": "global",
+    "country": "ES",
+    "provider": "greenhouse",
+    "token": "wallapop",
+    "rolesWhenConfirmed": 5,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "wayve",
+    "name": "Wayve",
+    "segment": "global",
+    "country": "GB",
+    "provider": "ashby",
+    "token": "wayve",
+    "rolesWhenConfirmed": 157,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "wealthfront",
+    "name": "Wealthfront",
+    "segment": "global",
+    "country": "US",
+    "provider": "lever",
+    "token": "wealthfront",
+    "rolesWhenConfirmed": 22,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "wealthsimple",
+    "name": "Wealthsimple",
+    "segment": "global",
+    "country": "CA",
+    "provider": "ashby",
+    "token": "wealthsimple",
+    "rolesWhenConfirmed": 48,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "weaviate",
+    "name": "Weaviate",
+    "segment": "global",
+    "country": "NL",
+    "provider": "ashby",
+    "token": "weaviate",
+    "rolesWhenConfirmed": 3,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "webflow",
+    "name": "Webflow",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "webflow",
+    "rolesWhenConfirmed": 23,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "whoop",
+    "name": "Whoop",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "whoop",
+    "rolesWhenConfirmed": 169,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "workato",
+    "name": "Workato",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "workato",
+    "rolesWhenConfirmed": 73,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "workos",
+    "name": "WorkOS",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "workos",
+    "rolesWhenConfirmed": 30,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "writer",
+    "name": "Writer",
+    "segment": "global",
+    "country": "US",
+    "provider": "ashby",
+    "token": "writer",
+    "rolesWhenConfirmed": 51,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "xai",
+    "name": "xAI",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "xai",
+    "rolesWhenConfirmed": 305,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "xendit",
+    "name": "Xendit",
+    "segment": "global",
+    "country": "ID",
+    "provider": "greenhouse",
+    "token": "xendit",
+    "rolesWhenConfirmed": 27,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "zilch",
+    "name": "Zilch",
+    "segment": "global",
+    "country": "GB",
+    "provider": "ashby",
+    "token": "zilch",
+    "rolesWhenConfirmed": 15,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "zilliz",
+    "name": "Zilliz",
+    "segment": "global",
+    "country": "US",
+    "provider": "lever",
+    "token": "zilliz",
+    "rolesWhenConfirmed": 11,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "zipline",
+    "name": "Zipline",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "flyzipline",
+    "rolesWhenConfirmed": 356,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "zocdoc",
+    "name": "Zocdoc",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "zocdoc",
+    "rolesWhenConfirmed": 60,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "zoominfo",
+    "name": "ZoomInfo",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "zoominfo",
+    "rolesWhenConfirmed": 99,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "zoox",
+    "name": "Zoox",
+    "segment": "global",
+    "country": "US",
+    "provider": "lever",
+    "token": "zoox",
+    "rolesWhenConfirmed": 239,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "zscaler",
+    "name": "Zscaler",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "zscaler",
+    "rolesWhenConfirmed": 377,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "zuora",
+    "name": "Zuora",
+    "segment": "global",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "zuora",
+    "rolesWhenConfirmed": 29,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "zus-health",
+    "name": "Zus Health",
+    "segment": "global",
+    "country": "US",
+    "provider": "lever",
+    "token": "zushealth",
+    "rolesWhenConfirmed": 6,
+    "confirmedVia": "hint"
   },
   {
     "slug": "atlan",
@@ -319,13 +3789,23 @@
     "priority": true
   },
   {
+    "slug": "druva",
+    "name": "Druva",
+    "segment": "india",
+    "country": "IN",
+    "provider": "greenhouse",
+    "token": "druva",
+    "rolesWhenConfirmed": 35,
+    "confirmedVia": "hint"
+  },
+  {
     "slug": "groww",
     "name": "Groww",
     "segment": "india",
     "country": "IN",
     "provider": "greenhouse",
     "token": "groww",
-    "rolesWhenConfirmed": 8,
+    "rolesWhenConfirmed": 10,
     "confirmedVia": "hint",
     "priority": true
   },
@@ -347,7 +3827,7 @@
     "country": "IN",
     "provider": "greenhouse",
     "token": "inmobi",
-    "rolesWhenConfirmed": 69,
+    "rolesWhenConfirmed": 74,
     "confirmedVia": "hint",
     "priority": true
   },
@@ -358,7 +3838,7 @@
     "country": "IN",
     "provider": "lever",
     "token": "meesho",
-    "rolesWhenConfirmed": 60,
+    "rolesWhenConfirmed": 57,
     "confirmedVia": "hint",
     "priority": true
   },
@@ -380,7 +3860,7 @@
     "country": "IN",
     "provider": "greenhouse",
     "token": "observeai",
-    "rolesWhenConfirmed": 12,
+    "rolesWhenConfirmed": 10,
     "confirmedVia": "hint",
     "priority": true
   },
@@ -391,7 +3871,7 @@
     "country": "IN",
     "provider": "lever",
     "token": "paytm",
-    "rolesWhenConfirmed": 178,
+    "rolesWhenConfirmed": 175,
     "confirmedVia": "hint",
     "priority": true
   },
@@ -402,7 +3882,7 @@
     "country": "IN",
     "provider": "lever",
     "token": "pocketfm",
-    "rolesWhenConfirmed": 10,
+    "rolesWhenConfirmed": 11,
     "confirmedVia": "hint",
     "priority": true
   },
@@ -413,7 +3893,7 @@
     "country": "IN",
     "provider": "greenhouse",
     "token": "razorpaysoftwareprivatelimited",
-    "rolesWhenConfirmed": 27,
+    "rolesWhenConfirmed": 28,
     "confirmedVia": "hint",
     "priority": true
   },
@@ -435,7 +3915,7 @@
     "country": "IN",
     "provider": "greenhouse",
     "token": "sigmoid",
-    "rolesWhenConfirmed": 36,
+    "rolesWhenConfirmed": 37,
     "confirmedVia": "hint",
     "priority": true
   },
@@ -446,9 +3926,19 @@
     "country": "US",
     "provider": "ashby",
     "token": "tekion",
-    "rolesWhenConfirmed": 96,
+    "rolesWhenConfirmed": 94,
     "confirmedVia": "hint",
     "priority": true
+  },
+  {
+    "slug": "zenoti",
+    "name": "Zenoti",
+    "segment": "india",
+    "country": "IN",
+    "provider": "greenhouse",
+    "token": "zenoti",
+    "rolesWhenConfirmed": 54,
+    "confirmedVia": "hint"
   },
   {
     "slug": "zeta",
@@ -457,7 +3947,7 @@
     "country": "IN",
     "provider": "lever",
     "token": "zeta",
-    "rolesWhenConfirmed": 24,
+    "rolesWhenConfirmed": 25,
     "confirmedVia": "hint",
     "priority": true
   },
@@ -468,9 +3958,49 @@
     "country": "CA",
     "provider": "ashby",
     "token": "1password",
-    "rolesWhenConfirmed": 69,
+    "rolesWhenConfirmed": 71,
     "confirmedVia": "hint",
     "priority": true
+  },
+  {
+    "slug": "articulate",
+    "name": "Articulate",
+    "segment": "remote-first",
+    "country": "US",
+    "provider": "lever",
+    "token": "articulate",
+    "rolesWhenConfirmed": 1,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "brave",
+    "name": "Brave",
+    "segment": "remote-first",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "brave",
+    "rolesWhenConfirmed": 12,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "buffer",
+    "name": "Buffer",
+    "segment": "remote-first",
+    "country": "US",
+    "provider": "ashby",
+    "token": "buffer",
+    "rolesWhenConfirmed": 1,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "calendly",
+    "name": "Calendly",
+    "segment": "remote-first",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "calendly",
+    "rolesWhenConfirmed": 9,
+    "confirmedVia": "hint"
   },
   {
     "slug": "canonical",
@@ -484,13 +4014,43 @@
     "priority": true
   },
   {
+    "slug": "clickhouse",
+    "name": "ClickHouse",
+    "segment": "remote-first",
+    "country": "US",
+    "provider": "ashby",
+    "token": "clickhouse",
+    "rolesWhenConfirmed": 194,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "close",
+    "name": "Close",
+    "segment": "remote-first",
+    "country": "US",
+    "provider": "ashby",
+    "token": "close",
+    "rolesWhenConfirmed": 6,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "cockroach-labs",
+    "name": "Cockroach Labs",
+    "segment": "remote-first",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "cockroachlabs",
+    "rolesWhenConfirmed": 19,
+    "confirmedVia": "hint"
+  },
+  {
     "slug": "gitlab",
     "name": "GitLab",
     "segment": "remote-first",
     "country": "US",
     "provider": "greenhouse",
     "token": "gitlab",
-    "rolesWhenConfirmed": 216,
+    "rolesWhenConfirmed": 221,
     "confirmedVia": "hint",
     "priority": true
   },
@@ -501,9 +4061,59 @@
     "country": "US",
     "provider": "greenhouse",
     "token": "grafanalabs",
-    "rolesWhenConfirmed": 113,
+    "rolesWhenConfirmed": 105,
     "confirmedVia": "hint",
     "priority": true
+  },
+  {
+    "slug": "kinsta",
+    "name": "Kinsta",
+    "segment": "remote-first",
+    "country": "GB",
+    "provider": "lever",
+    "token": "kinsta",
+    "rolesWhenConfirmed": 1,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "materialize",
+    "name": "Materialize",
+    "segment": "remote-first",
+    "country": "US",
+    "provider": "ashby",
+    "token": "materialize",
+    "rolesWhenConfirmed": 4,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "mattermost",
+    "name": "Mattermost",
+    "segment": "remote-first",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "mattermost",
+    "rolesWhenConfirmed": 14,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "miro",
+    "name": "Miro",
+    "segment": "remote-first",
+    "country": "NL",
+    "provider": "ashby",
+    "token": "miro",
+    "rolesWhenConfirmed": 24,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "motherduck",
+    "name": "MotherDuck",
+    "segment": "remote-first",
+    "country": "US",
+    "provider": "ashby",
+    "token": "motherduck",
+    "rolesWhenConfirmed": 3,
+    "confirmedVia": "hint"
   },
   {
     "slug": "mozilla",
@@ -512,9 +4122,89 @@
     "country": "US",
     "provider": "greenhouse",
     "token": "mozilla",
-    "rolesWhenConfirmed": 91,
+    "rolesWhenConfirmed": 95,
     "confirmedVia": "hint",
     "priority": true
+  },
+  {
+    "slug": "netlify",
+    "name": "Netlify",
+    "segment": "remote-first",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "netlify",
+    "rolesWhenConfirmed": 5,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "oyster",
+    "name": "Oyster",
+    "segment": "remote-first",
+    "country": "US",
+    "provider": "ashby",
+    "token": "oyster",
+    "rolesWhenConfirmed": 23,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "percona",
+    "name": "Percona",
+    "segment": "remote-first",
+    "country": "US",
+    "provider": "ashby",
+    "token": "percona",
+    "rolesWhenConfirmed": 15,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "posthog",
+    "name": "PostHog",
+    "segment": "remote-first",
+    "country": "US",
+    "provider": "ashby",
+    "token": "posthog",
+    "rolesWhenConfirmed": 10,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "prefect",
+    "name": "Prefect",
+    "segment": "remote-first",
+    "country": "US",
+    "provider": "ashby",
+    "token": "prefect",
+    "rolesWhenConfirmed": 8,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "proton",
+    "name": "Proton",
+    "segment": "remote-first",
+    "country": "CH",
+    "provider": "greenhouse",
+    "token": "proton",
+    "rolesWhenConfirmed": 55,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "sanity",
+    "name": "Sanity",
+    "segment": "remote-first",
+    "country": "NO",
+    "provider": "ashby",
+    "token": "sanity",
+    "rolesWhenConfirmed": 36,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "sourcegraph",
+    "name": "Sourcegraph",
+    "segment": "remote-first",
+    "country": "US",
+    "provider": "greenhouse",
+    "token": "sourcegraph91",
+    "rolesWhenConfirmed": 11,
+    "confirmedVia": "hint"
   },
   {
     "slug": "supabase",
@@ -534,7 +4224,7 @@
     "country": "CA",
     "provider": "greenhouse",
     "token": "tailscale",
-    "rolesWhenConfirmed": 56,
+    "rolesWhenConfirmed": 63,
     "confirmedVia": "hint",
     "priority": true
   },
@@ -545,8 +4235,38 @@
     "country": "US",
     "provider": "ashby",
     "token": "temporal",
-    "rolesWhenConfirmed": 66,
+    "rolesWhenConfirmed": 67,
     "confirmedVia": "hint",
     "priority": true
+  },
+  {
+    "slug": "toptal",
+    "name": "Toptal",
+    "segment": "remote-first",
+    "country": "US",
+    "provider": "lever",
+    "token": "toptal",
+    "rolesWhenConfirmed": 32,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "zapier",
+    "name": "Zapier",
+    "segment": "remote-first",
+    "country": "US",
+    "provider": "ashby",
+    "token": "zapier",
+    "rolesWhenConfirmed": 11,
+    "confirmedVia": "hint"
+  },
+  {
+    "slug": "zerotier",
+    "name": "ZeroTier",
+    "segment": "remote-first",
+    "country": "US",
+    "provider": "lever",
+    "token": "zerotier",
+    "rolesWhenConfirmed": 4,
+    "confirmedVia": "hint"
   }
 ]

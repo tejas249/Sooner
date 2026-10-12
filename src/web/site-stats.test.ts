@@ -41,10 +41,11 @@ describe("siteStats", () => {
   });
 
   it("adds up to the real data file", () => {
-    const real = siteStats(BoardEntries.parse(boardsFile));
-    expect(real.companies).toBe(50);
+    const entries = BoardEntries.parse(boardsFile);
+    const real = siteStats(entries);
+    expect(real.companies).toBe(entries.length);
     expect(real.providers).toBe(3);
-    expect(real.bySegment.reduce((sum, s) => sum + s.boards.length, 0)).toBe(50);
-    expect(real.byProvider.reduce((sum, p) => sum + p.boards, 0)).toBe(50);
+    expect(real.bySegment.reduce((sum, s) => sum + s.boards.length, 0)).toBe(entries.length);
+    expect(real.byProvider.reduce((sum, p) => sum + p.boards, 0)).toBe(entries.length);
   });
 });
