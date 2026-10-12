@@ -15,6 +15,8 @@ export interface PoolOptions {
   applicationName?: string;
   /** Called when an idle connection fails. The pool has already discarded it. */
   onError?: (error: Error) => void;
+  /** How long an idle connection is kept. A worker keeps them a while; a serverless function should let them go quickly. */
+  idleTimeoutMs?: number;
 }
 
 /**
@@ -32,7 +34,7 @@ export function createPool(connectionString: string, options: PoolOptions = {}):
     connectionString,
     max: options.max ?? 10,
     application_name: options.applicationName ?? "sooner",
-    idleTimeoutMillis: 30_000,
+    idleTimeoutMillis: options.idleTimeoutMs ?? 30_000,
     connectionTimeoutMillis: 15_000,
     keepAlive: true,
     keepAliveInitialDelayMillis: 10_000,

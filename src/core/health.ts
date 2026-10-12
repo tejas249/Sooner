@@ -136,6 +136,22 @@ export function formatSeconds(sec: number): string {
   return rest === 0 ? `${hours} h` : `${hours} h ${rest} min`;
 }
 
+/** "never", "just now", or "5 min ago". */
+export function agoLabel(at: Date | null, now: Date): string {
+  if (at === null) return "never";
+  const sec = Math.max(0, (now.getTime() - at.getTime()) / 1000);
+  return sec < 10 ? "just now" : `${formatSeconds(sec)} ago`;
+}
+
+/** When a board will be polled next, in words: "off", "polling now", "in 4 min", "due now" or "overdue 7 min". */
+export function nextPollLabel(board: HealthBoard, now: Date): string {
+  if (!board.active) return "off";
+  if (board.claimedUntil !== null && board.claimedUntil.getTime() > now.getTime()) return "polling now";
+  const sec = (board.nextPollAt.getTime() - now.getTime()) / 1000;
+  if (sec > 0) return `in ${formatSeconds(sec)}`;
+  return -sec < 60 ? "due now" : `overdue ${formatSeconds(-sec)}`;
+}
+
 const where = (board: HealthBoard): string => `${board.provider}:${board.token}`;
 
 /**
