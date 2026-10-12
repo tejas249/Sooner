@@ -23,6 +23,7 @@ describe("loadOverview", () => {
     expect(overview.tiles.every((t) => !t.attention)).toBe(true);
     expect(tile(overview, "Worker").value).toBe("never polled");
     expect(tile(overview, "Polls, last hour").value).toBe("none");
+    expect(tile(overview, "Roles")).toMatchObject({ value: "0", detail: "no changes in the last day" });
     expect(overview.lastTwoDays.map((t) => [t.label, t.value, t.attention])).toEqual([
       ["Polls, 48 hours", "none", false],
       ["Queue lag, worst", "no data", false],
@@ -58,7 +59,7 @@ describe("loadOverview", () => {
 
     const overview = await loadOverview(db.pool, NOW);
     expect(overview.boards.map((b) => `${b.name}:${b.state}`)).toEqual(["Zeta:failing", "Acme:ok", "Quiet:paused"]);
-    expect(tile(overview, "Roles")).toMatchObject({ value: "5", detail: "1 changes in the last day" });
+    expect(tile(overview, "Roles")).toMatchObject({ value: "5", detail: "1 change in the last day" });
     expect(tile(overview, "Polls, last hour")).toMatchObject({ value: "95.0% ok", detail: "40 polls, 2 failed; healthy is over 98%", attention: false });
     expect(tile(overview, "Boards")).toMatchObject({ value: "2 on", detail: "1 off · 1 need attention", attention: true });
     expect(tile(overview, "Worker")).toMatchObject({ value: "polled 30 s ago", attention: false });
@@ -137,6 +138,16 @@ describe("loadOverview", () => {
     const overview = await loadOverview(db.pool, NOW);
     expect(tile(overview, "Worker")).toMatchObject({ value: "polled 30 min ago", attention: true });
     expect(tile(overview, "Queue lag")).toMatchObject({ value: "15 min", attention: true });
+  });
+
+  it("counts the changes of the last day in plain words, however many there are", async () => {
+    const company = await insertCompany(db.pool);
+    const board = await insertBoard(db.pool, company);
+    const posting = await insertPosting(db.pool, { boardId: board, companyId: company });
+    for (const type of ["appeared", "updated", "closed"]) {
+      await db.pool.query("insert into posting_event (posting_id, company_id, type, at) values ($1, $2, $3, $4)", [posting, company, type, at(-60)]);
+    }
+    expect(tile(await loadOverview(db.pool, NOW), "Roles").detail).toBe("3 changes in the last day");
   });
 
   it("flags a worker that has never polled once there are boards for it to poll", async () => {

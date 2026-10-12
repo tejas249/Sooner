@@ -48,6 +48,9 @@ function alertView(row: AlertRow, now: Date): AlertView {
 
 const TWO_DAYS_SEC = 48 * 3600;
 
+const changesLabel = (n: number): string =>
+  n === 0 ? "no changes in the last day" : `${n.toLocaleString("en-US")} ${n === 1 ? "change" : "changes"} in the last day`;
+
 export async function loadOverview(db: Queryable, now: Date): Promise<Overview> {
   const [metrics, lastPoll, twoDays, lateness, openRows, resolvedRows, events] = await Promise.all([
     collectMetrics(db, now),
@@ -99,7 +102,7 @@ export async function loadOverview(db: Queryable, now: Date): Promise<Overview> 
     {
       label: "Roles",
       value: openRoles.toLocaleString("en-US"),
-      detail: `${(events.rows[0]?.n ?? 0).toLocaleString("en-US")} changes in the last day`,
+      detail: changesLabel(events.rows[0]?.n ?? 0),
       attention: false,
     },
     {
