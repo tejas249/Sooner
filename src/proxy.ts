@@ -9,8 +9,10 @@ export function proxy(request: NextRequest): NextResponse {
   const access = adminAccess(process.env, request.headers.get("authorization"));
 
   if (access === "off") {
-    // As if the page had never been built: Next's own 404, from a path that does not exist.
-    return NextResponse.rewrite(new URL("/not-found-admin-is-off", request.url));
+    // As if the page had never been built: the site's own 404, from an address that does not exist, so the answer, its caching
+    // and its body are exactly what any unknown address gets. (Next adds a header saying the request was rewritten, which
+    // is why the target's name says nothing about the admin page.)
+    return NextResponse.rewrite(new URL("/page-not-found", request.url));
   }
   if (access === "denied") {
     return new NextResponse("Authentication required.", {

@@ -10,16 +10,27 @@ const request = (authorization?: string, path = "/admin"): NextRequest =>
 afterEach(() => vi.unstubAllEnvs());
 
 describe("the admin proxy", () => {
+  /** The address the request is rewritten to: it does not exist, so the site's own 404 answers, exactly as for any unknown address. */
+  const rewrittenTo = (response: Response): string | null => response.headers.get("x-middleware-rewrite");
+
   it("makes the page not exist at all when there is no usable password", () => {
     vi.stubEnv("ADMIN_PASSWORD", "");
     const response = proxy(request(basic(PASSWORD)));
-    expect(response.headers.get("x-middleware-rewrite")).toContain("/not-found-admin-is-off");
+    expect(rewrittenTo(response)).toContain("/page-not-found");
+    expect(rewrittenTo(response)).not.toMatch(/admin/i); // the one header Next adds says nothing about an admin page
     expect(response.headers.get("www-authenticate")).toBeNull(); // nothing hints that an admin page exists
+    expect(response.headers.get("cache-control")).toBeNull(); // the 404 is cached exactly as any other 404 is
   });
 
   it("makes it not exist for a password that is too short, even when it is given correctly", () => {
     vi.stubEnv("ADMIN_PASSWORD", "hunter2");
-    expect(proxy(request(basic("hunter2"))).headers.get("x-middleware-rewrite")).toContain("/not-found-admin-is-off");
+    expect(rewrittenTo(proxy(request(basic("hunter2"))))).toContain("/page-not-found");
+  });
+
+  it("makes it not exist when no password is set at all, with or without credentials", () => {
+    vi.stubEnv("ADMIN_PASSWORD", undefined);
+    expect(rewrittenTo(proxy(request()))).toContain("/page-not-found");
+    expect(rewrittenTo(proxy(request(basic("anything at all, really"))))).toContain("/page-not-found");
   });
 
   it("asks for a password when none is given", async () => {
