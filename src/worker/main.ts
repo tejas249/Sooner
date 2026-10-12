@@ -8,6 +8,8 @@ import { createFetcher } from "./fetcher.ts";
 import { HostGate } from "./gate.ts";
 import { defaultLoopSettings, runWorker } from "./loop.ts";
 import { createLogger } from "./log.ts";
+import { runMonitor } from "./monitor.ts";
+import { createNotifier } from "./notify.ts";
 import { buildUserAgent } from "./user-agent.ts";
 
 const HELP = `Sooner worker: polls the job boards that are due and records what changed.
@@ -17,7 +19,8 @@ const HELP = `Sooner worker: polls the job boards that are due and records what 
   node src/worker/index.ts --check    check the configuration and exit; connects to nothing
 
 Environment: DATABASE_URL and HR_CONTACT are required. POLLING_ENABLED, ALL_BOARDS_FOLLOWED, DB_POOL_MAX,
-SHUTDOWN_GRACE_SEC, WORKER_ID and MIGRATIONS_DIR are optional. See .env.example.
+SHUTDOWN_GRACE_SEC, WORKER_ID, MIGRATIONS_DIR, ALERT_WEBHOOK_URL (or ALERT_TELEGRAM_BOT_TOKEN and ALERT_TELEGRAM_CHAT_ID)
+and MONITOR_INTERVAL_SEC are optional. See .env.example.
 `;
 
 export interface MainIO {
@@ -62,10 +65,12 @@ export async function main(argv: readonly string[], env: Readonly<Record<string,
     return 1;
   }
   const userAgent = buildUserAgent(config.contact);
+  const notifier = createNotifier({ webhookUrl: config.alertWebhookUrl ?? undefined, telegram: config.alertTelegram ?? undefined });
   if (flags.check) {
     io.stdout(
       `configuration is valid: database ${describeDatabase(config.databaseUrl)}, polling ${config.pollingEnabled ? "on" : "OFF"}, ` +
-        `${config.allBoardsFollowed ? "every board followed (5 minutes)" : "priority boards every 5 minutes, the rest adaptive"}, User-Agent "${userAgent}"\n`,
+        `${config.allBoardsFollowed ? "every board followed (5 minutes)" : "priority boards every 5 minutes, the rest adaptive"}, ` +
+        `alerts ${notifier ? `to ${notifier.channel}` : "logged only"}, User-Agent "${userAgent}"\n`,
     );
     return 0;
   }
@@ -109,16 +114,29 @@ export async function main(argv: readonly string[], env: Readonly<Record<string,
 
     deps.signals.on("SIGINT", onSignal);
     deps.signals.on("SIGTERM", onSignal);
-    await runWorker(
-      { pool, fetcher: createFetcher({ userAgent, gate: new HostGate() }), now: deps.now ?? (() => new Date()), random: deps.random ?? Math.random, log },
-      defaultLoopSettings({
-        followed: config.allBoardsFollowed,
-        pollingEnabled: config.pollingEnabled,
-        graceMs: config.shutdownGraceSec * 1000,
-      }),
-      stop.signal,
-      { once: flags.once },
-    );
+    const now = deps.now ?? (() => new Date());
+
+    // The monitor watches the worker's own health and tells the owner. A run that polls once and stops has no use for it.
+    const monitoring = flags.once
+      ? null
+      : runMonitor({ pool, notifier, log, now }, stop.signal, config.monitorIntervalSec * 1000);
+    if (monitoring) log.info("alerts", { channel: notifier?.channel ?? "none (logged only)" });
+
+    try {
+      await runWorker(
+        { pool, fetcher: createFetcher({ userAgent, gate: new HostGate() }), now, random: deps.random ?? Math.random, log },
+        defaultLoopSettings({
+          followed: config.allBoardsFollowed,
+          pollingEnabled: config.pollingEnabled,
+          graceMs: config.shutdownGraceSec * 1000,
+        }),
+        stop.signal,
+        { once: flags.once },
+      );
+    } finally {
+      stop.abort();
+      await monitoring;
+    }
     return 0;
   } catch (error) {
     log.error("the worker stopped because of an error", { error });

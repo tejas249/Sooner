@@ -19,6 +19,14 @@ export interface WorkerConfig {
   shutdownGraceSec: number;
   /** Shows up in the logs, so lines from two workers can be told apart. */
   workerId: string;
+  /**
+   * Where alerts to the owner are delivered: a chat webhook (Discord, Slack or any JSON endpoint) or a Telegram bot. With
+   * neither, alerts are still tracked, logged and shown on the admin page.
+   */
+  alertWebhookUrl: string | null;
+  alertTelegram: { botToken: string; chatId: string } | null;
+  /** How often the worker looks at its own health. */
+  monitorIntervalSec: number;
 }
 
 type Env = Readonly<Record<string, string | undefined>>;
@@ -43,6 +51,20 @@ function whole(env: Env, name: string, fallback: number, min: number, max: numbe
   return value;
 }
 
+const LOOPBACK = new Set(["localhost", "127.0.0.1", "[::1]"]);
+
+/** The webhook address is a secret, so a problem with it is described without repeating it. */
+function webhookProblem(value: string): string | null {
+  let url: URL;
+  try {
+    url = new URL(value);
+  } catch {
+    return "ALERT_WEBHOOK_URL is not a valid URL";
+  }
+  if (url.protocol === "https:" || (url.protocol === "http:" && LOOPBACK.has(url.hostname))) return null;
+  return "ALERT_WEBHOOK_URL must be an https address";
+}
+
 /** Reads and checks the environment. Every problem is reported together, so one restart fixes them all. */
 export function loadConfig(env: Env): WorkerConfig {
   const problems: string[] = [];
@@ -61,6 +83,16 @@ export function loadConfig(env: Env): WorkerConfig {
     buildUserAgent(value);
     return value;
   }, "");
+  const webhook = env["ALERT_WEBHOOK_URL"]?.trim() || null;
+  if (webhook) {
+    const problem = webhookProblem(webhook);
+    if (problem) problems.push(problem);
+  }
+  const botToken = env["ALERT_TELEGRAM_BOT_TOKEN"]?.trim() || null;
+  const chatId = env["ALERT_TELEGRAM_CHAT_ID"]?.trim() || null;
+  if ((botToken === null) !== (chatId === null)) {
+    problems.push("ALERT_TELEGRAM_BOT_TOKEN and ALERT_TELEGRAM_CHAT_ID must be set together");
+  }
   const config: WorkerConfig = {
     databaseUrl,
     contact,
@@ -69,6 +101,9 @@ export function loadConfig(env: Env): WorkerConfig {
     dbPoolMax: whole(env, "DB_POOL_MAX", 10, 2, 50, problems),
     shutdownGraceSec: whole(env, "SHUTDOWN_GRACE_SEC", 25, 1, 300, problems),
     workerId: (env["WORKER_ID"]?.trim() || `${hostname()}-${process.pid}`).slice(0, 80),
+    alertWebhookUrl: webhook,
+    alertTelegram: botToken !== null && chatId !== null ? { botToken, chatId } : null,
+    monitorIntervalSec: whole(env, "MONITOR_INTERVAL_SEC", 60, 10, 600, problems),
   };
   if (problems.length > 0) throw new Error(`the worker is not configured correctly:\n${problems.map((p) => `  - ${p}`).join("\n")}`);
   return config;

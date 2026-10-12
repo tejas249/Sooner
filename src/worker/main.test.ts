@@ -42,6 +42,22 @@ describe("main", () => {
     expect(text).not.toContain("secretpw");
   });
 
+  it("says where alerts go, without the address", async () => {
+    const logged = setup();
+    await main(["--check"], env, logged.deps);
+    expect(logged.out.join("")).toMatch(/alerts logged only/);
+
+    const hook = setup();
+    await main(["--check"], { ...env, ALERT_WEBHOOK_URL: "https://discord.com/api/webhooks/123/very-secret-token" }, hook.deps);
+    expect(hook.out.join("")).toMatch(/alerts to discord/);
+    expect(hook.out.join("")).not.toContain("very-secret-token");
+
+    const telegram = setup();
+    await main(["--check"], { ...env, ALERT_TELEGRAM_BOT_TOKEN: "1:secret-bot-token", ALERT_TELEGRAM_CHAT_ID: "-100" }, telegram.deps);
+    expect(telegram.out.join("")).toMatch(/alerts to telegram/);
+    expect(telegram.out.join("")).not.toContain("secret-bot-token");
+  });
+
   it("says when polling is switched off", async () => {
     const { out, deps } = setup();
     await main(["--check"], { ...env, POLLING_ENABLED: "false" }, deps);

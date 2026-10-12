@@ -85,7 +85,27 @@ select e.at, c.slug, e.type, p.title, p.location
  order by e.at desc
  limit 100;
 
--- 10. How much has the poller written? (poll_run keeps a week; everything else is kept for good.)
+-- 10. The alerts that are open right now, and who has been told. A critical one has probably been waiting a while.
+select key, severity, title, opened_at, last_sent_at, send_count
+  from alert_state
+ where resolved_at is null
+ order by severity, opened_at;
+
+-- 11. Alerts that were resolved lately.
+select key, title, opened_at, resolved_at
+  from alert_state
+ where resolved_at is not null
+ order by resolved_at desc
+ limit 20;
+
+-- 12. Boards that were switched off, and why (a 404, or someone paused them).
+select c.slug, b.provider, b.token, b.deactivated_at, b.deactivated_reason
+  from board b
+  join company c on c.id = b.company_id
+ where not b.active
+ order by b.deactivated_at desc nulls last;
+
+-- 13. How much has the poller written? (poll_run keeps a week; everything else is kept for good.)
 select (select count(*) from company) as companies,
        (select count(*) from board where active) as active_boards,
        (select count(*) from posting where status = 'open') as open_roles,

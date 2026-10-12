@@ -110,6 +110,13 @@ export interface Condition {
   detail: string;
 }
 
+/** One change in the state of one alert, to be told to the owner: it just opened, it is a reminder, or it was resolved. */
+export type NoticeKind = "new" | "reminder" | "resolved";
+
+export interface Notice extends Condition {
+  kind: NoticeKind;
+}
+
 export interface Metrics {
   /** The most overdue board's lag in seconds. */
   queueLagSec: number;

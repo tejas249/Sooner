@@ -76,6 +76,36 @@ default; it exists for a small list. A 304 costs a few hundred bytes.
 | Another worker took the board over | Nothing is written; the poll is logged as `lease lost` |
 | SIGTERM or Ctrl-C | Stops claiming, lets the polls in flight finish (up to `SHUTDOWN_GRACE_SEC`, default 25), cancels the rest and gives their leases back so the boards are due at once for whoever runs next. A second interrupt stops immediately |
 
+### Alerts to yourself
+
+Once a minute (`MONITOR_INTERVAL_SEC`) the worker looks at its own health and decides which of these problems exist. Each is
+one alert: it is sent when it opens, again as a reminder while it lasts (every hour if critical, every six hours if a
+warning), and once more when it is resolved. Restarting the worker does not repeat them; they are kept in `alert_state`.
+
+| Alert | Opens when | Clears when |
+| --- | --- | --- |
+| `queue-lag` (critical) | The most overdue board is over 5 minutes behind (healthy: under a minute): the worker is down, stuck or overloaded | Under 2 minutes |
+| `poll-success` (warning) | Under 90% of the last hour's polls succeeded (needs at least 20 polls) | Over 95% |
+| `degraded-boards` (warning) | More than 5% of the active boards have failed 8 or more times in a row | Under 2% |
+| `board:N:gone` (warning) | A board was switched off after three 404s | The board is switched on again |
+| `board:N:format` (critical) | A board's answer is no longer the shape its adapter knows | The board answers normally again |
+| `board:N:mass-drop` (warning) | So many roles of a board vanished at once that closing is held back | The roles are back, or have been confirmed gone |
+
+If forty boards fail at once because a provider broke, you get one message that lists them, not forty. A board you paused
+or opted out yourself raises nothing. With no channel configured, alerts are still tracked and logged (`"msg":"alert"`).
+
+To receive them, set one of these where the worker runs, and treat the address like a password:
+
+| Channel | How |
+| --- | --- |
+| Discord | Server settings, Integrations, Webhooks, New webhook, Copy webhook URL: `ALERT_WEBHOOK_URL`. The messages cannot mention anyone, whatever a provider's text says |
+| Slack | An incoming webhook's URL: `ALERT_WEBHOOK_URL` |
+| Telegram | A bot from @BotFather and the chat's ID: `ALERT_TELEGRAM_BOT_TOKEN` and `ALERT_TELEGRAM_CHAT_ID` |
+| Anything else | An https URL that accepts a JSON POST: `ALERT_WEBHOOK_URL` gets `{"text": ..., "content": ...}` |
+
+Check the choice with `npm run worker -- --check`, which says where alerts go but never prints the address. The worker cannot
+alert you when it is down; that is what the heartbeat is for.
+
 ### The kill switch
 
 `POLLING_ENABLED=false` keeps the process running but stops all polling. To stop one board, switch it off:
@@ -196,9 +226,9 @@ poll success should be near 100%.
 
 ## Look after it
 
-[docs/operating.sql](operating.sql) has ten read-only queries: queue lag, poll success, failing boards, feeds that changed
-shape, held-back mass disappearances, detection delay by provider, false closes, current leases, what changed today, and
-how much has been written.
+[docs/operating.sql](operating.sql) has thirteen read-only queries: queue lag, poll success, failing boards, feeds that changed
+shape, held-back mass disappearances, detection delay by provider, false closes, current leases, what changed today, open and
+resolved alerts, boards that were switched off, and how much has been written.
 
 | Healthy | Alarm | Query |
 | --- | --- | --- |
@@ -215,8 +245,7 @@ Rows in `poll_run` are deleted after a week, by the worker itself. Everything el
 
 These are week 2. Until then the worker is safe (a failing board backs off, nothing closes on a failed poll) but quiet.
 
-- No heartbeat to an outside monitor, and no message to you when something needs a human (queue lag, a held-back mass
-  disappearance, a format change). Read the logs, or run the queries above.
+- No heartbeat to an outside monitor, so nothing tells you when the worker itself is down.
 - No admin page: "poll now" and "pause" are SQL for now.
 - No mock job-board server for proving politeness and back-off end to end (the gate and the fetcher have their own tests).
 - Alerts to users, the web app's use of the database, and follows are weeks 3 and 4.

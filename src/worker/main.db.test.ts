@@ -1,10 +1,13 @@
 import { EventEmitter } from "node:events";
+import http from "node:http";
+import type { AddressInfo } from "node:net";
 import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { loadMigrations, migrate } from "../db/migrate.ts";
 import { testDatabase } from "../db/testing/database.ts";
+import { insertBoard, insertCompany } from "../db/testing/factories.ts";
 import { main, type MainDeps } from "./main.ts";
 import { waitFor } from "./testing.ts";
 
@@ -46,6 +49,43 @@ describe("main, against a database that has been migrated", () => {
     signals.emit("SIGINT");
     await running;
     expect(exits).toEqual([130]);
+  });
+
+  it("watches its own health and tells the owner through the webhook when boards are being polled late", async () => {
+    const received: unknown[] = [];
+    const server = http.createServer((req, res) => {
+      let raw = "";
+      req.on("data", (chunk: Buffer) => (raw += chunk.toString()));
+      req.on("end", () => {
+        received.push(JSON.parse(raw) as unknown);
+        res.writeHead(204).end();
+      });
+    });
+    await new Promise<void>((resolve) => server.listen(0, "127.0.0.1", resolve));
+    try {
+      const company = await insertCompany(db.pool, { slug: "acme", name: "Acme" });
+      await insertBoard(db.pool, company, { nextPollAt: new Date(Date.now() - 900_000).toISOString() }); // 15 minutes behind
+      const { deps, signals } = setup();
+      // Polling is off so the board stays overdue, which is what the monitor should notice.
+      const running = main(
+        [],
+        {
+          ...env(),
+          POLLING_ENABLED: "false",
+          ALERT_WEBHOOK_URL: `http://127.0.0.1:${(server.address() as AddressInfo).port}/hook`,
+          MONITOR_INTERVAL_SEC: "10",
+        },
+        deps,
+      );
+      await waitFor(() => received.length > 0, "the alert to reach the webhook");
+      signals.emit("SIGTERM");
+      expect(await running).toBe(0);
+      expect(JSON.stringify(received[0])).toContain("Boards are being polled late");
+      expect(JSON.stringify(received[0])).toContain("CRITICAL");
+    } finally {
+      server.closeAllConnections();
+      await new Promise((resolve) => server.close(resolve));
+    }
   });
 
   it("does not poll when polling is switched off", async () => {

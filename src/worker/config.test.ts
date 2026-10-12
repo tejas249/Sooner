@@ -55,6 +55,48 @@ describe("loadConfig", () => {
     expect(() => loadConfig({ ...valid, HR_CONTACT: "   " })).toThrow(/HR_CONTACT is empty/);
   });
 
+  describe("alerts", () => {
+    it("are logged only, with nothing configured", () => {
+      expect(loadConfig(valid)).toMatchObject({ alertWebhookUrl: null, alertTelegram: null, monitorIntervalSec: 60 });
+    });
+
+    it("go to a webhook", () => {
+      const config = loadConfig({ ...valid, ALERT_WEBHOOK_URL: "https://discord.com/api/webhooks/1/abc", MONITOR_INTERVAL_SEC: "30" });
+      expect(config).toMatchObject({ alertWebhookUrl: "https://discord.com/api/webhooks/1/abc", monitorIntervalSec: 30 });
+    });
+
+    it("go to a Telegram bot, which needs both its token and the chat", () => {
+      expect(loadConfig({ ...valid, ALERT_TELEGRAM_BOT_TOKEN: "1:abc", ALERT_TELEGRAM_CHAT_ID: "-100" }).alertTelegram).toEqual({
+        botToken: "1:abc",
+        chatId: "-100",
+      });
+      expect(() => loadConfig({ ...valid, ALERT_TELEGRAM_BOT_TOKEN: "1:abc" })).toThrow(/must be set together/);
+      expect(() => loadConfig({ ...valid, ALERT_TELEGRAM_CHAT_ID: "-100" })).toThrow(/must be set together/);
+    });
+
+    it("refuse a webhook that is not https, without repeating the address (it is a secret)", () => {
+      for (const bad of ["http://example.com/very-secret-path", "ftp://example.com/x", "not a url but secret-token"]) {
+        let message = "";
+        try {
+          loadConfig({ ...valid, ALERT_WEBHOOK_URL: bad });
+        } catch (error) {
+          message = (error as Error).message;
+        }
+        expect(message).toMatch(/ALERT_WEBHOOK_URL/);
+        expect(message).not.toContain("secret");
+      }
+    });
+
+    it("accept plain http to this machine, which is how the tests receive them", () => {
+      expect(loadConfig({ ...valid, ALERT_WEBHOOK_URL: "http://127.0.0.1:9999/hook" }).alertWebhookUrl).toBe("http://127.0.0.1:9999/hook");
+    });
+
+    it("look at the worker's health between 10 seconds and 10 minutes apart", () => {
+      expect(() => loadConfig({ ...valid, MONITOR_INTERVAL_SEC: "5" })).toThrow(/MONITOR_INTERVAL_SEC must be a whole number from 10 to 600/);
+      expect(() => loadConfig({ ...valid, MONITOR_INTERVAL_SEC: "601" })).toThrow(/MONITOR_INTERVAL_SEC/);
+    });
+  });
+
   it("never puts the database password into an error", () => {
     let message = "";
     try {

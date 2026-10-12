@@ -61,7 +61,7 @@ export function testDatabase(options: TestDatabaseOptions = {}): TestDatabase {
   async function reset(): Promise<void> {
     await current().query(
       migrated
-        ? "truncate poll_run, posting_event, posting, board, company restart identity cascade"
+        ? "truncate alert_state, poll_run, posting_event, posting, board, company restart identity cascade"
         : "drop schema public cascade; create schema public",
     );
   }
