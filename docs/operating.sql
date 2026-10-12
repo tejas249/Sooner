@@ -113,3 +113,16 @@ select (select count(*) from company) as companies,
        (select count(*) from posting_event) as events,
        (select count(*) from poll_run) as poll_runs,
        pg_size_pretty(pg_database_size(current_database())) as database_size;
+
+-- 14. The 48-hour check: how many polls, how many succeeded, and how late polls started, over the last two days.
+--     Healthy: the worst lag under a minute and more than 98% successful. Only polls recorded since the lag column
+--     existed (migration 0003) count towards the lag; poll_run keeps a week.
+select count(*) as polls,
+       round(100.0 * count(*) filter (where error is null) / nullif(count(*), 0), 2) as success_pct,
+       count(queue_lag_ms) as polls_with_lag,
+       round((percentile_cont(0.5) within group (order by queue_lag_ms) / 1000.0)::numeric, 1) as median_lag_sec,
+       round((percentile_cont(0.95) within group (order by queue_lag_ms) / 1000.0)::numeric, 1) as p95_lag_sec,
+       round(max(queue_lag_ms) / 1000.0, 1) as worst_lag_sec,
+       round(100.0 * count(*) filter (where queue_lag_ms < 60000) / nullif(count(queue_lag_ms), 0), 2) as started_within_a_minute_pct
+  from poll_run
+ where started_at > now() - interval '48 hours';

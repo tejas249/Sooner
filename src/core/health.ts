@@ -100,6 +100,17 @@ export const THRESHOLDS: Thresholds = {
   degradedShareClear: 0.02,
 };
 
+/**
+ * What healthy means, as the figures the project aims for. The thresholds above are looser on purpose: they are for waking
+ * someone up, these are for judging whether the worker is doing its job over days.
+ */
+export const TARGETS = {
+  /** The queue stays under a minute behind: no poll starts a minute or more after its board fell due. */
+  queueLagSec: 60,
+  /** More than this share of polls get a usable answer. */
+  successPct: 98,
+} as const;
+
 export type Severity = "warning" | "critical";
 
 export interface Condition {
@@ -134,6 +145,12 @@ export function formatSeconds(sec: number): string {
   const hours = Math.floor(minutes / 60);
   const rest = minutes - hours * 60;
   return rest === 0 ? `${hours} h` : `${hours} h ${rest} min`;
+}
+
+/** How late a poll started, for people: "—" when there is no figure, "under a second", "38 s", "5 min". */
+export function lagLabel(ms: number | null): string {
+  if (ms === null) return "—";
+  return ms < 1000 ? "under a second" : formatSeconds(ms / 1000);
 }
 
 /** "never", "just now", or "5 min ago". */

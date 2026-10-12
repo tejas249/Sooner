@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
+import { TARGETS } from "../../core/health.ts";
 import { OUTCOME_TEXT, isOutcome } from "../../web/admin-actions.ts";
 import { loadOverview, type Overview } from "../../web/admin-data.ts";
 import { webPool } from "../../web/db.ts";
@@ -95,6 +96,19 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
           Health
         </h2>
         <Tiles tiles={overview.tiles} />
+      </section>
+
+      <section aria-labelledby="two-days-title" className="mt-12">
+        <h2 id="two-days-title" className="text-xl font-semibold tracking-tight">
+          Last 48 hours
+        </h2>
+        <p className="mt-1 max-w-3xl text-sm text-muted">
+          Worked out from every poll, so a worker that has been up for two days shows whether it kept its promises: the queue never
+          a minute behind, and more than {TARGETS.successPct}% of polls getting a usable answer.
+        </p>
+        <div className="mt-4">
+          <Tiles tiles={overview.lastTwoDays} />
+        </div>
       </section>
 
       <section aria-labelledby="alerts-title" className="mt-12">

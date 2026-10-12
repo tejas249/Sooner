@@ -75,8 +75,8 @@ export async function boardHealth(db: Queryable): Promise<HealthBoard[]> {
 
 /**
  * Queue lag: how many seconds overdue the most overdue board is, among the active boards that nobody is working on right
- * now. Healthy: under a minute. Over five minutes the worker is down, stuck or overloaded. This is also what the health
- * endpoint reports as `workerLagSec`.
+ * now. Healthy: under a minute. Over five minutes the worker is down, stuck or overloaded. This is the "Queue lag" tile on
+ * the admin page.
  */
 export async function queueLagSec(db: Queryable, now: Date): Promise<number> {
   const { rows } = await db.query<{ lag: number }>(
@@ -105,6 +105,51 @@ export async function pollCounts(db: Queryable, now: Date, windowSec = 3600): Pr
     [now.toISOString(), windowSec],
   );
   return { polls: rows[0]?.polls ?? 0, failed: rows[0]?.failed ?? 0 };
+}
+
+export interface LagReport {
+  /** Polls in the window that have a lag recorded. */
+  polls: number;
+  /** How late the middle poll started, in milliseconds. Null when there are no polls. */
+  medianMs: number | null;
+  p95Ms: number | null;
+  /** The worst. */
+  maxMs: number | null;
+  /** The share of the polls, from 0 to 1, that started less than a minute after falling due. */
+  withinMinute: number | null;
+}
+
+/**
+ * How late polls started over the last `windowSec` seconds, measured for every poll (poll_run.queue_lag_ms), so that "the
+ * queue stays under a minute behind" can be shown over days and not only watched live. Polls recorded before the column
+ * existed have no lag and are left out.
+ */
+export async function lagReport(db: Queryable, now: Date, windowSec: number): Promise<LagReport> {
+  const { rows } = await db.query<{
+    polls: number;
+    median: number | null;
+    p95: number | null;
+    max: number | null;
+    within_minute: number | null;
+  }>(
+    `select count(queue_lag_ms)::int as polls,
+            round(percentile_cont(0.5) within group (order by queue_lag_ms))::float8 as median,
+            round(percentile_cont(0.95) within group (order by queue_lag_ms))::float8 as p95,
+            max(queue_lag_ms)::float8 as max,
+            avg((queue_lag_ms < 60000)::int)::float8 as within_minute
+       from poll_run
+      where started_at > $1::timestamptz - make_interval(secs => $2)
+        and queue_lag_ms is not null`,
+    [now.toISOString(), windowSec],
+  );
+  const row = rows[0];
+  return {
+    polls: row?.polls ?? 0,
+    medianMs: row?.median ?? null,
+    p95Ms: row?.p95 ?? null,
+    maxMs: row?.max ?? null,
+    withinMinute: row?.within_minute ?? null,
+  };
 }
 
 /** When the worker last finished a poll, or null if it never has. A worker that has gone quiet shows up here. */

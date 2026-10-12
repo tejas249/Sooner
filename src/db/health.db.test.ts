@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { evaluateHealth } from "../core/health.ts";
-import { boardHealth, collectMetrics, lastPollAt, pollCounts, queueLagSec } from "./health.ts";
+import { boardHealth, collectMetrics, lagReport, lastPollAt, pollCounts, queueLagSec } from "./health.ts";
 import { testDatabase } from "./testing/database.ts";
 import { insertBoard, insertCompany, insertPosting } from "./testing/factories.ts";
 
@@ -106,6 +106,40 @@ describe("pollCounts and lastPollAt", () => {
     expect(await lastPollAt(db.pool)).toBeNull();
     await seedRuns();
     expect((await lastPollAt(db.pool))?.toISOString()).toBe(at(-30));
+  });
+});
+
+describe("lagReport", () => {
+  let companies = 0;
+  async function seedLags(lagsMs: Array<number | null>, secondsAgo = 100) {
+    const company = await insertCompany(db.pool, { slug: `lag-${++companies}` });
+    const board = await insertBoard(db.pool, company, { token: `lag-${companies}` });
+    for (const lag of lagsMs) {
+      await db.pool.query("insert into poll_run (board_id, started_at, queue_lag_ms, http_status) values ($1, $2, $3, 200)", [board, at(-secondsAgo), lag]);
+    }
+  }
+
+  it("says how late polls started: the middle, the 95th percentile, the worst, and how many were within a minute", async () => {
+    await seedLags([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 100].map((seconds) => seconds * 1000));
+    expect(await lagReport(db.pool, NOW, 3600)).toEqual({ polls: 11, medianMs: 5000, p95Ms: 54_500, maxMs: 100_000, withinMinute: 10 / 11 });
+  });
+
+  it("counts a poll that started exactly a minute late as late: within a minute means under it", async () => {
+    await seedLags([59_999, 60_000]);
+    expect((await lagReport(db.pool, NOW, 3600)).withinMinute).toBe(0.5);
+  });
+
+  it("leaves out polls from before the lag was recorded, and polls outside the window", async () => {
+    await seedLags([2000, null, null]);
+    await seedLags([500_000], 7200); // two hours ago
+    expect(await lagReport(db.pool, NOW, 3600)).toMatchObject({ polls: 1, maxMs: 2000 });
+    expect(await lagReport(db.pool, NOW, 3 * 3600)).toMatchObject({ polls: 2, maxMs: 500_000 });
+  });
+
+  it("is empty, not zero, when there is nothing to report", async () => {
+    expect(await lagReport(db.pool, NOW, 3600)).toEqual({ polls: 0, medianMs: null, p95Ms: null, maxMs: null, withinMinute: null });
+    await seedLags([null]);
+    expect((await lagReport(db.pool, NOW, 3600)).polls).toBe(0);
   });
 });
 

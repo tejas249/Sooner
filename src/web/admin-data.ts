@@ -1,6 +1,6 @@
-import { THRESHOLDS, agoLabel, formatSeconds, type Severity } from "../core/health.ts";
+import { TARGETS, THRESHOLDS, agoLabel, formatSeconds, lagLabel, type Severity } from "../core/health.ts";
 import { openAlerts, recentlyResolved, type AlertRow } from "../db/alerts.ts";
-import { collectMetrics, lastPollAt } from "../db/health.ts";
+import { collectMetrics, lagReport, lastPollAt, pollCounts } from "../db/health.ts";
 import type { Queryable } from "../db/pool.ts";
 import { boardRows, type BoardRowView } from "./admin-view.ts";
 
@@ -28,6 +28,8 @@ export interface AlertView {
 export interface Overview {
   generatedAt: Date;
   tiles: Tile[];
+  /** The same questions asked over two days, which is how long a worker has to keep its promises before they count. */
+  lastTwoDays: Tile[];
   alerts: AlertView[];
   resolvedAlerts: AlertView[];
   boards: BoardRowView[];
@@ -44,10 +46,14 @@ function alertView(row: AlertRow, now: Date): AlertView {
   };
 }
 
+const TWO_DAYS_SEC = 48 * 3600;
+
 export async function loadOverview(db: Queryable, now: Date): Promise<Overview> {
-  const [metrics, lastPoll, openRows, resolvedRows, events] = await Promise.all([
+  const [metrics, lastPoll, twoDays, lateness, openRows, resolvedRows, events] = await Promise.all([
     collectMetrics(db, now),
     lastPollAt(db),
+    pollCounts(db, now, TWO_DAYS_SEC),
+    lagReport(db, now, TWO_DAYS_SEC),
     openAlerts(db),
     recentlyResolved(db, 5),
     db.query<{ n: number }>(
@@ -104,9 +110,38 @@ export async function loadOverview(db: Queryable, now: Date): Promise<Overview> 
     },
   ];
 
+  const twoDaysPct = twoDays.polls === 0 ? null : (100 * (twoDays.polls - twoDays.failed)) / twoDays.polls;
+  const lastTwoDays: Tile[] = [
+    {
+      label: "Polls, 48 hours",
+      value: twoDays.polls === 0 ? "none" : twoDays.polls.toLocaleString("en-US"),
+      detail:
+        twoDaysPct === null
+          ? "nothing to measure yet"
+          : `${twoDaysPct.toFixed(1)}% succeeded, ${twoDays.failed.toLocaleString("en-US")} failed; healthy is over ${TARGETS.successPct}%`,
+      attention: twoDaysPct !== null && twoDays.polls >= t.successMinPolls && twoDaysPct < TARGETS.successPct,
+    },
+    {
+      label: "Queue lag, worst",
+      value: lateness.maxMs === null ? "no data" : lagLabel(lateness.maxMs),
+      detail: "the latest any poll started after its board fell due; healthy is under a minute",
+      attention: lateness.maxMs !== null && lateness.maxMs >= TARGETS.queueLagSec * 1000,
+    },
+    {
+      label: "Queue lag, typical",
+      value: lateness.medianMs === null ? "no data" : lagLabel(lateness.medianMs),
+      detail:
+        lateness.withinMinute === null
+          ? "written down with every poll from now on"
+          : `median; 95th percentile ${lagLabel(lateness.p95Ms)}; ${(100 * lateness.withinMinute).toFixed(1)}% of polls started within a minute`,
+      attention: false,
+    },
+  ];
+
   return {
     generatedAt: now,
     tiles,
+    lastTwoDays,
     alerts: openRows.map((row) => alertView(row, now)),
     resolvedAlerts: resolvedRows.map((row) => alertView(row, now)),
     boards,

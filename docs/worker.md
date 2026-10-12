@@ -255,14 +255,16 @@ poll success should be near 100%.
 
 ## Look after it
 
-[docs/operating.sql](operating.sql) has thirteen read-only queries: queue lag, poll success, failing boards, feeds that changed
+[docs/operating.sql](operating.sql) has fourteen read-only queries: queue lag, poll success, failing boards, feeds that changed
 shape, held-back mass disappearances, detection delay by provider, false closes, current leases, what changed today, open and
-resolved alerts, boards that were switched off, and how much has been written.
+resolved alerts, boards that were switched off, how much has been written, and the 48-hour check. The worker writes down how
+late every poll started (`poll_run.queue_lag_ms`), which is what lets that last query, and the "Last 48 hours" tiles on the
+[admin page](admin.md), say whether the queue stayed under a minute behind instead of leaving you to watch it.
 
 | Healthy | Alarm | Query |
 | --- | --- | --- |
-| Queue lag under a minute | Over five minutes: the worker is down or overloaded | 1 |
-| Poll success over 98% | Under 90% | 2 |
+| Queue lag under a minute | Over five minutes: the worker is down or overloaded | 1, and over two days 14 |
+| Poll success over 98% | Under 90% | 2, and over two days 14 |
 | No degraded boards | Over 5% of boards | 3 |
 | No format changes | Any: fix the adapter | 4 |
 | Median detection delay under ten minutes | Over twenty | 6 |

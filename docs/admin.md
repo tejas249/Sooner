@@ -27,6 +27,10 @@ them against its current docs.
 - **Tiles.** *Worker*: how long since a poll last finished. *Queue lag*: how overdue the most overdue board is; healthy is under a
   minute. *Polls, last hour*: how many, how many failed; healthy is over 98% successful. *Boards*: how many are on, off and in
   need of attention. *Roles*: open roles, and how many changes in the last day. *Alerts*: open and recently resolved.
+- **Last 48 hours.** Three more tiles: how many polls there were and how many succeeded (healthy is over 98%), the worst queue
+  lag (healthy is under a minute) and the typical one (median and 95th percentile, and the share of polls that started within a
+  minute). They come from a figure the worker writes down with every poll, how late it started, so a worker that has been up
+  for two days can show it kept its promises. The same numbers are query 14 in [operating.sql](operating.sql).
 - **Open alerts**, and the ones resolved lately: the same ones the worker sends to your webhook ([docs/worker.md](worker.md#alerts-to-yourself)).
 - **Every board**, the ones that need attention first: its state, open roles, when it was last polled and when it is next due,
   how often it is polled, and the reason when something is wrong. A state is always written as text (OK, Waiting, Failing,

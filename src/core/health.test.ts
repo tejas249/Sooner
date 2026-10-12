@@ -7,6 +7,7 @@ import {
   evaluateHealth,
   formatSeconds,
   isHeldBack,
+  lagLabel,
   overdueSec,
   type HealthBoard,
   type Metrics,
@@ -224,5 +225,20 @@ describe("formatSeconds", () => {
     [9000, "2 h 30 min"],
   ])("%s seconds is %s", (sec, text) => {
     expect(formatSeconds(sec)).toBe(text);
+  });
+});
+
+describe("lagLabel", () => {
+  it.each([
+    [null, "—"],
+    [0, "under a second"],
+    [999, "under a second"],
+    [1000, "1 s"],
+    [38_400, "38 s"],
+    [59_999, "60 s"],
+    [300_000, "5 min"],
+    [3_600_000, "60 min"],
+  ])("%s milliseconds is %s", (ms, text) => {
+    expect(lagLabel(ms)).toBe(text);
   });
 });
